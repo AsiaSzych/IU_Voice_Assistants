@@ -1,0 +1,56 @@
+version: "3.1"
+
+stories:
+
+- story: happy path find restaurant
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: find_restaurant
+  - action: utter_confirm
+  - intent: goodbye
+  - action: utter_goodbye
+
+
+- story: happy path make reservation
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: make_reservation
+  - action: utter_confirm
+  - intent: goodbye
+  - action: utter_goodbye
+
+
+- story: happy path show reservation
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: show_reservations
+  - action: utter_confirm
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: happy path long
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: find_restaurant
+  - action: utter_confirm
+  - intent: make_reservation
+  - action: utter_confirm
+  - intent: show_reservations
+  - action: utter_confirm
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: interactive_story_1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: find_restaurant
+  - action: utter_confirm
+  - intent: show_reservations
+  - action: utter_confirm
+  - intent: make_reservation
+  - action: utter_confirm

@@ -169,3 +169,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+
+## for now do not push models to repo - only configs 
+/rasa_chatbot/models
+/rasa_chatbot/.rasa

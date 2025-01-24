@@ -1,0 +1,63 @@
+version: "3.1"
+nlu:
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - moin
+    - hey there
+    - let's go
+    - hey dude
+    - goodmorning
+    - goodevening
+    - good afternoon
+- intent: goodbye
+  examples: |
+    - cu
+    - good by
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - have a nice day
+    - see you around
+    - bye bye
+    - see you later
+- intent: find_restaurant
+  examples: |
+    - I want to find a restaurant
+    - I'm looking for a restaurant
+    - I'm looking for a place to eat
+    - I can't decide where to eat today
+    - Can you help me find a restaurant?
+    - Can you help me find a place for dinner?
+    - I have no idea where to eat
+    - I need to find a place for dinner
+- intent: make_reservation
+  examples: |
+    - I want to book a table here
+    - I want to make a reservation
+    - Can you make a reservation here?
+    - Can you help me make a reservation?
+    - Can you help me make a new reservation?
+    - Can you help me book a table?
+    - I need to book a table in a restaurant
+    - I need to book a table
+- intent: show_reservations
+  examples: |
+    - show me my previous reservation
+    - show me previous reservations for Anna
+    - what are my old reservations
+    - what are my previous reservations
+    - what are previous reservations for Brad Pit
+    - show me my reservations
+    - show me the list of reservations for Angelina Jolie
+    - I wanna check the reservations I made
+    - I want to see my previous reservations
+    - I want to see what are my reservations
+    - What are the previous reservations for Joanna Szych
+    - I want to know the list of reservations for Mark Twain

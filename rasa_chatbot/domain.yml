@@ -1,0 +1,20 @@
+version: '3.1'
+intents:
+- find_restaurant
+- goodbye
+- greet
+- make_reservation
+- show_reservations
+responses:
+  utter_greet:
+  - text: Hey! I'm a restaurnat-helper bot, I can help you find a restaurnat, reserve a seat there and check previous reservations! What would you like to do today?
+  utter_goodbye:
+  - text: Bye
+  utter_confirm:
+  - text: Great, I've got that
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+actions:
+- utter_greet
+- utter_confirm
