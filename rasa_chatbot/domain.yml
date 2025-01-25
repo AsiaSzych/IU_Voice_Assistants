@@ -1,23 +1,26 @@
 version: '3.1'
 intents:
 - find_restaurant
+- PERSON_inform
 - goodbye
 - greet
 - make_reservation
+- session_start
 - show_reservations
+- thanks
 entities:
-- full_name
+- PERSON
 slots:
-  full_name:
+  PERSON:
     type: text
     influence_conversation: false
     mappings:
     - type: from_entity
-      entity: full_name
+      entity: PERSON
 forms:
   show_reservations_form:
     required_slots:
-    - full_name
+    - PERSON
 responses:
   utter_greet:
   - text: Hey! I'm a restaurnat-helper bot, I can help you find a restaurnat, reserve a seat there and check previous reservations! What would you like to do today?
@@ -28,8 +31,8 @@ responses:
   utter_confirm:
   - text: Great, I've got that
   utter_show_reservations:
-  - text: Here is the list of resertvations for {full_name}
-  utter_ask_full_name:
+  - text: Here is the list of resertvations for {PERSON}
+  utter_ask_PERSON:
   - text: What is your full name?
   utter_submit_show_reservations:
   - text: I will check reservations for you!
@@ -37,9 +40,10 @@ session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
 actions:
-- utter_confirm
+- utter_greet
 - utter_show_reservations
 - utter_submit_show_reservations
-- utter_greet
+- utter_welcome
+- utter_confirm
 - utter_goodbye
-- utter_ask_full_name
+- utter_ask_PERSON

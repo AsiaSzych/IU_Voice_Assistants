@@ -15,6 +15,7 @@ nlu:
     - goodmorning
     - goodevening
     - good afternoon
+    - Adam Musk
 - intent: goodbye
   examples: |
     - cu
@@ -31,8 +32,9 @@ nlu:
   examples: |
     - thank
     - thank you
-    - thanks 
+    - thanks
     - thanks for help
+    - tanks
 - intent: find_restaurant
   examples: |
     - I want to find a restaurant
@@ -56,15 +58,32 @@ nlu:
 - intent: show_reservations
   examples: |
     - show me my previous reservation
-    - show me previous reservations for [Anna Green](full_name)
+    - show me previous reservations for [Anna Green](PERSON)
     - what are my old reservations
     - what are my previous reservations
-    - what are previous reservations for [Brad Pit](full_name)
+    - what are previous reservations for [Brad Pit](PERSON)
     - show me my reservations
-    - show me the list of reservations for [Angelina Jolie](full_name)
+    - show me the list of reservations for [Angelina Jolie](PERSON)
     - I wanna check the reservations I made
     - I want to see my previous reservations
     - I want to see what are my reservations
-    - What are the previous reservations for [Joanna Szych](full_name)
-    - I want to know the list of reservations for [Mark Twain](full_name)
-    - I want to see reservatrions for [Joanna Szych](full_name)
+    - What are the previous reservations for [Joanna Szych](PERSON)
+    - I want to know the list of reservations for [Mark Twain](PERSON)
+    - I want to see reservatrions for [Joanna Szych](PERSON)
+    - show me my prevous reservations
+    - Show me my reservations
+- intent: PERSON_inform
+  examples: |
+    - [Anna Green](PERSON)
+    - [Brad Pit](PERSON)
+    - My name is [Michal Blajet](PERSON)
+    - [Angelina Jolie](PERSON)
+    - It's for [Rachel Green](PERSON)
+    - [Joanna Szych](PERSON)
+    - [Mark Twain](PERSON)
+    - It is [Olivia Rodrigo](PERSON)
+    - [Monica Burk](PERSON)
+    - It is for [Richard Burk](PERSON)
+    - [Ross Bing](PERSON)
+    - [Chandler Bing](PERSON)
+    - It's [Monica Belluci](PERSON)
