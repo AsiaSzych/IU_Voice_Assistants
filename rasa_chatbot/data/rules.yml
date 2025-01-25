@@ -6,3 +6,23 @@ rules:
   steps:
   - intent: greet
   - action: utter_greet
+
+- rule: Activate form show reservations
+  steps:
+  - intent: show_reservations
+  - action: show_reservations_form
+  - active_loop: show_reservations_form
+
+- rule: Submit forms how reservations
+  condition:
+  # Condition that form is active.
+  - active_loop: show_reservations_form
+  steps:
+  # Form is deactivated
+  - action: show_reservations_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  # The actions we want to run when the form is submitted.
+  - action: utter_submit_show_reservations
+  - action: utter_show_reservations

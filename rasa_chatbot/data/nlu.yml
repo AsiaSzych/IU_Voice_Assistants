@@ -27,6 +27,12 @@ nlu:
     - see you around
     - bye bye
     - see you later
+- intent: thanks
+  examples: |
+    - thank
+    - thank you
+    - thanks 
+    - thanks for help
 - intent: find_restaurant
   examples: |
     - I want to find a restaurant
@@ -50,14 +56,15 @@ nlu:
 - intent: show_reservations
   examples: |
     - show me my previous reservation
-    - show me previous reservations for Anna
+    - show me previous reservations for [Anna Green](full_name)
     - what are my old reservations
     - what are my previous reservations
-    - what are previous reservations for Brad Pit
+    - what are previous reservations for [Brad Pit](full_name)
     - show me my reservations
-    - show me the list of reservations for Angelina Jolie
+    - show me the list of reservations for [Angelina Jolie](full_name)
     - I wanna check the reservations I made
     - I want to see my previous reservations
     - I want to see what are my reservations
-    - What are the previous reservations for Joanna Szych
-    - I want to know the list of reservations for Mark Twain
+    - What are the previous reservations for [Joanna Szych](full_name)
+    - I want to know the list of reservations for [Mark Twain](full_name)
+    - I want to see reservatrions for [Joanna Szych](full_name)

@@ -11,22 +11,11 @@ stories:
   - intent: goodbye
   - action: utter_goodbye
 
-
 - story: happy path make reservation
   steps:
   - intent: greet
   - action: utter_greet
   - intent: make_reservation
-  - action: utter_confirm
-  - intent: goodbye
-  - action: utter_goodbye
-
-
-- story: happy path show reservation
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: show_reservations
   - action: utter_confirm
   - intent: goodbye
   - action: utter_goodbye
@@ -39,18 +28,29 @@ stories:
   - action: utter_confirm
   - intent: make_reservation
   - action: utter_confirm
-  - intent: show_reservations
-  - action: utter_confirm
+  - intent: thanks
+  - action: utter_welcome
   - intent: goodbye
   - action: utter_goodbye
+
 
 - story: interactive_story_1
   steps:
   - intent: greet
   - action: utter_greet
-  - intent: find_restaurant
-  - action: utter_confirm
   - intent: show_reservations
-  - action: utter_confirm
-  - intent: make_reservation
+    entities:
+    - full_name: Joanna Szych
+  - slot_was_set:
+    - full_name: Joanna Szych
+  - action: show_reservations_form
+  - active_loop: show_reservations_form
+  - slot_was_set:
+    - full_name: Joanna Szych
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_show_reservations
+  - action: utter_show_reservations
+  - intent: find_restaurant
   - action: utter_confirm
