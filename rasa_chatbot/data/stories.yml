@@ -92,3 +92,32 @@ stories:
   - action: utter_show_reservations
   - intent: thanks
   - action: utter_welcome
+
+- story: interactive_story_1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: find_restaurant
+  - action: utter_confirm
+  - intent: thanks
+  - action: utter_welcome
+  - intent: show_reservations
+  - action: show_reservations_form
+  - active_loop: show_reservations_form
+  - slot_was_set:
+    - requested_slot: PERSON
+  - intent: greet
+    entities:
+    - PERSON: Hillary Clinton
+  - slot_was_set:
+    - PERSON: Hillary Clinton
+  - action: show_reservations_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_show_reservations
+  - action: utter_show_reservations
+  - intent: thanks
+  - action: utter_welcome
+  - intent: goodbye
+  - action: utter_goodbye

@@ -1,7 +1,7 @@
 version: '3.1'
 intents:
-- find_restaurant
 - PERSON_inform
+- find_restaurant
 - goodbye
 - greet
 - make_reservation
@@ -41,9 +41,9 @@ session_config:
   carry_over_slots_to_new_session: true
 actions:
 - utter_greet
-- utter_show_reservations
-- utter_submit_show_reservations
-- utter_welcome
 - utter_confirm
 - utter_goodbye
+- utter_welcome
+- utter_show_reservations
+- utter_submit_show_reservations
 - utter_ask_PERSON
