@@ -1,10 +1,10 @@
 version: '3.1'
 intents:
-- PERSON_inform
 - find_restaurant
 - goodbye
 - greet
 - make_reservation
+- record_PERSON
 - session_start
 - show_reservations
 - thanks
@@ -30,8 +30,6 @@ responses:
   - text: You're welcome! Can I help you with somethig else?
   utter_confirm:
   - text: Great, I've got that
-  utter_show_reservations:
-  - text: Here is the list of resertvations for {PERSON}
   utter_ask_PERSON:
   - text: What is your full name?
   utter_submit_show_reservations:
@@ -40,10 +38,10 @@ session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
 actions:
+- action_fetch_reservations
 - utter_greet
-- utter_confirm
+- utter_submit_show_reservations
 - utter_goodbye
 - utter_welcome
-- utter_show_reservations
-- utter_submit_show_reservations
+- utter_confirm
 - utter_ask_PERSON

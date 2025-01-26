@@ -15,8 +15,6 @@ nlu:
     - goodmorning
     - goodevening
     - good afternoon
-    - Adam Musk
-    - Hillary Clinton
 - intent: goodbye
   examples: |
     - cu
@@ -30,6 +28,8 @@ nlu:
     - bye bye
     - see you later
     - byr
+    - no, bye
+    - ok, bye
 - intent: thanks
   examples: |
     - thank
@@ -57,36 +57,39 @@ nlu:
     - Can you help me book a table?
     - I need to book a table in a restaurant
     - I need to book a table
+    - I want to make a reservations
 - intent: show_reservations
   examples: |
     - show me my previous reservation
-    - show me previous reservations for [Anna Green](PERSON)
+    - show me previous reservations for Anna Green
     - what are my old reservations
     - what are my previous reservations
-    - what are previous reservations for [Brad Pit](PERSON)
+    - what are previous reservations for Brad Pit
     - show me my reservations
-    - show me the list of reservations for [Angelina Jolie](PERSON)
+    - show me the list of reservations for Angelina Jolie
     - I wanna check the reservations I made
     - I want to see my previous reservations
     - I want to see what are my reservations
-    - What are the previous reservations for [Joanna Szych](PERSON)
-    - I want to know the list of reservations for [Mark Twain](PERSON)
-    - I want to see reservatrions for [Joanna Szych](PERSON)
+    - What are the previous reservations for Joanna Szych
+    - I want to know the list of reservations for Mark Twain
+    - I want to see reservatrions for Joanna Szych
     - show me my prevous reservations
     - Show me my reservations
     - Show me old reservations
-- intent: PERSON_inform
+    - I want to check old reservatinos
+    - Show me reservations for Mark Twain
+    - Show me reservations for Monica Geller
+    - I want to check reservations
+    - I want to see reservations made
+- intent: record_PERSON
   examples: |
-    - [Anna Green](PERSON)
-    - [Brad Pit](PERSON)
-    - My name is [Michal Blajet](PERSON)
-    - [Angelina Jolie](PERSON)
-    - It's for [Rachel Green](PERSON)
-    - [Joanna Szych](PERSON)
-    - [Mark Twain](PERSON)
-    - It is [Olivia Rodrigo](PERSON)
-    - [Monica Burk](PERSON)
-    - It is for [Richard Burk](PERSON)
-    - [Ross Bing](PERSON)
-    - [Chandler Bing](PERSON)
-    - It's [Monica Belluci](PERSON)
+    - Anna Green
+    - Brad Pit
+    - My name is Michal Blajet
+    - It's for Rachel Green
+    - Joanna Szych
+    - It is Olivia Rodrigo
+    - It is for Richard Burk
+    - Chandler Bing
+    - It's Monica Belluci
+    - Condrad Flinch

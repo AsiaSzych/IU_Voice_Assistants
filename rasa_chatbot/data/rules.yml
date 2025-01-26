@@ -35,4 +35,4 @@ rules:
     - requested_slot: null
   # The actions we want to run when the form is submitted.
   - action: utter_submit_show_reservations
-  - action: utter_show_reservations
+  - action: action_fetch_reservations
