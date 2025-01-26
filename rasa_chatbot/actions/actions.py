@@ -29,3 +29,17 @@ class ActionFetchReservations(Action):
         dispatcher.utter_message(text=current_reservations_message)
 
         return []
+
+
+class ActionFindRestaurant(Action):
+
+    def name(self) -> Text:
+        return "action_find_restaurant"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        dispatcher.utter_message(text="I have found a XYZ restaurant, is that okay?")
+
+        return []

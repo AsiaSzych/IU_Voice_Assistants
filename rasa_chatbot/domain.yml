@@ -4,12 +4,16 @@ intents:
 - goodbye
 - greet
 - make_reservation
+- record_GPE
 - record_PERSON
+- record_cuisine
 - session_start
 - show_reservations
 - thanks
 entities:
+- cuisine
 - PERSON
+- GPE
 slots:
   PERSON:
     type: text
@@ -17,10 +21,26 @@ slots:
     mappings:
     - type: from_entity
       entity: PERSON
+  GPE:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: GPE
+  cuisine:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: cuisine
 forms:
   show_reservations_form:
     required_slots:
     - PERSON
+  find_restaurant_form:
+    required_slots:
+    - GPE
+    - cuisine
 responses:
   utter_greet:
   - text: Hey! I'm a restaurnat-helper bot, I can help you find a restaurnat, reserve a seat there and check previous reservations! What would you like to do today?
@@ -32,16 +52,26 @@ responses:
   - text: Great, I've got that
   utter_ask_PERSON:
   - text: What is your full name?
+  utter_ask_GPE:
+  - text: What city are you in?
+  utter_ask_cuisine:
+  - text: What type of cuisine would you like?
   utter_submit_show_reservations:
   - text: I will check reservations for you!
+  utter_submit_find_restaurant:
+  - text: Wait a minute, I will find a restaurant for you
 session_config:
   session_expiration_time: 60
-  carry_over_slots_to_new_session: true
+  carry_over_slots_to_new_session: false
 actions:
-- action_fetch_reservations
 - utter_greet
-- utter_submit_show_reservations
+- action_find_restaurant
+- utter_submit_find_restaurant
 - utter_goodbye
+- action_fetch_reservations
+- utter_submit_show_reservations
 - utter_welcome
 - utter_confirm
 - utter_ask_PERSON
+- utter_ask_GPE
+- utter_ask_cuisine

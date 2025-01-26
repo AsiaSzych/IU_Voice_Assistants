@@ -36,3 +36,24 @@ rules:
   # The actions we want to run when the form is submitted.
   - action: utter_submit_show_reservations
   - action: action_fetch_reservations
+
+- rule: Activate form show reservations
+  steps:
+  - intent: find_restaurant
+  - action: find_restaurant_form
+  - active_loop: find_restaurant_form
+
+
+- rule: Submit form find restaurant
+  condition:
+  # Condition that form is active.
+  - active_loop: find_restaurant_form
+  steps:
+  # Form is deactivated
+  - action: find_restaurant_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  # The actions we want to run when the form is submitted.
+  - action: utter_submit_find_restaurant
+  - action: action_find_restaurant

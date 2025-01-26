@@ -37,16 +37,47 @@ nlu:
     - thanks
     - thanks for help
     - tanks
+    - Thanks
+- intent: confirm
+  examples: |
+    - yes
+    - yeah
+    - yep
+    - of course
+    - ofc
+    - sure
+    - yes it is
+    - ok
+    - fine
+    - it's ok
+- intent: deny
+  examples: |
+    - no
+    - nope
+    - nah
+    - no-no
+    - oh no
+    - never
+    - it's a no
+    - no, it's not
 - intent: find_restaurant
   examples: |
     - I want to find a restaurant
+    - I want to find a restaurant in Gdynia
     - I'm looking for a restaurant
+    - I'm looking for a restaurant in [Sopot](GPE)
     - I'm looking for a place to eat
+    - I'm looking for a place to eat in Gdańsk
+    - I'm looking for a place in Gdynia where I can eat something [Mexican](cuisine)
     - I can't decide where to eat today
     - Can you help me find a restaurant?
+    - Can you help me find a restaurant located in [Sopot](GPE), which has a [Italian](cuisine) food?
     - Can you help me find a place for dinner?
     - I have no idea where to eat
     - I need to find a place for dinner
+    - I want to find a restautant in [Sopot](GPE)
+    - I want to find something to eat in Gdańsk
+    - I want to find a place to eat in Tricity
 - intent: make_reservation
   examples: |
     - I want to book a table here
@@ -93,3 +124,31 @@ nlu:
     - Chandler Bing
     - It's Monica Belluci
     - Condrad Flinch
+- intent: record_LOC
+  examples: |
+    - Gdynia
+    - I'm in [Sopot](GPE)
+    - I'm located in [Sopot](GPE)
+    - Currently, a Tricity
+    - Right now I'm in Gdańsk
+    - I want to find some place in Gdynia
+    - I need a place in Gdańsk
+    - I'm in Gdynia
+- intent: record_cuisine
+  examples: |
+    - I would like something [Italian](cuisine)
+    - Maybe somethig from [Turkish](cuisine) cuisine
+    - I love [Indian](cuisine) food!
+    - [Mexian](cuisine) food is on my mind
+    - Somethig [Japanese](cuisine), maybe sushi
+    - I would love a [Chinese](cuisine)
+    - All I'm thinking about is [Italian](cuisine)
+    - I want to eat [Mexican](cuisine) food
+    - I would love to eat something from [Thai](cuisine) cuisine
+    - I would die for [Chinese](cuisine) meal
+    - I need someting [French](cuisine), like a croisant!
+    - I want a [Mexican](cuisine) food
+    - I want to eat something [Chinese](cuisine)
+    - I want a [Indian](cuisine) food
+    - [Italian](cuisine)
+    - Somethig [Mexican](cuisine)
