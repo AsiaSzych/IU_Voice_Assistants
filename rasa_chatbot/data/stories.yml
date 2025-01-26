@@ -1,0 +1,94 @@
+version: "3.1"
+
+stories:
+
+- story: happy path find restaurant
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: find_restaurant
+  - action: utter_confirm
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: happy path make reservation
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: make_reservation
+  - action: utter_confirm
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: happy path make reservation
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: make_reservation
+  - action: utter_confirm
+  - intent: thanks
+  - action: utter_welcome
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: happy path long
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: find_restaurant
+  - action: utter_confirm
+  - intent: make_reservation
+  - action: utter_confirm
+  - intent: thanks
+  - action: utter_welcome
+  - intent: goodbye
+  - action: utter_goodbye
+
+
+- story: interactive_story_1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: show_reservations
+  - action: show_reservations_form
+  - active_loop: show_reservations_form
+  - slot_was_set:
+    - requested_slot: PERSON
+  - intent: record_PERSON
+    entities:
+    - PERSON: Joanna Szych
+  - slot_was_set:
+    - PERSON: Joanna Szych
+  - action: show_reservations_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_show_reservations
+  - action: action_fetch_reservations
+  - intent: thanks
+  - action: utter_welcome
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: interactive_story_1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: show_reservations
+  - action: show_reservations_form
+  - active_loop: show_reservations_form
+  - slot_was_set:
+    - requested_slot: PERSON
+  - intent: record_PERSON
+    entities:
+    - PERSON: Condrad Flinch
+  - slot_was_set:
+    - PERSON: Condrad Flinch
+  - action: show_reservations_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_show_reservations
+  - action: action_fetch_reservations
+  - intent: goodbye
+  - action: utter_goodbye

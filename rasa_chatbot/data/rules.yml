@@ -1,0 +1,38 @@
+version: "3.1"
+
+rules:
+
+- rule: Introduce anytime the user says hello
+  steps:
+  - intent: greet
+  - action: utter_greet
+
+- rule: Say goodbye anytime the user says goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+
+- rule: Say welcome anytime the user says thanks
+  steps:
+  - intent: thanks
+  - action: utter_welcome
+
+- rule: Activate form show reservations
+  steps:
+  - intent: show_reservations
+  - action: show_reservations_form
+  - active_loop: show_reservations_form
+
+- rule: Submit form show reservations
+  condition:
+  # Condition that form is active.
+  - active_loop: show_reservations_form
+  steps:
+  # Form is deactivated
+  - action: show_reservations_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  # The actions we want to run when the form is submitted.
+  - action: utter_submit_show_reservations
+  - action: action_fetch_reservations
