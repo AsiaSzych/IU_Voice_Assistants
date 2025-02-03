@@ -174,3 +174,5 @@ cython_debug/
 ## for now do not push models to repo - only configs 
 /rasa_chatbot/models
 /rasa_chatbot/.rasa
+/restaurants_data/api_key.txt
+/restaurants_data/tests.ipynb

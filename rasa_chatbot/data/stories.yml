@@ -2,43 +2,25 @@ version: "3.1"
 
 stories:
 
+- story: happy path make reservation
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: make_reservation
+  - action: utter_confirm
+  - intent: thanks
+  - action: utter_welcome
+  - intent: goodbye
+  - action: utter_goodbye
+
 - story: happy path find restaurant
   steps:
   - intent: greet
   - action: utter_greet
+  - intent: make_reservation
   - intent: find_restaurant
-  - action: utter_confirm
-  - intent: goodbye
-  - action: utter_goodbye
-
-- story: happy path make reservation
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: make_reservation
-  - action: utter_confirm
-  - intent: goodbye
-  - action: utter_goodbye
-
-- story: happy path make reservation
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: make_reservation
-  - action: utter_confirm
-  - intent: thanks
-  - action: utter_welcome
-  - intent: goodbye
-  - action: utter_goodbye
-
-- story: happy path long
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: find_restaurant
-  - action: utter_confirm
-  - intent: make_reservation
-  - action: utter_confirm
+  - action: find_restaurant_form
+  - active_loop: find_restaurant_form  
   - intent: thanks
   - action: utter_welcome
   - intent: goodbye
@@ -90,5 +72,65 @@ stories:
   - active_loop: null
   - action: utter_submit_show_reservations
   - action: action_fetch_reservations
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: interactive_story_1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: find_restaurant
+    entities:
+    - GPE: Gdańsk
+  - slot_was_set:
+    - GPE: Gdańsk
+  - action: find_restaurant_form
+  - active_loop: find_restaurant_form
+  - slot_was_set:
+    - GPE: Gdańsk
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: record_cuisine
+    entities:
+    - cuisine: Mexican
+  - slot_was_set:
+    - cuisine: Mexican
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_find_restaurant
+  - action: action_find_restaurant
+  - intent: thanks
+  - action: utter_welcome
+
+- story: interactive_story_1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: find_restaurant
+  - action: find_restaurant_form
+  - active_loop: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: GPE
+  - intent: record_GPE
+    entities:
+    - GPE: Sopot
+  - slot_was_set:
+    - GPE: Sopot
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: record_cuisine
+    entities:
+    - cuisine: Japanese
+  - slot_was_set:
+    - cuisine: Japanese
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_find_restaurant
+  - action: action_find_restaurant
   - intent: goodbye
   - action: utter_goodbye

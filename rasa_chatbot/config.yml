@@ -24,7 +24,7 @@ pipeline:
     min_ngram: 1
     max_ngram: 4
   - name: SpacyEntityExtractor
-    dimensions: ["PERSON"]
+    dimensions: ["PERSON", "GPE"]
     # overlap_strategy: "deduplicate"
   - name: DIETClassifier
     epochs: 100
