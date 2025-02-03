@@ -80,39 +80,6 @@ stories:
   - intent: greet
   - action: utter_greet
   - intent: find_restaurant
-  - action: find_restaurant_form
-  - active_loop: find_restaurant_form
-  - slot_was_set:
-    - requested_slot: GPE
-  - intent: record_LOC
-    entities:
-    - GPE: Gdynia
-  - slot_was_set:
-    - GPE: Gdynia
-  - action: find_restaurant_form
-  - slot_was_set:
-    - requested_slot: cuisine
-  - intent: record_cuisine
-    entities:
-    - cuisine: chinese
-  - slot_was_set:
-    - cuisine: chinese
-  - action: find_restaurant_form
-  - slot_was_set:
-    - requested_slot: null
-  - active_loop: null
-  - action: utter_submit_find_restaurant
-  - action: action_find_restaurant
-  - intent: confirm
-  - action: action_default_fallback
-  - intent: goodbye
-  - action: utter_goodbye
-
-- story: interactive_story_1
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: find_restaurant
     entities:
     - GPE: Gdańsk
   - slot_was_set:
@@ -125,9 +92,9 @@ stories:
     - requested_slot: cuisine
   - intent: record_cuisine
     entities:
-    - cuisine: Indian
+    - cuisine: Mexican
   - slot_was_set:
-    - cuisine: Indian
+    - cuisine: Mexican
   - action: find_restaurant_form
   - slot_was_set:
     - requested_slot: null
@@ -142,58 +109,28 @@ stories:
   - intent: greet
   - action: utter_greet
   - intent: find_restaurant
-  - intent: find_restaurant
-    entities:
-    - GPE: Sopot
   - action: find_restaurant_form
   - active_loop: find_restaurant_form
   - slot_was_set:
+    - requested_slot: GPE
+  - intent: record_GPE
+    entities:
     - GPE: Sopot
+  - slot_was_set:
+    - GPE: Sopot
+  - action: find_restaurant_form
   - slot_was_set:
     - requested_slot: cuisine
   - intent: record_cuisine
     entities:
-    - cuisine: Italian
+    - cuisine: Japanese
   - slot_was_set:
-    - cuisine: Italian
+    - cuisine: Japanese
   - action: find_restaurant_form
   - slot_was_set:
     - requested_slot: null
   - active_loop: null
   - action: utter_submit_find_restaurant
   - action: action_find_restaurant
-  - intent: confirm
-  - action: action_default_fallback
-  - intent: goodbye
-  - action: utter_goodbye
-
-- story: interactive_story_1
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: find_restaurant
-    entities:
-    - GPE: Tricity
-  - slot_was_set:
-    - GPE: Tricity
-  - action: find_restaurant_form
-  - active_loop: find_restaurant_form
-  - slot_was_set:
-    - GPE: Tricity
-  - slot_was_set:
-    - requested_slot: cuisine
-  - intent: record_cuisine
-    entities:
-    - cuisine: Mexican
-  - slot_was_set:
-    - cuisine: Mexican
-  - action: find_restaurant_form
-  - slot_was_set:
-    - requested_slot: null
-  - active_loop: null
-  - action: utter_submit_find_restaurant
-  - action: action_find_restaurant
-  - intent: confirm
-  - action: action_default_fallback
   - intent: goodbye
   - action: utter_goodbye

@@ -5,6 +5,7 @@ intents:
 - greet
 - make_reservation
 - record_GPE
+- record_LOC
 - record_PERSON
 - record_cuisine
 - session_start
@@ -12,8 +13,8 @@ intents:
 - thanks
 entities:
 - cuisine
-- PERSON
 - GPE
+- PERSON
 slots:
   PERSON:
     type: text
@@ -64,10 +65,10 @@ session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: false
 actions:
-- utter_greet
 - action_find_restaurant
-- utter_submit_find_restaurant
 - utter_goodbye
+- utter_greet
+- utter_submit_find_restaurant
 - action_fetch_reservations
 - utter_submit_show_reservations
 - utter_welcome

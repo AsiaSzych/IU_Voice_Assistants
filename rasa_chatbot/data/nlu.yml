@@ -78,6 +78,7 @@ nlu:
     - I want to find a restautant in [Sopot](GPE)
     - I want to find something to eat in Gdańsk
     - I want to find a place to eat in Tricity
+    - I want to find a restaurant in Gdańsk
 - intent: make_reservation
   examples: |
     - I want to book a table here
@@ -124,7 +125,7 @@ nlu:
     - Chandler Bing
     - It's Monica Belluci
     - Condrad Flinch
-- intent: record_LOC
+- intent: record_GPE
   examples: |
     - Gdynia
     - I'm in [Sopot](GPE)
@@ -144,7 +145,7 @@ nlu:
     - I would love a [Chinese](cuisine)
     - All I'm thinking about is [Italian](cuisine)
     - I want to eat [Mexican](cuisine) food
-    - I would love to eat something from [Thai](cuisine) cuisine
+    - I would love to eat something from [Turkish](cuisine) cuisine
     - I would die for [Chinese](cuisine) meal
     - I need someting [French](cuisine), like a croisant!
     - I want a [Mexican](cuisine) food
@@ -152,3 +153,8 @@ nlu:
     - I want a [Indian](cuisine) food
     - [Italian](cuisine)
     - Somethig [Mexican](cuisine)
+    - I want something [Mexican](cuisine)
+    - I want something [Japanese](cuisine)
+- intent: record_LOC
+  examples: |
+    - I'm in [Sopot](GPE)

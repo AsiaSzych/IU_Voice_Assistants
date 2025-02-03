@@ -12,8 +12,11 @@ from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 
-from .db_functions import check_reservations_in_db
+from .db_functions import check_reservations_in_db, recommend_restaurants
 
+
+CITY_VALIDATION =  ['Gdańsk', 'Gdynia', "Sopot", "Tricity"]
+CUISINE_VALIDATION = ["Italian", "Turkish", "Indian", "Chinese", "sushi", "pizza", "Mexican", "Japanese", "French"]
 
 class ActionFetchReservations(Action):
 
@@ -39,7 +42,16 @@ class ActionFindRestaurant(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        
-        dispatcher.utter_message(text="I have found a XYZ restaurant, is that okay?")
+        city = tracker.get_slot("GPE")
+        cuisine = tracker.get_slot("cuisine")
+        if city not in CITY_VALIDATION:
+            dispatcher.utter_message("I'm sorry. It is only possible to find restaurant in the Tricity area of Poland")
+            # return empty city slot
+        elif cuisine not in CUISINE_VALIDATION:
+            dispatcher.utter_message("I'm sorry, I don't have any restaurant with such a cuisine. Please try something else")
+            # return empty cuisine slot
+        else:
+            restaurant_name = recommend_restaurants(city, cuisine)
+            dispatcher.utter_message(text=f"I have found a {restaurant_name} restaurant in {city}")
 
         return []
