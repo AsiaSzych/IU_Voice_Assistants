@@ -155,6 +155,3 @@ nlu:
     - Somethig [Mexican](cuisine)
     - I want something [Mexican](cuisine)
     - I want something [Japanese](cuisine)
-- intent: record_LOC
-  examples: |
-    - I'm in [Sopot](GPE)
