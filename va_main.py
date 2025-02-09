@@ -5,9 +5,9 @@ import whisper
 import tempfile
 import pyttsx3
 from google.cloud import texttospeech
-
 from va_helpers import create_session, send_message_to_rasa, save_audio_to_file, speak_text, transcribe_audio, record_audio
 
+#Initialize constant parameters
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "./tts_sa.json"
 RASA_SERVER_URL = "http://localhost:5005/webhooks/rest/webhook"
 TTS_MODEL = "google"
@@ -34,7 +34,7 @@ logger.debug(f"TTS model set")
 
 if __name__ == "__main__":
     logger.info("Starting voice assistant...")
-    session_id, sessions = create_session(sessions=sessions)
+    sessions, session_id = create_session(sessions=sessions)
 
     while True:
         # Record user input

@@ -13,6 +13,12 @@ logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("va_helpers")
 
+voice = texttospeech.VoiceSelectionParams(
+    language_code="en-US",  
+    ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL)
+audio_config = texttospeech.AudioConfig(
+    audio_encoding=texttospeech.AudioEncoding.LINEAR16)
+
 def create_session(sessions:dict):
     session_id = str(uuid.uuid4())
     sessions[session_id] = {"context": {}}
@@ -37,9 +43,7 @@ def send_message_to_rasa(url:str,
 
 
 def record_audio(duration:int=7, sample_rate:int=16000):
-    """
-    Record audio from the microphone.
-    """
+
     logger.info("Recording... Speak now.")
     audio_data = sd.rec(int(duration * sample_rate), samplerate=sample_rate, channels=1, dtype=np.int16)
     sd.wait() 
@@ -47,7 +51,7 @@ def record_audio(duration:int=7, sample_rate:int=16000):
     return audio_data, sample_rate
 
 
-def save_audio_to_file(audio_data, sample_rate:int, filename:str):
+def save_audio_to_file(audio_data:any, sample_rate:int, filename:str):
 
     with wave.open(filename, 'wb') as wf:
         wf.setnchannels(1)  # Mono audio
@@ -72,11 +76,6 @@ def speak_text(text:str,
         tts_engine.say(text)
         tts_engine.runAndWait()
     elif tts_model == 'google':
-        voice = texttospeech.VoiceSelectionParams(
-        language_code="en-US",  
-        ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL)
-        audio_config = texttospeech.AudioConfig(
-            audio_encoding=texttospeech.AudioEncoding.LINEAR16)
         synthesis_input = texttospeech.SynthesisInput(text=text)
         response = tts_engine.synthesize_speech(
             input=synthesis_input, voice=voice, audio_config=audio_config)
