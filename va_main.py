@@ -1,16 +1,9 @@
 import os
-import uuid
 import time
-import requests
 import logging
-import wave
 import whisper
 import tempfile
 import pyttsx3
-import numpy as np
-import sounddevice as sd
-from pydub import AudioSegment
-from pydub.playback import play
 from google.cloud import texttospeech
 
 from va_helpers import create_session, send_message_to_rasa, save_audio_to_file, speak_text, transcribe_audio, record_audio
