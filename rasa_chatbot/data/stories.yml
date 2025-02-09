@@ -134,3 +134,32 @@ stories:
   - action: action_find_restaurant
   - intent: goodbye
   - action: utter_goodbye
+
+- story: interactive_story_1
+  steps:
+  - intent: find_restaurant
+    entities:
+    - GPE: Sopot
+  - slot_was_set:
+    - GPE: Sopot
+  - action: find_restaurant_form
+  - active_loop: find_restaurant_form
+  - slot_was_set:
+    - GPE: Sopot
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: record_cuisine
+    entities:
+    - cuisine: Italian
+  - slot_was_set:
+    - cuisine: Italian
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_find_restaurant
+  - action: action_find_restaurant
+  - intent: thanks
+  - action: utter_welcome
+  - intent: deny
+  - action: action_default_fallback
