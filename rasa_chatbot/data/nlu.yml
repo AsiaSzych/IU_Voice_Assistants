@@ -79,6 +79,7 @@ nlu:
     - I want to find something to eat in Gdańsk
     - I want to find a place to eat in Tricity
     - I want to find a restaurant in Gdańsk
+    - I want to find a restaurant in [Sopot](GPE)
 - intent: make_reservation
   examples: |
     - I want to book a table here
@@ -155,3 +156,4 @@ nlu:
     - Somethig [Mexican](cuisine)
     - I want something [Mexican](cuisine)
     - I want something [Japanese](cuisine)
+    - [Italian](cuisine)

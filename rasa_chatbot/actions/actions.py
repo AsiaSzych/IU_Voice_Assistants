@@ -1,20 +1,13 @@
-# This files contains your custom actions which can be used to run
-# custom Python code.
-#
-# See this guide on how to implement these action:
-# https://rasa.com/docs/rasa/custom-actions
-
-
-# This is a simple example for a custom action which utters "Hello World!"
-
+## Should be run from root project directory with folder selection:
+#  rasa run actions --actions rasa_chatbot.actions
 from typing import Any, Text, Dict, List
 
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 
-from .db_functions import check_reservations_in_db, recommend_restaurants
+from database.db_queries import get_reservations, get_restaurant_recommendations
 
-
+DB_PATH = 'database/restaurants.db'
 CITY_VALIDATION =  ['Gdańsk', 'Gdynia', "Sopot", "Tricity"]
 CUISINE_VALIDATION = ["Italian", "Turkish", "Indian", "Chinese", "sushi", "pizza", "Mexican", "Japanese", "French"]
 
@@ -28,7 +21,8 @@ class ActionFetchReservations(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
         full_name = tracker.get_slot("PERSON")
-        current_reservations_message = check_reservations_in_db(full_name)
+        amount_of_reservations = get_reservations(full_name, db_path=DB_PATH)
+        current_reservations_message = f"Currently there are {amount_of_reservations} reservations for {full_name}"
         dispatcher.utter_message(text=current_reservations_message)
 
         return []
@@ -51,7 +45,7 @@ class ActionFindRestaurant(Action):
             dispatcher.utter_message("I'm sorry, I don't have any restaurant with such a cuisine. Please try something else")
             # return empty cuisine slot
         else:
-            restaurant_name = recommend_restaurants(city, cuisine)
+            restaurant_id, restaurant_name = get_restaurant_recommendations(city, cuisine, db_path=DB_PATH)
             dispatcher.utter_message(text=f"I have found a {restaurant_name} restaurant in {city}")
 
         return []
