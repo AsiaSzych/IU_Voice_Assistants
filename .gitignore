@@ -176,3 +176,5 @@ cython_debug/
 /rasa_chatbot/.rasa
 /restaurants_data/api_key.txt
 /restaurants_data/tests.ipynb
+/tests/*
+tts_sa.json
