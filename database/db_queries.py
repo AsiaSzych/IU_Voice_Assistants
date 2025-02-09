@@ -25,7 +25,7 @@ def get_restaurant_recommendations(city, cuisine, db_path="restaurants.db", *kwa
 
     return choice[0], choice[1] #TODO: change this, for now return only id and name - later probably more 
 
-#TODO: change this - adding logic to check if there is a possibility to make reservation
+#TODO: change this - add logic to check if there is a possibility to make reservation
 def make_reservation(restaurant_id, name, num_people, date, time, db_path="restaurants.db", *kwargs):
 
     conn = sqlite3.connect(db_path)

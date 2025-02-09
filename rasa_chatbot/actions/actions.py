@@ -1,3 +1,5 @@
+## Should be run from root project directory with folder selection:
+#  rasa run actions --actions rasa_chatbot.actions
 from typing import Any, Text, Dict, List
 
 from rasa_sdk import Action, Tracker
