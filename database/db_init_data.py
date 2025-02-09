@@ -52,6 +52,6 @@ def load_initial_reservations(csv_file):
 
 if __name__ == "__main__":
     load_all_restaurants_from_csv("../restaurants_data/all_restaurants_info.csv") 
-    # load_initial_reservations("../restaurants_data/initial_reservations.csv") TODO: Create initial_reservations.csv
+    load_initial_reservations("../restaurants_data/initial_reservations.csv")
 
 conn.close()

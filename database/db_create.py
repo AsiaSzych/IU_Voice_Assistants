@@ -35,7 +35,6 @@ CREATE TABLE IF NOT EXISTS reservations (
     date TEXT NOT NULL,
     time TEXT NOT NULL,
     phone TEXT,
-    special_requests TEXT,
     FOREIGN KEY (restaurant_id) REFERENCES restaurants(id)
 );
 ''')
