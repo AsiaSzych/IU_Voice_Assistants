@@ -1,5 +1,7 @@
 version: '3.1'
 intents:
+- confirm
+- deny
 - find_restaurant
 - goodbye
 - greet
@@ -8,15 +10,19 @@ intents:
 - record_LOC
 - record_PERSON
 - record_cuisine
+- record_date_time
+- record_num_people
 - session_start
 - show_reservations
 - thanks
-- deny
-- confirm
 entities:
 - cuisine
 - GPE
 - PERSON
+- time
+- number
+- place_id
+- place_name
 slots:
   PERSON:
     type: text
@@ -36,6 +42,30 @@ slots:
     mappings:
     - type: from_entity
       entity: cuisine
+  number:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: number
+  time:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: time
+  place_id:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: place_id
+  place_name:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: place_name
 forms:
   show_reservations_form:
     required_slots:
@@ -44,6 +74,12 @@ forms:
     required_slots:
     - GPE
     - cuisine
+  make_reservation_form:
+    required_slots:
+    - PERSON
+    - time
+    - number
+    - place_id
 responses:
   utter_greet:
   - text: Hey! I'm a restaurnat-helper bot, I can help you find a restaurnat, reserve a seat there and check previous reservations! What would you like to do today?
@@ -59,18 +95,28 @@ responses:
   - text: What city are you in?
   utter_ask_cuisine:
   - text: What type of cuisine would you like?
+  utter_ask_time:
+  - text: What date and time should I put on reservation?
+  utter_ask_number:
+  - text: For how many people is this reservation?
+  utter_ask_place_id:
+  - text: Do you have a place chosen?
   utter_submit_show_reservations:
   - text: I will check reservations for you!
   utter_submit_find_restaurant:
   - text: Wait a minute, I will find a restaurant for you
+  utter_submit_make_reservation:
+  - text: Wait a minute, I will make a reservation
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: false
 actions:
-- utter_welcome
-- utter_submit_find_restaurant
-- action_find_restaurant
+- utter_submit_make_reservation
 - utter_goodbye
+- action_find_restaurant
+- action_make_reservation
+- utter_submit_find_restaurant
+- utter_welcome
 - utter_greet
 - action_fetch_reservations
 - utter_submit_show_reservations
@@ -78,3 +124,6 @@ actions:
 - utter_ask_PERSON
 - utter_ask_GPE
 - utter_ask_cuisine
+- utter_ask_time
+- utter_ask_number
+- utter_ask_place_id
