@@ -32,6 +32,7 @@ nlu:
     - ok, bye
     - Thanks, bye
     - thanks, bye
+    - thank, bye
 - intent: thanks
   examples: |
     - thank
@@ -125,6 +126,8 @@ nlu:
     - Show me reservations for Monica Geller
     - I want to check reservations
     - I want to see reservations made
+    - I want to check my reservations
+    - I want to check reservatons for michal Blajetow
 - intent: record_PERSON
   examples: |
     - Anna Green
@@ -170,7 +173,6 @@ nlu:
     - I want something [Mexican](cuisine)
     - I want something [Japanese](cuisine)
     - I want something [Italian](cuisine)
-    - [Italian](cuisine)
 - intent: record_date_time
   examples: |
     - today at 5PM

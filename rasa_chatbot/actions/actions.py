@@ -6,7 +6,7 @@ from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet
 
-from database.db_queries import get_reservations, get_restaurant_recommendations, make_reservation
+from database.db_queries import get_reservations, get_restaurant_recommendations, make_reservation, get_restaurant_name
 
 DB_PATH = 'database/restaurants.db'
 CITY_VALIDATION =  ['Gdańsk', 'Gdynia', "Sopot", "Tricity"]
@@ -22,8 +22,15 @@ class ActionFetchReservations(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
         full_name = tracker.get_slot("PERSON")
-        amount_of_reservations = get_reservations(full_name, db_path=DB_PATH)
-        current_reservations_message = f"Currently there are {amount_of_reservations} reservations for {full_name}"
+        closest_reservation, text = get_reservations(full_name, db_path=DB_PATH)
+        if closest_reservation:
+            restaurant_id = closest_reservation[0]
+            restaurant_name = get_restaurant_name(restaurant_id, db_path = DB_PATH)
+            current_reservations_message = f"Your closest reservation {text} on {closest_reservation[1]} at {closest_reservation[2]} for {closest_reservation[3]} people, in the {restaurant_name}." 
+        else:
+            current_reservations_message = f'Sorry currently there are no reservations for {full_name}'
+        if text == 'was':
+            current_reservations_message = current_reservations_message + "There are no reservations in the future."
         dispatcher.utter_message(text=current_reservations_message)
 
         return []

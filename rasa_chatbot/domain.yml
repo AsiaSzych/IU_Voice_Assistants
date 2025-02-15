@@ -111,6 +111,8 @@ session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: false
 actions:
+- action_fetch_reservations
+- utter_submit_show_reservations
 - utter_submit_make_reservation
 - utter_goodbye
 - action_find_restaurant
@@ -118,8 +120,6 @@ actions:
 - utter_submit_find_restaurant
 - utter_welcome
 - utter_greet
-- action_fetch_reservations
-- utter_submit_show_reservations
 - utter_confirm
 - utter_ask_PERSON
 - utter_ask_GPE
