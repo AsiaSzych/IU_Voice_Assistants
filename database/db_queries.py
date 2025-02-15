@@ -41,9 +41,7 @@ def make_reservation(restaurant_id, name, num_people, date, time, db_path="resta
     conn.close()
     logger.debug(f"New reservation inserted")
 
-#TODO: Change this - return also latest/closest reservation 
 def get_reservations(name, db_path="restaurants.db", *kwargs):
-
 
     query_closest_future = '''
     SELECT restaurant_id, date, time, num_people,  julianday(date) - julianday('now') AS date_diff
@@ -83,6 +81,7 @@ def get_reservations(name, db_path="restaurants.db", *kwargs):
     return closest_resevation, text
 
 def get_restaurant_name(restaurant_id, db_path="restaurants.db"):
+
     query = '''
     SELECT name
     FROM restaurants
