@@ -12,11 +12,6 @@ rules:
   - intent: goodbye
   - action: utter_goodbye
 
-- rule: Say welcome anytime the user says thanks
-  steps:
-  - intent: thanks
-  - action: utter_welcome
-
 - rule: Activate form show reservations
   steps:
   - intent: show_reservations

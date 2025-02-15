@@ -22,8 +22,6 @@ stories:
   - active_loop: null
   - action: utter_submit_show_reservations
   - action: action_fetch_reservations
-  - intent: thanks
-  - action: utter_welcome
   - intent: goodbye
   - action: utter_goodbye
 
@@ -76,8 +74,8 @@ stories:
   - active_loop: null
   - action: utter_submit_find_restaurant
   - action: action_find_restaurant
-  - intent: thanks
-  - action: utter_welcome
+  - intent: goodbye
+  - action: utter_goodbye
 
 - story: interactive_story_1
   steps:
@@ -134,10 +132,8 @@ stories:
   - active_loop: null
   - action: utter_submit_find_restaurant
   - action: action_find_restaurant
-  - intent: thanks
-  - action: utter_welcome
-  - intent: deny
-  - action: action_default_fallback
+  - intent: goodbye
+  - action: utter_goodbye
 
 - story: interactive_story_1
   steps:

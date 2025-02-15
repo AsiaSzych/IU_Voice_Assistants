@@ -33,14 +33,6 @@ nlu:
     - Thanks, bye
     - thanks, bye
     - thank, bye
-- intent: thanks
-  examples: |
-    - thank
-    - thank you
-    - thanks
-    - thanks for help
-    - tanks
-    - Thanks
 - intent: confirm
   examples: |
     - yes

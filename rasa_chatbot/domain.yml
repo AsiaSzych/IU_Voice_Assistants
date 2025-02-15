@@ -14,7 +14,6 @@ intents:
 - record_num_people
 - session_start
 - show_reservations
-- thanks
 entities:
 - cuisine
 - GPE
