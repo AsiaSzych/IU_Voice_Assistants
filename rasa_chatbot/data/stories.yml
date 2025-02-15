@@ -2,31 +2,6 @@ version: "3.1"
 
 stories:
 
-- story: happy path make reservation
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: make_reservation
-  - action: utter_confirm
-  - intent: thanks
-  - action: utter_welcome
-  - intent: goodbye
-  - action: utter_goodbye
-
-- story: happy path find restaurant
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: make_reservation
-  - intent: find_restaurant
-  - action: find_restaurant_form
-  - active_loop: find_restaurant_form  
-  - intent: thanks
-  - action: utter_welcome
-  - intent: goodbye
-  - action: utter_goodbye
-
-
 - story: interactive_story_1
   steps:
   - intent: greet
@@ -47,8 +22,6 @@ stories:
   - active_loop: null
   - action: utter_submit_show_reservations
   - action: action_fetch_reservations
-  - intent: thanks
-  - action: utter_welcome
   - intent: goodbye
   - action: utter_goodbye
 
@@ -101,8 +74,8 @@ stories:
   - active_loop: null
   - action: utter_submit_find_restaurant
   - action: action_find_restaurant
-  - intent: thanks
-  - action: utter_welcome
+  - intent: goodbye
+  - action: utter_goodbye
 
 - story: interactive_story_1
   steps:
@@ -159,7 +132,244 @@ stories:
   - active_loop: null
   - action: utter_submit_find_restaurant
   - action: action_find_restaurant
-  - intent: thanks
-  - action: utter_welcome
-  - intent: deny
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: interactive_story_1
+  steps:
+  - intent: find_restaurant
+  - action: find_restaurant_form
+  - active_loop: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: GPE
+  - intent: record_GPE
+    entities:
+    - GPE: Gdynia
+  - slot_was_set:
+    - GPE: Gdynia
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: record_cuisine
+    entities:
+    - cuisine: Italian
+  - slot_was_set:
+    - cuisine: Italian
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_find_restaurant
+  - action: action_find_restaurant
+  - slot_was_set:
+    - place_id: ChIJbVK7kiSn_UYRIv2xNPTcNO8
+  - slot_was_set:
+    - place_name: Andiamo a Roma Gdynia
+  - intent: make_reservation
+  - action: make_reservation_form
+  - active_loop: make_reservation_form
+  - slot_was_set:
+    - requested_slot: PERSON
+  - intent: record_PERSON
+    entities:
+    - PERSON: Joanna Szych
+  - slot_was_set:
+    - PERSON: Joanna Szych
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: time
+  - intent: record_date_time
+    entities:
+    - time: '2025-02-12T12:00:00.000+01:00'
+  - slot_was_set:
+    - time: '2025-02-12T12:00:00.000+01:00'
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: number
+  - intent: record_num_people
   - action: action_default_fallback
+  - intent: record_num_people
+    entities:
+    - number: 2
+  - slot_was_set:
+    - number: 2
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_make_reservation
+  - action: action_make_reservation
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: interactive_story_1
+  steps:
+  - intent: find_restaurant
+    entities:
+    - GPE: Gdańsk
+  - slot_was_set:
+    - GPE: Gdańsk
+  - action: find_restaurant_form
+  - active_loop: find_restaurant_form
+  - slot_was_set:
+    - GPE: Gdańsk
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: record_cuisine
+    entities:
+    - cuisine: Italian
+  - slot_was_set:
+    - cuisine: Italian
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_find_restaurant
+  - action: action_find_restaurant
+  - slot_was_set:
+    - place_id: ChIJvS9OjDNz_UYR8Y9DR6KReFQ
+  - slot_was_set:
+    - place_name: IL Panino Gdańsk
+  - intent: make_reservation
+  - action: make_reservation_form
+  - active_loop: make_reservation_form
+  - slot_was_set:
+    - requested_slot: PERSON
+  - intent: record_PERSON
+    entities:
+    - PERSON: Joanna Szych
+  - slot_was_set:
+    - PERSON: Joanna Szych
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: time
+  - intent: record_date_time
+    entities:
+    - time: '2025-02-12T15:00:00.000+01:00'
+  - slot_was_set:
+    - time: '2025-02-12T15:00:00.000+01:00'
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: number
+  - intent: record_num_people
+    entities:
+    - number: 9
+  - slot_was_set:
+    - number: 9
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_make_reservation
+  - action: action_make_reservation
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: interactive_story_1
+  steps:
+  - intent: show_reservations
+  - action: show_reservations_form
+  - active_loop: show_reservations_form
+  - slot_was_set:
+    - requested_slot: PERSON
+  - intent: record_PERSON
+    entities:
+    - PERSON: Joanna Szych
+  - slot_was_set:
+    - PERSON: Joanna Szych
+  - action: show_reservations_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_show_reservations
+  - action: action_fetch_reservations
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: interactive_story_1
+  steps:
+  - intent: show_reservations
+    entities:
+    - PERSON: michal Blajetow
+  - slot_was_set:
+    - PERSON: michal Blajetow
+  - action: show_reservations_form
+  - active_loop: show_reservations_form
+  - slot_was_set:
+    - PERSON: michal Blajetow
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_show_reservations
+  - action: action_fetch_reservations
+
+- story: interactive_story_1
+  steps:
+  - intent: find_restaurant
+  - action: find_restaurant_form
+  - active_loop: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: GPE
+  - intent: record_GPE
+    entities:
+    - GPE: Gdynia
+  - slot_was_set:
+    - GPE: Gdynia
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: record_cuisine
+    entities:
+    - cuisine: Mexican
+  - slot_was_set:
+    - cuisine: Mexican
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_find_restaurant
+  - action: action_find_restaurant
+  - slot_was_set:
+    - place_id: ChIJ8-kT3y-n_UYRkHU_5x4BC0M
+  - slot_was_set:
+    - place_name: Pueblo
+  - intent: make_reservation
+  - action: make_reservation_form
+  - active_loop: make_reservation_form
+  - slot_was_set:
+    - requested_slot: PERSON
+  - intent: record_PERSON
+    entities:
+    - PERSON: Kate Ming
+  - slot_was_set:
+    - PERSON: Kate Ming
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: time
+  - intent: record_date_time
+    entities:
+    - time: '2025-02-16T16:00:00.000+01:00'
+  - slot_was_set:
+    - time: '2025-02-16T16:00:00.000+01:00'
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: number
+  - intent: record_num_people
+    entities:
+    - number: 4
+  - slot_was_set:
+    - number: 4
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_make_reservation
+  - action: action_make_reservation
+  - intent: show_reservations
+  - action: show_reservations_form
+  - active_loop: show_reservations_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_show_reservations
+  - action: action_fetch_reservations

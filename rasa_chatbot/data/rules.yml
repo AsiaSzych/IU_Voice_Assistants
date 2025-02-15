@@ -12,11 +12,6 @@ rules:
   - intent: goodbye
   - action: utter_goodbye
 
-- rule: Say welcome anytime the user says thanks
-  steps:
-  - intent: thanks
-  - action: utter_welcome
-
 - rule: Activate form show reservations
   steps:
   - intent: show_reservations
@@ -37,7 +32,7 @@ rules:
   - action: utter_submit_show_reservations
   - action: action_fetch_reservations
 
-- rule: Activate form show reservations
+- rule: Activate form find restaurant
   steps:
   - intent: find_restaurant
   - action: find_restaurant_form
@@ -57,3 +52,24 @@ rules:
   # The actions we want to run when the form is submitted.
   - action: utter_submit_find_restaurant
   - action: action_find_restaurant
+
+- rule: Activate form make reservation
+  steps:
+  - intent: make_reservation
+  - action: make_reservation_form
+  - active_loop: make_reservation_form
+
+
+- rule: Submit form make reservation
+  condition:
+  # Condition that form is active.
+  - active_loop: make_reservation_form
+  steps:
+  # Form is deactivated
+  - action: make_reservation_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  # The actions we want to run when the form is submitted.
+  - action: utter_submit_make_reservation
+  - action: action_make_reservation

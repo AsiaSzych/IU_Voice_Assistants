@@ -30,14 +30,9 @@ nlu:
     - byr
     - no, bye
     - ok, bye
-- intent: thanks
-  examples: |
-    - thank
-    - thank you
-    - thanks
-    - thanks for help
-    - tanks
-    - Thanks
+    - Thanks, bye
+    - thanks, bye
+    - thank, bye
 - intent: confirm
   examples: |
     - yes
@@ -80,6 +75,13 @@ nlu:
     - I want to find a place to eat in Tricity
     - I want to find a restaurant in Gdańsk
     - I want to find a restaurant in [Sopot](GPE)
+    - I'm hungry, where can I eat?
+    - I want something to eat
+    - I need a place for dinner
+    - Where can I eat dinner?
+    - Hi I want to find a restaurant
+    - Hi I want to find a restaurant in Gdańsk
+    - I want to find a place to eat dinner
 - intent: make_reservation
   examples: |
     - I want to book a table here
@@ -91,6 +93,10 @@ nlu:
     - I need to book a table in a restaurant
     - I need to book a table
     - I want to make a reservations
+    - I need to have a sure table
+    - I want to book that place
+    - Thanks, I want to make reservation here
+    - I want to book a table in this restaurant
 - intent: show_reservations
   examples: |
     - show me my previous reservation
@@ -114,6 +120,8 @@ nlu:
     - Show me reservations for Monica Geller
     - I want to check reservations
     - I want to see reservations made
+    - I want to check my reservations
+    - I want to check reservatons for michal Blajetow
 - intent: record_PERSON
   examples: |
     - Anna Green
@@ -126,6 +134,9 @@ nlu:
     - Chandler Bing
     - It's Monica Belluci
     - Condrad Flinch
+    - It's Joanna Szych
+    - My name is Joanna Szych
+    - My name is Kate Ming
 - intent: record_GPE
   examples: |
     - Gdynia
@@ -156,4 +167,29 @@ nlu:
     - Somethig [Mexican](cuisine)
     - I want something [Mexican](cuisine)
     - I want something [Japanese](cuisine)
-    - [Italian](cuisine)
+    - I want something [Italian](cuisine)
+    - something [Mexican](cuisine)
+- intent: record_date_time
+  examples: |
+    - today at 5PM
+    - on saturday
+    - at 8PM
+    - tomorrow at 6AM
+    - next sunday at noon
+    - Tomorrow at noon, please
+    - Tomorrow at 3PM
+    - Tomorrow at 4PM
+- intent: record_num_people
+  examples: |
+    - it will be for 5 people
+    - it will be for five people
+    - 8
+    - eigth
+    - 6 people
+    - six people
+    - table for 2, please
+    - table for two, please
+    - it's for 4 guys
+    - It will be a table for two
+    - for nine people
+    - It's for four people
