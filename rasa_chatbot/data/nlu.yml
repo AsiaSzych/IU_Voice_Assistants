@@ -33,6 +33,7 @@ nlu:
     - Thanks, bye
     - thanks, bye
     - thank, bye
+    - thanks
 - intent: confirm
   examples: |
     - yes
@@ -147,6 +148,7 @@ nlu:
     - I want to find some place in Gdynia
     - I need a place in Gdańsk
     - I'm in Gdynia
+    - I'm in Gdańsk
 - intent: record_cuisine
   examples: |
     - I would like something [Italian](cuisine)
@@ -169,6 +171,7 @@ nlu:
     - I want something [Japanese](cuisine)
     - I want something [Italian](cuisine)
     - something [Mexican](cuisine)
+    - Something [mexican]{"entity": "cuisine", "value": "Mexican"}
 - intent: record_date_time
   examples: |
     - today at 5PM

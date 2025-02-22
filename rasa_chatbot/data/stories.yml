@@ -373,3 +373,36 @@ stories:
   - active_loop: null
   - action: utter_submit_show_reservations
   - action: action_fetch_reservations
+
+- story: interactive_story_1
+  steps:
+  - intent: find_restaurant
+  - action: find_restaurant_form
+  - active_loop: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: GPE
+  - intent: record_GPE
+    entities:
+    - GPE: Gdańsk
+  - slot_was_set:
+    - GPE: Gdańsk
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: record_cuisine
+    entities:
+    - cuisine: Mexican
+  - slot_was_set:
+    - cuisine: Mexican
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_find_restaurant
+  - action: action_find_restaurant
+  - slot_was_set:
+    - place_id: ChIJ8R1cEg11_UYRDv9UPvUhLCQ
+  - slot_was_set:
+    - place_name: Avocado Vegan SPOT
+  - intent: goodbye
+  - action: utter_goodbye

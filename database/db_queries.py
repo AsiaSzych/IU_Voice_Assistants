@@ -1,29 +1,52 @@
 import sqlite3
 import logging
-import random
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("db_queries")
 
-#TODO: change this for content based recommendation, kwargs to store additional requirements
-def get_restaurant_recommendations(city, cuisine, db_path="restaurants.db", *kwargs):
-    
+
+def get_restaurants(city, db_path="restaurants.db"):
     conn = sqlite3.connect(db_path)
+    query = """
+    SELECT place_id, name, cuisine, avg_rating, price_level, vegetarian, beer, wine 
+    FROM restaurants 
+    WHERE city = ?;
+    """
     cursor = conn.cursor()
-
-    query = '''
-    SELECT place_id, name
-    FROM restaurants
-    WHERE city = ? AND cuisine LIKE ?
-    '''
-    cursor.execute(query, (city, f"%{cuisine}%"))
-    
-    results = cursor.fetchall()
+    cursor.execute(query, (city,))
+    data = cursor.fetchall()
     conn.close()
-    choice = random.choice(results) #TODO: change this, for now random - later the most suitable 
+    return data
 
-    return choice[0], choice[1] #TODO: change this, for now return only id and name - later probably more 
+def get_reservations(city, db_path="restaurants.db"):
+    conn = sqlite3.connect(db_path)
+    query = """
+    SELECT place.place_id, place.name, res.name AS user_name
+    FROM restaurants place
+    JOIN reservations res ON place.place_id = res.restaurant_id
+    WHERE place.city = ?;
+    """
+    cursor = conn.cursor()
+    cursor.execute(query, (city,))
+    data = cursor.fetchall()
+    conn.close()
+    return data
+
+
+def get_distinct_users_in_city(city, db_path="restaurants.db"):
+    conn = sqlite3.connect(db_path)
+    query = """
+    SELECT DISTINCT res.name 
+    FROM restaurants place
+    JOIN reservations res ON place.place_id = res.restaurant_id
+    WHERE place.city = ?;
+    """
+    cursor = conn.cursor()
+    cursor.execute(query, (city,))
+    data = cursor.fetchall()
+    conn.close()
+    return data
 
 #TODO: change this - add logic to check if there is a possibility to make reservation
 def make_reservation(restaurant_id, name, num_people, date, time, db_path="restaurants.db", *kwargs):
@@ -41,7 +64,7 @@ def make_reservation(restaurant_id, name, num_people, date, time, db_path="resta
     conn.close()
     logger.debug(f"New reservation inserted")
 
-def get_reservations(name, db_path="restaurants.db", *kwargs):
+def get_closest_reservation_for_user(name, db_path="restaurants.db", *kwargs):
 
     query_closest_future = '''
     SELECT restaurant_id, date, time, num_people,  julianday(date) - julianday('now') AS date_diff
@@ -94,10 +117,23 @@ def get_restaurant_name(restaurant_id, db_path="restaurants.db"):
     results = cursor.fetchall()
     return results[0][0]
 
+def get_restaurant_details(restaurant_id, db_path="restaurants.db"):
+
+    conn = sqlite3.connect(db_path)
+    query = """
+    SELECT place_id, name, cuisine, avg_rating, price_level, vegetarian, beer, wine 
+    FROM restaurants 
+    WHERE place_id = ?
+    """
+    cursor = conn.cursor()
+    cursor.execute(query, (restaurant_id,))
+    data = cursor.fetchall()
+    conn.close()
+    return data
+
 
 if __name__ == "__main__":
     # Test queries
-    print(get_restaurant_recommendations("Gdańsk", "Italian"))
     make_reservation("ChIJ90grTyOn_UYRYV0USPJmPq4", "John Doe", 4, "2025-02-10", "15:00")
     get_reservations("Joanna Szych")
     get_restaurant_name("ChIJK4PtjPun_UYRRYuECz2jxWk")
