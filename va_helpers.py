@@ -103,13 +103,13 @@ def record_audio(sample_rate=SAMPLE_RATE):
     recorded_audio = b''.join(frames)
     return recorded_audio, sample_rate
 
-def save_audio_to_file(audio_data:any, sample_rate:int, filename:str):
+def save_audio_to_file(audio_data:bytes, sample_rate:int, filename:str):
 
     with wave.open(filename, 'wb') as wf:
         wf.setnchannels(1)  # Mono audio
         wf.setsampwidth(2)  # 16-bit audio
         wf.setframerate(sample_rate)
-        wf.writeframes(audio_data.tobytes())
+        wf.writeframes(audio_data)
 
 
 def transcribe_audio(stt_model: any, 
