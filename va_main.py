@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
     while True:
         # Record user input
-        audio_data, sample_rate = record_audio(duration=6)
+        audio_data, sample_rate = record_audio()
 
         # Save the audio to a temporary file
         with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_audio_file:

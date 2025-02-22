@@ -8,16 +8,39 @@ import sounddevice as sd
 from pydub import AudioSegment
 from pydub.playback import play
 from google.cloud import texttospeech
+import pyaudio
+import webrtcvad
+import time
+
+# Configuration
+SAMPLE_RATE = 16000  # 16 kHz sample rate (WebRTC VAD works best with this)
+FRAME_DURATION = 30   # 30 ms per frame
+FRAME_SIZE = int(SAMPLE_RATE * FRAME_DURATION / 1000)  # Convert ms to samples
+CHANNELS = 1
+FORMAT = pyaudio.paInt16
+VAD_MODE = 2  # WebRTC VAD aggressiveness (0-3, higher = more strict)
+SILENCE_DURATION = 1.5  # Stop recording after 1.5s of silence
+
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("va_helpers")
+
 
 voice = texttospeech.VoiceSelectionParams(
     language_code="en-US",  
     ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL)
 audio_config = texttospeech.AudioConfig(
     audio_encoding=texttospeech.AudioEncoding.LINEAR16)
+
+vad = webrtcvad.Vad(VAD_MODE)
+audio = pyaudio.PyAudio()
+stream = audio.open(format=FORMAT,
+                    channels=CHANNELS,
+                    rate=SAMPLE_RATE,
+                    input=True,
+                    frames_per_buffer=FRAME_SIZE)
+
 
 def create_session(sessions:dict):
     session_id = str(uuid.uuid4())
@@ -42,7 +65,7 @@ def send_message_to_rasa(url:str,
         return ["Sorry, I couldn't process your request."]
 
 
-def record_audio(duration:int=7, sample_rate:int=16000):
+def record_audio_old(duration:int=7, sample_rate:int=16000):
 
     logger.info("Recording... Speak now.")
     audio_data = sd.rec(int(duration * sample_rate), samplerate=sample_rate, channels=1, dtype=np.int16)
@@ -50,6 +73,35 @@ def record_audio(duration:int=7, sample_rate:int=16000):
     logger.info("Recording complete.")
     return audio_data, sample_rate
 
+
+def is_speech(frame, sample_rate=SAMPLE_RATE):
+    """Check if the given audio frame contains speech using WebRTC VAD."""
+    return vad.is_speech(frame, sample_rate)
+
+def record_audio(sample_rate=SAMPLE_RATE):
+    """Record audio from microphone using VAD to detect speech activity."""
+    logger.info("Listening... Speak now!")
+    frames = []
+    silence_start = None
+
+    while True:
+        audio_chunk = stream.read(FRAME_SIZE, exception_on_overflow=False)
+        
+        # Check if the chunk contains speech
+        if is_speech(audio_chunk):
+            frames.append(audio_chunk)
+            silence_start = None  # Reset silence timer
+        else:
+            if silence_start is None:
+                silence_start = time.time()  # Start silence timer
+            
+            # If silence exceeds the threshold, stop recording
+            if time.time() - silence_start > SILENCE_DURATION:
+                break
+
+    logger.info("Recording stopped.")
+    recorded_audio = b''.join(frames)
+    return recorded_audio, sample_rate
 
 def save_audio_to_file(audio_data:any, sample_rate:int, filename:str):
 
