@@ -1,25 +1,24 @@
 import os
 import uuid
-import requests
+import time
 import logging
+import requests
 import wave
-import numpy as np
-import sounddevice as sd
 from pydub import AudioSegment
 from pydub.playback import play
-from google.cloud import texttospeech
+import subprocess
 import pyaudio
 import webrtcvad
-import time
+from google.cloud import texttospeech
 
 # Configuration
 SAMPLE_RATE = 16000  # 16 kHz sample rate (WebRTC VAD works best with this)
-FRAME_DURATION = 30   # 30 ms per frame
+FRAME_DURATION = 30   #ms per frame
 FRAME_SIZE = int(SAMPLE_RATE * FRAME_DURATION / 1000)  # Convert ms to samples
 CHANNELS = 1
 FORMAT = pyaudio.paInt16
 VAD_MODE = 2  # WebRTC VAD aggressiveness (0-3, higher = more strict)
-SILENCE_DURATION = 1.5  # Stop recording after 1.5s of silence
+SILENCE_DURATION = 2 #seconds
 
 
 logging.basicConfig(level=logging.DEBUG,
@@ -63,15 +62,6 @@ def send_message_to_rasa(url:str,
     else:
         logger.error("Error communicating with Rasa:", response.text)
         return ["Sorry, I couldn't process your request."]
-
-
-def record_audio_old(duration:int=7, sample_rate:int=16000):
-
-    logger.info("Recording... Speak now.")
-    audio_data = sd.rec(int(duration * sample_rate), samplerate=sample_rate, channels=1, dtype=np.int16)
-    sd.wait() 
-    logger.info("Recording complete.")
-    return audio_data, sample_rate
 
 
 def is_speech(frame, sample_rate=SAMPLE_RATE):
@@ -133,6 +123,10 @@ def speak_text(text:str,
             input=synthesis_input, voice=voice, audio_config=audio_config)
         with open(output_file, "wb") as out:
             out.write(response.audio_content)
-        audio = AudioSegment.from_wav(output_file)
-        play(audio)
+        subprocess.run(["ffplay", "-nodisp", "-autoexit", output_file], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         os.remove(output_file) 
+
+def clean_up_resources():
+    stream.stop_stream()
+    stream.close()
+    audio.terminate()

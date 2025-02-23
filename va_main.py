@@ -60,4 +60,3 @@ if __name__ == "__main__":
             logger.info(f"Assistant: {response}")
             speak_text(text=response, tts_model=TTS_MODEL, tts_engine=tts_engine)
         
-        time.sleep(1)

@@ -1,0 +1,17 @@
+requests
+pandas
+spacy
+numpy
+googlemaps
+rasa
+whisper 
+pyttsx3 
+sounddevice 
+google-cloud-texttospeech
+protobuf==4.23.4
+pydub
+faker
+pyaudio>=0.2.0
+webrtcvad==0.2.10
+
+
