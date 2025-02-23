@@ -4,8 +4,6 @@ import time
 import logging
 import requests
 import wave
-from pydub import AudioSegment
-from pydub.playback import play
 import subprocess
 import pyaudio
 import webrtcvad
@@ -18,7 +16,7 @@ FRAME_SIZE = int(SAMPLE_RATE * FRAME_DURATION / 1000)  # Convert ms to samples
 CHANNELS = 1
 FORMAT = pyaudio.paInt16
 VAD_MODE = 2  # WebRTC VAD aggressiveness (0-3, higher = more strict)
-SILENCE_DURATION = 2 #seconds
+SILENCE_DURATION = 2.5 #seconds
 
 
 logging.basicConfig(level=logging.DEBUG,
@@ -50,6 +48,7 @@ def create_session(sessions:dict):
 def send_message_to_rasa(url:str,
                          session_id:str,
                          user_message:str):
+    
     payload = {
         "sender": session_id,
         "message": user_message
@@ -65,11 +64,16 @@ def send_message_to_rasa(url:str,
 
 
 def is_speech(frame, sample_rate=SAMPLE_RATE):
-    """Check if the given audio frame contains speech using WebRTC VAD."""
     return vad.is_speech(frame, sample_rate)
 
+def clear_audio_buffer():
+    for _ in range(5):  # Read and discard a few frames
+        stream.read(FRAME_SIZE, exception_on_overflow=False)
+
 def record_audio(sample_rate=SAMPLE_RATE):
-    """Record audio from microphone using VAD to detect speech activity."""
+
+    clear_audio_buffer()
+
     logger.info("Listening... Speak now!")
     frames = []
     silence_start = None
@@ -127,6 +131,7 @@ def speak_text(text:str,
         os.remove(output_file) 
 
 def clean_up_resources():
+
     stream.stop_stream()
     stream.close()
     audio.terminate()

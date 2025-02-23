@@ -1,11 +1,10 @@
 import os
-import time
 import logging
 import whisper
 import tempfile
 import pyttsx3
 from google.cloud import texttospeech
-from va_helpers import create_session, send_message_to_rasa, save_audio_to_file, speak_text, transcribe_audio, record_audio
+from va_helpers import create_session, send_message_to_rasa, save_audio_to_file, speak_text, transcribe_audio, record_audio, clean_up_resources
 
 #Initialize constant parameters
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "./tts_sa.json"
@@ -35,8 +34,9 @@ logger.debug(f"TTS model set")
 if __name__ == "__main__":
     logger.info("Starting voice assistant...")
     sessions, session_id = create_session(sessions=sessions)
+    stop_counter = 0
 
-    while True:
+    while stop_counter<2:
         # Record user input
         audio_data, sample_rate = record_audio()
 
@@ -48,8 +48,12 @@ if __name__ == "__main__":
         # Transcribe the audio to text
         user_input = transcribe_audio(stt_model, temp_audio_path)
         os.remove(temp_audio_path) 
-
         logger.info(f"You: {user_input}")
+
+        #Check stop condition
+        if user_input == "":
+            stop_counter += 1 
+            logger.debug(f"No input from the user, stop counter {stop_counter}")
 
         # Send transcribed text to Rasa
         responses = send_message_to_rasa(RASA_SERVER_URL, session_id, user_input)
@@ -59,4 +63,6 @@ if __name__ == "__main__":
         for response in responses:
             logger.info(f"Assistant: {response}")
             speak_text(text=response, tts_model=TTS_MODEL, tts_engine=tts_engine)
-        
+
+    logger.debug("Voicebot loop is closed.")
+    clean_up_resources() 

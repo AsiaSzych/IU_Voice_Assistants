@@ -1,17 +1,16 @@
 requests
 pandas
 spacy
-numpy
 googlemaps
-rasa
-whisper 
-pyttsx3 
+rasa 
+pyttsx3
+openai-whispe
 sounddevice 
 google-cloud-texttospeech
 protobuf==4.23.4
 pydub
 faker
-pyaudio>=0.2.0
-webrtcvad==0.2.10
-
+pyaudio
+webrtcvad
+numpy==1.24
 
