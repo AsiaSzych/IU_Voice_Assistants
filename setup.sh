@@ -5,4 +5,4 @@ sudo apt-get install -y libasound-dev portaudio19-dev libportaudio2 libportaudio
 sudo apt-get install -y ffmpeg libav-tools
 sudo apt install -y python3-pyaudio
 sudo apt install -y libsqlite3-dev
-
+sudo apt-get install -y swig

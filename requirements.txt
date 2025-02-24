@@ -12,5 +12,5 @@ pydub
 faker
 pyaudio
 webrtcvad
+webrtc-audio-processing
 numpy==1.24
-
