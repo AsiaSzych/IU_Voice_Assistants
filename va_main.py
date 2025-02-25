@@ -54,7 +54,9 @@ if __name__ == "__main__":
         if user_input == "":
             stop_counter += 1 
             logger.debug(f"No input from the user, stop counter {stop_counter}")
-            
+        else:
+            stop_counter = 0
+
         # Send transcribed text to Rasa
         responses = send_message_to_rasa(RASA_SERVER_URL, session_id, user_input)
         logger.debug(f"Amount of responses {len(responses)}")
@@ -63,8 +65,10 @@ if __name__ == "__main__":
         for response in responses:
             logger.info(f"Assistant: {response}")
             speak_text(text=response, tts_model=TTS_MODEL, tts_engine=tts_engine)
-            if response.lower() == "bye":
-                stop_counter == 3
+            if response.lower().lstrip().rstrip() == "bye":
+                logger.debug("In stop condition, because bot response is 'bye'. Closing the assistant.")
+                stop_counter = 3
+                break
 
 
     logger.debug("Voicebot loop is closed.")

@@ -8,7 +8,6 @@ import subprocess
 import pyaudio
 import webrtcvad
 from google.cloud import texttospeech
-from webrtc_audio_processing import AudioProcessingModule as AP
 
 
 # Configuration
@@ -17,7 +16,7 @@ FRAME_DURATION = 30   #ms per frame
 FRAME_SIZE = int(SAMPLE_RATE * FRAME_DURATION / 1000)  # Convert ms to samples
 CHANNELS = 1
 FORMAT = pyaudio.paInt16
-VAD_MODE = 2  # WebRTC VAD aggressiveness (0-3, higher = more strict)
+VAD_MODE = 3  # WebRTC VAD aggressiveness (0-3, higher = more strict)
 SILENCE_DURATION = 2.5 #seconds
 
 
@@ -39,14 +38,6 @@ stream = audio.open(format=FORMAT,
                     rate=SAMPLE_RATE,
                     input=True,
                     frames_per_buffer=FRAME_SIZE)
-
-noise_suppressor = AP(enable_vad=True, enable_ns=True)
-noise_suppressor.set_stream_format(SAMPLE_RATE, CHANNELS)
-noise_suppressor.set_ns_level(1)
-noise_suppressor.set_vad_level(VAD_MODE)  
-noise_suppressor.set_aec_level(2)  
-noise_suppressor.set_agc_level(1)  
-
 
 
 def create_session(sessions:dict):
@@ -80,11 +71,6 @@ def clear_audio_buffer():
     for _ in range(5):  # Read and discard a few frames
         stream.read(FRAME_SIZE, exception_on_overflow=False)
 
-
-def process_audio(audio_chunk):
-    """Apply WebRTC echo cancellation and noise suppression."""
-    return noise_suppressor.process_stream(audio_chunk)
-
 def record_audio(sample_rate=SAMPLE_RATE):
 
     clear_audio_buffer()
@@ -95,11 +81,10 @@ def record_audio(sample_rate=SAMPLE_RATE):
 
     while True:
         audio_chunk = stream.read(FRAME_SIZE, exception_on_overflow=False)
-        processed_chunk = process_audio(audio_chunk)  # Apply echo cancellation
 
         # Check if the chunk contains speech
-        if is_speech(processed_chunk):
-            frames.append(processed_chunk)
+        if is_speech(audio_chunk):
+            frames.append(audio_chunk)
             silence_start = None  # Reset silence timer
         else:
             if silence_start is None:
