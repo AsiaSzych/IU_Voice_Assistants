@@ -178,3 +178,4 @@ cython_debug/
 /restaurants_data/tests.ipynb
 /tests/*
 tts_sa.json
+ssh.txt
