@@ -1,0 +1,23 @@
+services:
+  duckling:
+    image: rasa/duckling:latest
+    ports:
+      - 8000:8000
+  rasa:
+    image: aszych/iu_rasa_chatbot:0.0.3
+    user: root
+    build: 
+      context: rasa_chatbot
+    volumes:
+      - "./rasa_chatbot:/app"
+    ports: 
+      - 5005:5005
+  app:
+    image: aszych/iu_rasa_actions:0.0.5
+    build: 
+      context: rasa_chatbot/actions
+    volumes:
+        - ./rasa_chatbot/actions:/app/actions
+        - ./rasa_chatbot/data:/app/data
+    ports:
+      - 5055:5055

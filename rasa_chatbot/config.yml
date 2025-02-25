@@ -28,7 +28,7 @@ pipeline:
     # overlap_strategy: "deduplicate"
     # docker run -p 8000:8000 rasa/duckling to enable this
   - name: "DucklingEntityExtractor"
-    url: "http://localhost:8000"
+    url: "http://duckling:8000"
     dimensions: ["time", "number"]
     locale: "en_GB"
     timezone: "Europe/Berlin"

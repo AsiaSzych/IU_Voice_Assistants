@@ -4,7 +4,7 @@ spacy
 googlemaps
 rasa 
 pyttsx3
-openai-whispe
+openai-whisper
 sounddevice 
 google-cloud-texttospeech
 protobuf==4.23.4
