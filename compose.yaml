@@ -12,7 +12,7 @@ services:
       - "./rasa_chatbot:/app"
     ports: 
       - 5005:5005
-  app:
+  actions:
     image: aszych/iu_rasa_actions:0.0.5
     build: 
       context: rasa_chatbot/actions
