@@ -16,6 +16,7 @@ intents:
 - show_reservations
 - out_of_scope
 - what_can_do
+- record_filters
 entities:
 - cuisine
 - GPE
@@ -67,6 +68,17 @@ slots:
     mappings:
     - type: from_entity
       entity: place_name
+  additional_filters:
+    type: bool
+    influence_conversation: false
+    mappings:
+      - type: from_intent
+        intent: confirm
+        value: true
+      - type: from_intent
+        intent: deny
+        value: false
+
 forms:
   show_reservations_form:
     required_slots:
@@ -116,6 +128,10 @@ responses:
   - text: I'm sorry, I didn't quite understand that. Could you rephrase?
   utter_default:
   - text: Sorry I didn't get that. Can you rephrase?
+  utter_ask_if_additional_filters:
+  - text: "Would you like to specify additional preferences like vegan, alcohol availability, rating, or price level?"
+  utter_ask_for_optional_filters:
+    - text: "What additional preferences do you have?"
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: false

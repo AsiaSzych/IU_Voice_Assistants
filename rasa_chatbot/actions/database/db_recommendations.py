@@ -5,7 +5,7 @@ import numpy as np
 from collections import defaultdict
 from scipy.spatial.distance import pdist, squareform
 from sklearn.metrics.pairwise import cosine_similarity
-from database.db_queries import get_reservations, get_restaurants, get_distinct_users_in_city
+from .db_queries import get_reservations, get_restaurants, get_distinct_users_in_city
 
 
 def encode_cuisine(restaurants):

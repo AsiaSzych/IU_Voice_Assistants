@@ -6,8 +6,8 @@ from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet
 
-from database.db_queries import get_closest_reservation_for_user, make_reservation, get_restaurant_name
-from database.db_recommendations import get_combined_recommendations
+from .database.db_queries import get_closest_reservation_for_user, make_reservation, get_restaurant_name
+from .database.db_recommendations import get_combined_recommendations
 
 DB_PATH = 'database/restaurants.db'
 CITY_VALIDATION =  ['Gdańsk', 'Gdynia', "Sopot", "Tricity"]

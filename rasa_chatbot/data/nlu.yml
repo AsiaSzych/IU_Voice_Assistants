@@ -57,6 +57,9 @@ nlu:
     - never
     - it's a no
     - no, it's not
+    - No, thanks
+    - nope, this is it
+    - no, that fine
 - intent: find_restaurant
   examples: |
     - I want to find a restaurant
@@ -218,3 +221,10 @@ nlu:
     - What skills do you have?
     - What can you help me with?
     - I don't know what I can ask
+- intent: record_filters
+  examples: |
+    - Yes, I want a [vegan](vegan) option.
+    - I would like a place that serves [beer](alcohol).
+    - Sure, I prefer a [popular](popularity) restaurant.
+    - Yes, I want a restaurant with a rating above [4.5](rating).
+    - I'd like a [cheap](pricing) option.

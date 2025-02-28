@@ -54,20 +54,30 @@ rules:
   - action: find_restaurant_form
   - active_loop: find_restaurant_form
 
-
 - rule: Submit form find restaurant
   condition:
-  # Condition that form is active.
-  - active_loop: find_restaurant_form
+    - active_loop: find_restaurant_form
   steps:
-  # Form is deactivated
-  - action: find_restaurant_form
-  - active_loop: null
-  - slot_was_set:
-    - requested_slot: null
-  # The actions we want to run when the form is submitted.
-  - action: utter_submit_find_restaurant
-  - action: action_find_restaurant
+    - action: find_restaurant_form
+    - active_loop: null
+    - slot_was_set:
+        - requested_slot: null
+    - action: utter_ask_if_additional_filters  
+
+- rule: User provides additional filters immediately
+  steps:
+    - intent: record_filters
+    - action: action_find_restaurant
+
+- rule: User wants to specify additional filters
+  steps:
+    - intent: confirm
+    - action: utter_ask_for_optional_filters
+
+- rule: User does not want additional filters
+  steps:
+    - intent: deny
+    - action: action_find_restaurant
 
 - rule: Activate form make reservation
   steps:
