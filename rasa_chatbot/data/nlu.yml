@@ -15,6 +15,7 @@ nlu:
     - goodmorning
     - goodevening
     - good afternoon
+    - what's up
 - intent: goodbye
   examples: |
     - cu
@@ -33,7 +34,7 @@ nlu:
     - Thanks, bye
     - thanks, bye
     - thank, bye
-    - thanks
+    - ciao
 - intent: confirm
   examples: |
     - yes
@@ -196,3 +197,24 @@ nlu:
     - It will be a table for two
     - for nine people
     - It's for four people
+- intent: out_of_scope
+  examples: |
+    - What is 2 + 2?
+    - Who's the US President?
+    - How's the weather
+    - What day it is?
+    - How to play golf?
+    - I want to buy new shoes
+    - I want to check the weather
+    - I want to order food to my house
+    - I want to check my bank account
+    - How mucj money do I have?
+- intent: what_can_do
+  examples: |
+    - What do you do?
+    - What can I do?
+    - How can you help me?
+    - What's your purpose?
+    - What skills do you have?
+    - What can you help me with?
+    - I don't know what I can ask

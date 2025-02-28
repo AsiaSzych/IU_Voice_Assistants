@@ -39,7 +39,9 @@ Since voice assistant is based on rasa chatbot, there is a possibility to run an
 
 OR 
 
+* in the */rasa_chatbot/config.yaml* file, comment line 31 and uncomment line 32. It should set duckling endpoint to localhost 
 * start duckling server separately, running `docker run -p 8000:8000 rasa/duckling`
+* in the */rasa_chatbot/endpoints.yaml* file uncomment lines 13-14 and comment lines 16-17. It should set actions endpont to localhost
 * start action server separately `docker run -p 5055:5055 aszych/iu_rasa_actions`
 * start rasa chatbotin the shell, from the */rasa_chatbot* folder run `rasa shell`
 

@@ -12,6 +12,22 @@ rules:
   - intent: goodbye
   - action: utter_goodbye
 
+- rule: Handle what to do
+  steps:
+  - intent: what_can_do
+  - action: utter_whoami
+
+- rule: Handle out-of-scope
+  steps:
+  - intent: out_of_scope
+  - action: utter_out_of_scope
+  - action: utter_whoami
+
+- rule: Ask the user to rephrase whenever they send a message with low NLU confidence
+  steps:
+  - intent: nlu_fallback
+  - action: utter_please_rephrase
+
 - rule: Activate form show reservations
   steps:
   - intent: show_reservations

@@ -14,6 +14,8 @@ intents:
 - record_num_people
 - session_start
 - show_reservations
+- out_of_scope
+- what_can_do
 entities:
 - cuisine
 - GPE
@@ -81,7 +83,9 @@ forms:
     - place_id
 responses:
   utter_greet:
-  - text: Hey! I'm a restaurnat-helper bot, I can help you find a restaurnat, reserve a seat there and check previous reservations! What would you like to do today?
+  - text: Hey! What can I help you with?
+  utter_whoami:
+  - text: I'm a restaurnat-helper bot, I can help you find a restaurnat, reserve a seat there and check previous reservations! What would you like to do today?
   utter_goodbye:
   - text: Bye
   utter_welcome:
@@ -106,6 +110,12 @@ responses:
   - text: Wait a minute, I will find a restaurant for you
   utter_submit_make_reservation:
   - text: Wait a minute, I will make a reservation
+  utter_out_of_scope:
+  - text: Sorry, I can't handle that request. 
+  utter_please_rephrase:
+  - text: I'm sorry, I didn't quite understand that. Could you rephrase?
+  utter_default:
+  - text: Sorry I didn't get that. Can you rephrase?
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: false
