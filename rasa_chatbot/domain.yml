@@ -25,6 +25,11 @@ entities:
 - number
 - place_id
 - place_name
+- vegan
+- alcohol
+- pricing
+- popularity
+- rating
 slots:
   PERSON:
     type: text
@@ -78,7 +83,41 @@ slots:
       - type: from_intent
         intent: deny
         value: false
-
+  vegan:
+    type: bool
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: vegan
+  alcohol:
+    type: bool
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: alcohol
+  pricing:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: pricing
+  pricing_level:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: custom
+  popularity:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: popularity
+  rating:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: rating
 forms:
   show_reservations_form:
     required_slots:
@@ -152,3 +191,4 @@ actions:
 - utter_ask_time
 - utter_ask_number
 - utter_ask_place_id
+- action_map_pricing

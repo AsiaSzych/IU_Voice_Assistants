@@ -108,7 +108,7 @@ def get_restaurants_collaborative(city,
                                   similar_users_amount=5,
                                   similarity_threshold=0.2, 
                                   amount_of_results=3,
-                                  db_path="restaurants.db",):
+                                  db_path="restaurants.db"):
     #get data about all reservations in given city
     reservations_data = get_reservations(city, db_path)
 

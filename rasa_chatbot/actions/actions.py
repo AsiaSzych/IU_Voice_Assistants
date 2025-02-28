@@ -8,8 +8,9 @@ from rasa_sdk.events import SlotSet
 
 from .database.db_queries import get_closest_reservation_for_user, make_reservation, get_restaurant_name
 from .database.db_recommendations import get_combined_recommendations
+import difflib
 
-DB_PATH = 'database/restaurants.db'
+DB_PATH = '/rasa_chatbot/actions/database/restaurants.db' ##TODO: verify with dockerfile
 CITY_VALIDATION =  ['Gdańsk', 'Gdynia', "Sopot", "Tricity"]
 CUISINE_VALIDATION = ["Italian", "Turkish", "Indian", "Chinese", "sushi", "pizza", "Mexican", "Japanese", "French"]
 
@@ -80,3 +81,38 @@ class ActionFindRestaurant(Action):
             dispatcher.utter_message(text=f"I have found a {restaurant_name} restaurant in {city}")
             
         return [SlotSet("place_id", restaurant_id),SlotSet("place_name", restaurant_name) ]
+    
+class ActionMapPricing(Action):
+    def name(self):
+        return "action_map_pricing"
+
+    def run(self, dispatcher, tracker, domain):
+        pricing_text = tracker.get_slot("pricing")
+
+        # Define pricing categories and common phrases
+        pricing_mapping = {
+            "cheap": 1, "budget-friendly": 1, "not too pricey": 1, "affordable": 1, "low-cost": 1, "not expensive": 1, "budget": 1,
+            "mid-range": 2, "moderately priced": 2, "fair prices": 2, "reasonably priced": 2, "not too cheap, not too expensive": 2,
+            "expensive": 3, "high-end": 3, "luxury": 3, "fine dining": 3, "fancy": 3, "premium": 3, "upscale": 3
+        }
+
+        if not pricing_text:
+            dispatcher.utter_message(text="I couldn't understand your price range. Can you specify if you want something cheap, moderate, or expensive?")
+            return []
+
+        # Try direct match first
+        pricing_text = pricing_text.lower()
+        if pricing_text in pricing_mapping:
+            pricing_level = pricing_mapping[pricing_text]
+        else:
+            # Use fuzzy matching to find the closest known category
+            closest_match = difflib.get_close_matches(pricing_text, pricing_mapping.keys(), n=1, cutoff=0.6)
+            if closest_match:
+                pricing_level = pricing_mapping[closest_match[0]]
+            else:
+                # Default fallback if no match is found
+                dispatcher.utter_message(text="I couldn't classify that price range. Do you mean cheap, moderate, or expensive?")
+                return []
+
+        dispatcher.utter_message(text=f"Got it! I'll look for restaurants in price level {pricing_level}.")
+        return [SlotSet("pricing_level", pricing_level)]

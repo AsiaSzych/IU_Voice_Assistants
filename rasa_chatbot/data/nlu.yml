@@ -223,8 +223,44 @@ nlu:
     - I don't know what I can ask
 - intent: record_filters
   examples: |
-    - Yes, I want a [vegan](vegan) option.
-    - I would like a place that serves [beer](alcohol).
-    - Sure, I prefer a [popular](popularity) restaurant.
-    - Yes, I want a restaurant with a rating above [4.5](rating).
-    - I'd like a [cheap](pricing) option.
+    - I want a [vegan](vegan:True) option
+    - The restaurant should be [vegan](vegan:True)-friendly
+    - I'm looking for a place that serves [vegan](vegan:True) dishes
+    - It must have [vegan](vegan:True) options
+    - Make sure it's [vegan](vegan:True)
+    - I want a place that serves [beer](alcohol:True) and [wine](alcohol:True)
+    - The restaurant should have [alcohol](alcohol:True) available
+    - I need a restaurant with a [bar](alcohol:True)
+    - Does it serve [beer](alcohol:True)?
+    - I prefer a place that serves [drinks](alcohol:True)
+    - It should have [wine](alcohol:True) options
+    - I want a [popular](popularity) restaurant
+    - The restaurant should be [well-rated](popularity)
+    - Can you find a [highly-rated](popularity) place?
+    - It should be one of the [best-rated](popularity) restaurants
+    - Show me a place with [great reviews](popularity)
+    - I prefer a place with a lot of [positive feedback](popularity)
+    - It should be a [well-known](popularity) spot
+    - I want something [cheap](pricing)
+    - [Not too pricey](pricing)
+    - [Nothing expensive](pricing)
+    - I don't want to spend too much, find something [cheap](pricing)
+    - Find a [budget-friendly](pricing) place
+    - It should be [affordable](pricing)
+    - Looking for a [low-cost](pricing) restaurant
+    - [Not a high-end](pricing) place
+    - Find me a [mid-range](pricing) restaurant
+    - Something [not too cheap, not too expensive](pricing)
+    - I want a [reasonably priced](pricing) place
+    - Somewhere [moderately priced](pricing)
+    - A restaurant with [fair prices](pricing)
+    - I want a [high-end](pricing) restaurant
+    - Find me a [fancy](pricing) restaurant
+    - It should be an [upscale](pricing) place
+    - Looking for a [fine dining](pricing) experience
+    - Something [premium](pricing)
+    - I want a [luxury](pricing) dining place
+    - The restaurant should have an average rating of [4.5+](rating)
+    - Find me a place with [good reviews](rating)
+    - It should be [top-rated](rating)
+    - I prefer a place with a rating above [4.2](rating)

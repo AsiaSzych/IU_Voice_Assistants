@@ -67,6 +67,7 @@ rules:
 - rule: User provides additional filters immediately
   steps:
     - intent: record_filters
+    - action: action_map_pricing  # Ensures pricing gets mapped
     - action: action_find_restaurant
 
 - rule: User wants to specify additional filters
