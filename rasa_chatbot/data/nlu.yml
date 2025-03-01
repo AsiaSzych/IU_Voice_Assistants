@@ -17,6 +17,7 @@ nlu:
     - good afternoon
     - what's up
     - Hello
+    - Hi
 - intent: goodbye
   examples: |
     - cu
@@ -37,6 +38,8 @@ nlu:
     - thank, bye
     - ciao
     - That's all, bye bye
+    - [great](rating), bye
+    - [Great]{"entity": "rating", "value": "great"}, thanks
 - intent: confirm
   examples: |
     - yes
@@ -92,6 +95,8 @@ nlu:
     - I want to find a place for dinner in Gdańsk
     - I need a place to eat
     - Hello, I need help finding a place for dinner
+    - Hi, I want to find a restaurant
+    - Hi I want to find a place for dinner with family
 - intent: make_reservation
   examples: |
     - I want to book a table here
@@ -108,13 +113,7 @@ nlu:
     - Thanks, I want to make reservation here
     - I want to book a table in this restaurant
     - That's awesome. Can we book a table there?
-- intent: show_reservations
-  examples: |
-    - show me my previous reservation
-    - show me previous reservations for Anna Green
-    - what are my old reservations
-    - what are my previous reservations
-    - what are previous reservations for Brad Pit
+    - Can you book a table there?
     - show me my reservations
     - show me the list of reservations for Angelina Jolie
     - I wanna check the reservations I made
@@ -135,6 +134,8 @@ nlu:
     - I want to check reservatons for michal Blajetow
     - Can you show me my reservation now?
     - Hi I want to check my reservations
+    - Hi, can you show me old reservations?
+    - Can you book a table for me there?
 - intent: record_PERSON
   examples: |
     - Anna Green
@@ -151,6 +152,7 @@ nlu:
     - My name is Joanna Szych
     - My name is Kate Ming
     - My name is Julie Brown
+    - Emily Brown
 - intent: record_GPE
   examples: |
     - Gdynia
@@ -164,6 +166,7 @@ nlu:
     - I'm in Gdańsk
     - In [Sopot](GPE)
     - In Gdynia
+    - In Gdańsk
 - intent: record_cuisine
   examples: |
     - I would like something [Italian](cuisine)
@@ -190,6 +193,9 @@ nlu:
     - [Mexican](cuisine) dishes is what I like
     - I really want something [Italian](cuisine)
     - I want something [Chinese](cuisine)
+    - I want something [Italian](cuisine) to eat
+    - I want [Chinese](cuisine) food
+    - Something [Italian](cuisine)
 - intent: record_date_time
   examples: |
     - today at 5PM
@@ -201,6 +207,8 @@ nlu:
     - Tomorrow at 3PM
     - Tomorrow at 4PM
     - Today, for 6PM
+    - Next Monday at 5PM
+    - Tomorrow at noon
 - intent: record_num_people
   examples: |
     - it will be for 5 people
@@ -216,6 +224,8 @@ nlu:
     - for nine people
     - It's for four people
     - It's a table for 2
+    - There will be four of us
+    - For 6 people
 - intent: out_of_scope
   examples: |
     - What is 2 + 2?
@@ -252,13 +262,7 @@ nlu:
     - The restaurant should have [alcohol]{"entity": "alcohol", "value": "True"} available
     - Does it serve [beer]{"entity": "alcohol", "value": "True"}?
     - It should have [wine]{"entity": "alcohol", "value": "True"} options
-    - I want a [popular](popularity) restaurant
-    - The restaurant should be [well-known](popularity)
-    - Can you find a [recommended](popularity) place?
-    - It should be a [proven place](popularity)
-    - Show me a place that is [often visited](popularity)
-    - A restaurant that is [frequented by many people](popularity)
-    - I prefer a place with a lot of [customer traffic](popularity)
+    - It should be a [proven place](rating)
     - Find me a [highly-rated](rating) restaurant
     - The restaurant should have a [good rating](rating)
     - Can you find one of the [best-rated](rating) places?
@@ -281,12 +285,14 @@ nlu:
     - Looking for a [fine dining](pricing) experience
     - I want a [luxury](pricing) dining place
     - Yes, I need some [vege]{"entity": "vegetarian", "value": "True"} options and the place should be [highly-rated](rating) but [budget](pricing) friendly
-    - Yes, I need some [vegetarian]{"entity": "vegetarian", "value": "True"} options in menu. Also, I would like to go someplace [popular](popularity), but I'm on a [budget](pricing)
+    - Yes, I need some [vegetarian]{"entity": "vegetarian", "value": "True"} options in menu. Also, I'm on a [budget](pricing)
     - Yes I want a [well-rated](rating), [fancy](pricing) place. It's diner with fiance
+    - Yes, I want [vegetarian]{"entity": "vegetarian", "value": "True"} option and the place should be [budget](pricing)-friendly
+    - Yes, this place should have [high ratings](pricing)
+    - Yes, I want this place to have [vegetarian]{"entity": "vegetarian", "value": "True"} food and I want it to be moderately [expensive](pricing)
 - intent: nlu_fallback
   examples: |
-    - I really want a pizza
-    - [great](rating), thanks
+    - Mike Curry
 - synonym: Mexican
   examples: |
     - mexican

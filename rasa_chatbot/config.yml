@@ -28,8 +28,8 @@ pipeline:
     # overlap_strategy: "deduplicate"
     # docker run -p 8000:8000 rasa/duckling to enable this
   - name: "DucklingEntityExtractor"
-    url: "http://duckling:8000"
-    # url: "http://localhost:8000"
+    # url: "http://duckling:8000"
+    url: "http://localhost:8000"
     dimensions: ["time", "number"]
     locale: "en_GB"
     timezone: "Europe/Berlin"
@@ -57,7 +57,7 @@ policies:
     # Confidence threshold for the `core_fallback_action_name` to apply.
     # The action will apply if no other action was predicted with
     # a confidence >= core_fallback_threshold
-    core_fallback_threshold: 0.4
+    core_fallback_threshold: 0.1
     core_fallback_action_name: "action_default_fallback"
     enable_fallback_prediction: True
   - name: UnexpecTEDIntentPolicy

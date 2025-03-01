@@ -84,7 +84,7 @@ def get_restaurants_content_based(city,
                                   amount_of_results=3):
     #get restaurants data
     restaurants_data = get_restaurants(city)
-    print(restaurants_data)
+
     #not optimal - maybe to rethink
     restaurants_data = pd.DataFrame(restaurants_data, columns=["rest_id", "rest_name", "cuisine", "avg_rating", "price_level", "vegetarian", "beer", "wine"])
     

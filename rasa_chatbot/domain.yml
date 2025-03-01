@@ -20,11 +20,10 @@ intents:
 - what_can_do
 entities:
 - rating
+- vegetarian
 - cuisine
 - pricing
-- popularity
 - GPE
-- vegetarian
 - PERSON
 - time
 - number
@@ -33,7 +32,6 @@ entities:
 - alcohol
 - pricing_level
 - rating_level
-- popularity_level
 slots:
   PERSON:
     type: text
@@ -110,17 +108,6 @@ slots:
     influence_conversation: false
     mappings:
     - type: custom
-  popularity:
-    type: text
-    influence_conversation: false
-    mappings:
-    - type: from_entity
-      entity: popularity
-  popularity_level:
-    type: float
-    influence_conversation: false
-    mappings:
-    - type: custom
   rating:
     type: text
     influence_conversation: false
@@ -189,16 +176,16 @@ session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: false
 actions:
-- action_fetch_reservations
-- utter_submit_show_reservations
+- action_map_filters
 - utter_goodbye
-- utter_please_rephrase
 - action_find_restaurant
 - utter_ask_if_additional_filters
-- action_make_reservation
-- action_map_filters
 - utter_submit_make_reservation
 - utter_greet
+- action_make_reservation
+- action_fetch_reservations
+- utter_submit_show_reservations
+- utter_please_rephrase
 - utter_submit_find_restaurant
 - utter_welcome
 - utter_confirm

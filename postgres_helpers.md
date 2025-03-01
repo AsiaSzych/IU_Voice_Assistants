@@ -14,12 +14,13 @@
 6. Build image 
     1. docker build . -t aszych/iu_rasa_database:0.0.2 
 7. Run image to check 
-    1. docker run -d \
-        --name shared_postgres_container \
-        -e POSTGRES_USER=rasa_user \
-        -e POSTGRES_PASSWORD=rasa_password \
-        -e POSTGRES_DB=rasa_db \
-        -p 5432:5432 \
+    1. docker run -d 
+        --name shared_postgres_container 
+        -e POSTGRES_USER=rasa_user 
+        -e POSTGRES_PASSWORD=rasa_password 
+        -e POSTGRES_DB=rasa_db 
+        -p 5432:5432 
+        -v rasa_postgres_data:/var/lib/postgresql/data 
         aszych/iu_rasa_database:0.0.2
     2. Run scripts to check if all data are in the database and if conneciton works
 8. Push image to repo

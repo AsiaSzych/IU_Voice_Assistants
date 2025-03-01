@@ -2,7 +2,7 @@ version: "3.1"
 
 stories:
 
-- story: show_reservations_1
+- story: show_reservations_story_1
   steps:
   - intent: greet
   - action: utter_greet
@@ -25,7 +25,7 @@ stories:
   - intent: goodbye
   - action: utter_goodbye
 
-- story: show_reservations_2
+- story: show_reservations_story_2
   steps:
   - intent: greet
   - action: utter_greet
@@ -48,7 +48,7 @@ stories:
   - intent: goodbye
   - action: utter_goodbye
 
-- story: show_reservations_3
+- story: show_reservations_story_3
   steps:
   - intent: show_reservations
   - action: show_reservations_form
@@ -69,7 +69,7 @@ stories:
   - intent: goodbye
   - action: utter_goodbye
 
-- story: show_reservations_4
+- story: show_reservations_story_5
   steps:
   - intent: show_reservations
     entities:
@@ -143,7 +143,7 @@ stories:
     - action: action_map_filters 
     - action: action_find_restaurant
 
-- story: User provides rating and popularity filters
+- story: User provides rating 
   steps:
     - intent: find_restaurant
     - action: find_restaurant_form
@@ -153,7 +153,6 @@ stories:
     - intent: record_filters
     - slot_was_set:
         - rating: "highly-rated"
-        - popularity: "recommended"
     - action: action_map_filters  # Converts values into DB format
     - action: action_find_restaurant
 
@@ -213,8 +212,6 @@ stories:
     - pricing_level: 1.0
   - slot_was_set:
     - rating_level: 4.0
-  - slot_was_set:
-    - popularity_level: null
   - action: action_find_restaurant
   - intent: goodbye
   - action: utter_goodbye
@@ -254,19 +251,244 @@ stories:
   - intent: record_filters
     entities:
     - vegetarian: 'True'
-    - popularity: popular
     - pricing: budget
   - slot_was_set:
     - vegetarian: 'True'
   - slot_was_set:
     - pricing: budget
-  - slot_was_set:
-    - popularity: popular
   - action: action_map_filters
   - slot_was_set:
     - pricing_level: 1
   - slot_was_set:
     - rating_level: null
-  - slot_was_set:
-    - popularity_level: 500
   - action: action_find_restaurant
+
+- story: find_place_and_make_reservation_1
+  steps:
+  - intent: find_restaurant
+  - action: find_restaurant_form
+  - active_loop: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: GPE
+  - intent: record_GPE
+    entities:
+    - GPE: Gdynia
+  - slot_was_set:
+    - GPE: Gdynia
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: record_cuisine
+    entities:
+    - cuisine: Italian
+  - slot_was_set:
+    - cuisine: Italian
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_ask_if_additional_filters
+  - intent: record_filters
+    entities:
+    - vegetarian: 'True'
+    - pricing: budget
+  - slot_was_set:
+    - vegetarian: 'True'
+  - slot_was_set:
+    - pricing: budget
+  - action: action_map_filters
+  - slot_was_set:
+    - pricing_level: 1
+  - slot_was_set:
+    - rating_level: null
+  - action: action_find_restaurant
+  - slot_was_set:
+    - place_id: ChIJsc4Fu2Wn_UYR3TgoG1K1Da0
+  - slot_was_set:
+    - place_name: Bergamo - kuchnia pizza prosecco
+  - intent: make_reservation
+  - action: make_reservation_form
+  - active_loop: make_reservation_form
+  - slot_was_set:
+    - requested_slot: PERSON
+  - intent: record_PERSON
+    entities:
+    - PERSON: Emily Brown
+  - slot_was_set:
+    - PERSON: Emily Brown
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: time
+  - intent: record_date_time
+    entities:
+    - time: '2025-03-03T17:00:00.000+01:00'
+  - slot_was_set:
+    - time: '2025-03-03T17:00:00.000+01:00'
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: number
+  - intent: record_num_people
+    entities:
+    - number: 4
+  - slot_was_set:
+    - number: 4
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_make_reservation
+  - action: action_make_reservation
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: show_reservations_story_5
+  steps:
+  - intent: show_reservations
+  - action: show_reservations_form
+  - active_loop: show_reservations_form
+  - slot_was_set:
+    - requested_slot: PERSON
+  - intent: record_PERSON
+    entities:
+    - PERSON: Emily Brown
+  - slot_was_set:
+    - PERSON: Emily Brown
+  - action: show_reservations_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_show_reservations
+  - action: action_fetch_reservations
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: interactive_story_1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: find_restaurant
+  - action: find_restaurant_form
+  - active_loop: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: GPE
+  - intent: record_GPE
+    entities:
+    - GPE: Sopot
+  - slot_was_set:
+    - GPE: Sopot
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: record_cuisine
+    entities:
+    - cuisine: Chinese
+  - slot_was_set:
+    - cuisine: Chinese
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_ask_if_additional_filters
+  - intent: record_filters
+    entities:
+    - pricing: high ratings
+  - slot_was_set:
+    - pricing: high ratings
+  - action: action_map_filters
+  - slot_was_set:
+    - pricing_level: null
+  - slot_was_set:
+    - rating_level: null
+  - action: action_find_restaurant
+  - slot_was_set:
+    - place_id: ChIJI4fVJ9cK_UYRFFPbdBi5YMQ
+  - slot_was_set:
+    - place_name: Asia Hoanmy
+  - intent: make_reservation
+  - action: make_reservation_form
+  - active_loop: make_reservation_form
+  - slot_was_set:
+    - requested_slot: PERSON
+  - intent: nlu_fallback
+    entities:
+    - PERSON: Mike Curry
+  - slot_was_set:
+    - PERSON: Mike Curry
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: time
+  - intent: record_date_time
+    entities:
+    - time: '2025-03-02T12:00:00.000+01:00'
+  - slot_was_set:
+    - time: '2025-03-02T12:00:00.000+01:00'
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: number
+  - intent: record_num_people
+    entities:
+    - number: 6
+  - slot_was_set:
+    - number: 6
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_make_reservation
+  - action: action_make_reservation
+  - intent: goodbye
+    entities:
+    - rating: great
+  - slot_was_set:
+    - rating: great
+  - action: utter_goodbye
+
+- story: interactive_story_1
+  steps:
+  - intent: find_restaurant
+  - action: find_restaurant_form
+  - active_loop: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: GPE
+  - intent: record_GPE
+    entities:
+    - GPE: Gdańsk
+  - slot_was_set:
+    - GPE: Gdańsk
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: record_cuisine
+    entities:
+    - cuisine: Italian
+  - slot_was_set:
+    - cuisine: Italian
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_ask_if_additional_filters
+  - intent: record_filters
+    entities:
+    - vegetarian: 'True'
+    - pricing: expensive
+  - slot_was_set:
+    - vegetarian: 'True'
+  - slot_was_set:
+    - pricing: expensive
+  - action: action_map_filters
+  - slot_was_set:
+    - pricing_level: 3
+  - slot_was_set:
+    - rating_level: null
+  - action: action_find_restaurant
+  - slot_was_set:
+    - place_id: ChIJG5h92wpz_UYRNraUDOP77fo
+  - slot_was_set:
+    - place_name: Restauracja Fellini Gdańsk
+  - intent: goodbye
+    entities:
+    - rating: great
+  - slot_was_set:
+    - rating: great
+  - action: utter_goodbye

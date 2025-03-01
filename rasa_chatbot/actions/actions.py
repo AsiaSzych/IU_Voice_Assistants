@@ -64,10 +64,26 @@ class ActionFindRestaurant(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
         full_name = tracker.get_slot("PERSON")
-        print(full_name)
         city = tracker.get_slot("GPE")
         cuisine = tracker.get_slot("cuisine")
+        pricing_level = tracker.get_slot("pricing_level")
+        rating_level = tracker.get_slot("rating_level")
+        vege = tracker.get_slot("vegetarian") # bool
+        alcohol = tracker.get_slot("alcohol") # bool
+
+        addiitonal_options = {}
+        if pricing_level:
+            addiitonal_options.update({"price_level": pricing_level})
+        if rating_level:
+            addiitonal_options.update({"avg_rating": rating_level})
+        if vege:
+            addiitonal_options.update({"vegetarian": 1})
+        if alcohol:
+            addiitonal_options.update({"beer": 1})
+            addiitonal_options.update({"wine": 1})
+
         if city not in CITY_VALIDATION:
             dispatcher.utter_message("I'm sorry. It is only possible to find restaurant in the Tricity area of Poland")
             # return empty city slot
@@ -75,7 +91,7 @@ class ActionFindRestaurant(Action):
             dispatcher.utter_message("I'm sorry, I don't have any restaurant with such a cuisine. Please try something else")
             # return empty cuisine slot
         else:
-            first, second, third = get_combined_recommendations(city, cuisine)
+            first, second, third = get_combined_recommendations(city, cuisine, optional_filters=addiitonal_options)
             restaurant_id, restaurant_name, _ = first 
             dispatcher.utter_message(text=f"I have found a {restaurant_name} restaurant in {city}")
             
@@ -89,7 +105,6 @@ class ActionMapFiltersToScale(Action):
         # Get user-provided slots
         pricing_text = tracker.get_slot("pricing")
         rating_text = tracker.get_slot("rating")
-        popularity_text = tracker.get_slot("popularity")
         vege = tracker.get_slot("vegetarian") # bool
         alcohol = tracker.get_slot("alcohol") # bool
 
@@ -102,14 +117,8 @@ class ActionMapFiltersToScale(Action):
 
         # Rating Mapping (>4.0 = Good, >3.0 = Decent)
         rating_mapping = {
-            "highly-rated": 4.0, "good rating": 4.0, "best-rated": 4.5, "top-rated": 4.5, "solid reputation": 4.0,
-            "great reviews": 4.0, "well-rated": 4.0, "decent rating": 3.0
-        }
-
-        # Popularity Mapping (>500 reviews = Popular)
-        popularity_mapping = {
-            "popular": 1000, "recommended": 500, "proven place": 500, "often visited": 1000, "frequented by many people": 500,
-            "customer traffic": 500
+            "highly-rated": 4.0, "high ratings":4.5, "good rating": 4.0, "best-rated": 4.5, "top-rated": 4.5, "solid reputation": 4.0,
+            "great reviews": 4.0, "well-rated": 4.0, "decent rating": 3.0, "recommended": 4.0, "proven place": 4.0
         }
 
         # Function to perform fuzzy matching
@@ -128,17 +137,12 @@ class ActionMapFiltersToScale(Action):
         # Process Rating
         rating_threshold = fuzzy_match(rating_text, rating_mapping)
 
-        # Process Popularity
-        review_count = fuzzy_match(popularity_text, popularity_mapping)
-
         # Generate Response
         response_parts = []
         if pricing_level:
             response_parts.append(f"price level {pricing_level}")
         if rating_threshold:
             response_parts.append(f"rating above {rating_threshold}")
-        if review_count:
-            response_parts.append(f"more than {review_count} reviews")
         if vege:
             response_parts.append(f"vegetarian options")
         if alcohol:
@@ -151,6 +155,5 @@ class ActionMapFiltersToScale(Action):
 
         return [
             SlotSet("pricing_level", pricing_level),
-            SlotSet("rating_level", rating_threshold),
-            SlotSet("popularity_level", review_count)
+            SlotSet("rating_level", rating_threshold)
         ]
