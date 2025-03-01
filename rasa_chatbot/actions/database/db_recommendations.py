@@ -81,11 +81,10 @@ def calculate_cosine_similarity_user_restaurants(user_profile, restaurants_data)
 def get_restaurants_content_based(city, 
                                   cuisine_preferences, 
                                   optional_filters={},
-                                  db_path="restaurants.db",
                                   amount_of_results=3):
     #get restaurants data
-    restaurants_data = get_restaurants(city, db_path)
-
+    restaurants_data = get_restaurants(city)
+    print(restaurants_data)
     #not optimal - maybe to rethink
     restaurants_data = pd.DataFrame(restaurants_data, columns=["rest_id", "rest_name", "cuisine", "avg_rating", "price_level", "vegetarian", "beer", "wine"])
     
@@ -107,10 +106,9 @@ def get_restaurants_collaborative(city,
                                   user_name, 
                                   similar_users_amount=5,
                                   similarity_threshold=0.2, 
-                                  amount_of_results=3,
-                                  db_path="restaurants.db"):
+                                  amount_of_results=3,):
     #get data about all reservations in given city
-    reservations_data = get_reservations(city, db_path)
+    reservations_data = get_reservations(city)
 
     #user-restaurant mapping (who was where, user is the key)
     user_restaurant_map = defaultdict(set)
@@ -157,22 +155,19 @@ def get_combined_recommendations(city,
                                  cuisine_preferences, 
                                  user_name = "", 
                                  optional_filters={},
-                                 db_path="restaurants.db",
                                  amount_of_results=3):
     #get content based recommendations
     content_based = get_restaurants_content_based(city=city, 
                                                   cuisine_preferences=cuisine_preferences, 
-                                                  optional_filters=optional_filters, 
-                                                  db_path=db_path)
+                                                  optional_filters=optional_filters)
 
     #if user_name is given use also collaborative filtering
     if user_name != "":
         collaborative = get_restaurants_collaborative(city=city, 
-                                                      user_name=user_name, 
-                                                      db_path=db_path)
+                                                      user_name=user_name)
 
         # if user is new prioritize content-based filtering
-        if user_name in [user[0] for user in get_distinct_users_in_city(city, db_path=db_path)]:
+        if user_name in [user[0] for user in get_distinct_users_in_city(city)]:
             weight_cb, weight_cf = 0.5, 0.5  
         else:
             weight_cb, weight_cf = 0.8, 0.2  

@@ -1,45 +1,50 @@
-import sqlite3
+import psycopg2
+from .db_config import DB_CONFIG 
 
-conn = sqlite3.connect("restaurants.db")
+conn = psycopg2.connect(
+    host=DB_CONFIG['host'],
+    database=DB_CONFIG['database'],
+    user=DB_CONFIG['user'],
+    password=DB_CONFIG['password']
+)
 cursor = conn.cursor()
 
 # Create restaurants table
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS restaurants (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    place_id TEXT UNIQUE NOT NULL,
-    city TEXT NOT NULL,
-    name TEXT NOT NULL,
-    cuisine TEXT,
-    address TEXT,
-    phone TEXT,
-    price_level INTEGER,
-    avg_rating REAL,
-    amount_of_ratings INTEGER,
+    restaurant_id SERIAL PRIMARY KEY, 
+    city VARCHAR NOT NULL,
+    place_id VARCHAR NOT NULL UNIQUE,
+    name VARCHAR NOT NULL,
+    cuisine VARCHAR,
+    address VARCHAR,
+    phone VARCHAR,
+    price_level FLOAT,
+    avg_rating FLOAT,
+    amount_of_ratings FLOAT,
     vegetarian BOOLEAN,
     beer BOOLEAN,
     wine BOOLEAN,
-    opening_hours TEXT,
+    opening_hours VARCHAR,
     tags TEXT
 );
 ''')
-print("restaurants table created sucessfully")
+print("restaurants table created successfully")
 
 # Create reservations table
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS reservations (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    restaurant_id INTEGER NOT NULL,
-    name TEXT NOT NULL,
-    num_people INTEGER NOT NULL,
-    date TEXT NOT NULL,
-    time TEXT NOT NULL,
-    phone TEXT,
-    FOREIGN KEY (restaurant_id) REFERENCES restaurants(id)
+    reservation_id SERIAL PRIMARY KEY,
+    restaurant_id VARCHAR REFERENCES restaurants(place_id),
+    name VARCHAR NOT NULL,
+    num_people INT NOT NULL,
+    date DATE NOT NULL,
+    time TIME NOT NULL,
+    phone VARCHAR
 );
 ''')
-print("reservations table created sucessfully")
+print("reservations table created successfully")
 
+# Commit and close connection
 conn.commit()
-
 conn.close()

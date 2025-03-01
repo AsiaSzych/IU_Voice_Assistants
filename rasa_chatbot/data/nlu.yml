@@ -16,6 +16,7 @@ nlu:
     - goodevening
     - good afternoon
     - what's up
+    - Hello
 - intent: goodbye
   examples: |
     - cu
@@ -35,6 +36,7 @@ nlu:
     - thanks, bye
     - thank, bye
     - ciao
+    - That's all, bye bye
 - intent: confirm
   examples: |
     - yes
@@ -87,6 +89,9 @@ nlu:
     - Hi I want to find a restaurant
     - Hi I want to find a restaurant in Gdańsk
     - I want to find a place to eat dinner
+    - I want to find a place for dinner in Gdańsk
+    - I need a place to eat
+    - Hello, I need help finding a place for dinner
 - intent: make_reservation
   examples: |
     - I want to book a table here
@@ -102,6 +107,7 @@ nlu:
     - I want to book that place
     - Thanks, I want to make reservation here
     - I want to book a table in this restaurant
+    - That's awesome. Can we book a table there?
 - intent: show_reservations
   examples: |
     - show me my previous reservation
@@ -127,6 +133,8 @@ nlu:
     - I want to see reservations made
     - I want to check my reservations
     - I want to check reservatons for michal Blajetow
+    - Can you show me my reservation now?
+    - Hi I want to check my reservations
 - intent: record_PERSON
   examples: |
     - Anna Green
@@ -142,6 +150,7 @@ nlu:
     - It's Joanna Szych
     - My name is Joanna Szych
     - My name is Kate Ming
+    - My name is Julie Brown
 - intent: record_GPE
   examples: |
     - Gdynia
@@ -153,6 +162,8 @@ nlu:
     - I need a place in Gdańsk
     - I'm in Gdynia
     - I'm in Gdańsk
+    - In [Sopot](GPE)
+    - In Gdynia
 - intent: record_cuisine
   examples: |
     - I would like something [Italian](cuisine)
@@ -176,6 +187,9 @@ nlu:
     - I want something [Italian](cuisine)
     - something [Mexican](cuisine)
     - Something [mexican]{"entity": "cuisine", "value": "Mexican"}
+    - [Mexican](cuisine) dishes is what I like
+    - I really want something [Italian](cuisine)
+    - I want something [Chinese](cuisine)
 - intent: record_date_time
   examples: |
     - today at 5PM
@@ -186,6 +200,7 @@ nlu:
     - Tomorrow at noon, please
     - Tomorrow at 3PM
     - Tomorrow at 4PM
+    - Today, for 6PM
 - intent: record_num_people
   examples: |
     - it will be for 5 people
@@ -200,6 +215,7 @@ nlu:
     - It will be a table for two
     - for nine people
     - It's for four people
+    - It's a table for 2
 - intent: out_of_scope
   examples: |
     - What is 2 + 2?
@@ -211,7 +227,9 @@ nlu:
     - I want to check the weather
     - I want to order food to my house
     - I want to check my bank account
-    - How mucj money do I have?
+    - How much money do I have?
+    - Can I order a taxi?
+    - I want an uber
 - intent: what_can_do
   examples: |
     - What do you do?
@@ -223,24 +241,31 @@ nlu:
     - I don't know what I can ask
 - intent: record_filters
   examples: |
-    - I want a [vegan](vegan:True) option
-    - The restaurant should be [vegan](vegan:True)-friendly
-    - I'm looking for a place that serves [vegan](vegan:True) dishes
-    - It must have [vegan](vegan:True) options
-    - Make sure it's [vegan](vegan:True)
-    - I want a place that serves [beer](alcohol:True) and [wine](alcohol:True)
-    - The restaurant should have [alcohol](alcohol:True) available
-    - I need a restaurant with a [bar](alcohol:True)
-    - Does it serve [beer](alcohol:True)?
-    - I prefer a place that serves [drinks](alcohol:True)
-    - It should have [wine](alcohol:True) options
+    - I want a [vegetarian]{"entity": "vegetarian", "value": "True"} option
+    - The restaurant should be [vegetarian]{"entity": "vegetarian", "value": "True"}-friendly
+    - It must have [vegetarian]{"entity": "vegetarian", "value": "True"} options
+    - I need [vege]{"entity": "vegetarian", "value": "True"} options available
+    - It must have [vegan]{"entity": "vegetarian", "value": "True"} options
+    - It must have [vege]{"entity": "vegetarian", "value": "True"} dishes
+    - It need [vegetarian]{"entity": "vegetarian", "value": "True"} dish
+    - I want a place that serves [beer]{"entity": "alcohol", "value": "True"} and [wine]{"entity": "alcohol", "value": "True"}
+    - The restaurant should have [alcohol]{"entity": "alcohol", "value": "True"} available
+    - Does it serve [beer]{"entity": "alcohol", "value": "True"}?
+    - It should have [wine]{"entity": "alcohol", "value": "True"} options
     - I want a [popular](popularity) restaurant
-    - The restaurant should be [well-rated](popularity)
-    - Can you find a [highly-rated](popularity) place?
-    - It should be one of the [best-rated](popularity) restaurants
-    - Show me a place with [great reviews](popularity)
-    - I prefer a place with a lot of [positive feedback](popularity)
-    - It should be a [well-known](popularity) spot
+    - The restaurant should be [well-known](popularity)
+    - Can you find a [recommended](popularity) place?
+    - It should be a [proven place](popularity)
+    - Show me a place that is [often visited](popularity)
+    - A restaurant that is [frequented by many people](popularity)
+    - I prefer a place with a lot of [customer traffic](popularity)
+    - Find me a [highly-rated](rating) restaurant
+    - The restaurant should have a [good rating](rating)
+    - Can you find one of the [best-rated](rating) places?
+    - Show me a place with [great reviews](rating)
+    - I want a restaurant with a rating of [4.5+](rating)
+    - It should be [top-rated](rating)
+    - A place with a [solid reputation](rating)
     - I want something [cheap](pricing)
     - [Not too pricey](pricing)
     - [Nothing expensive](pricing)
@@ -248,19 +273,28 @@ nlu:
     - Find a [budget-friendly](pricing) place
     - It should be [affordable](pricing)
     - Looking for a [low-cost](pricing) restaurant
-    - [Not a high-end](pricing) place
     - Find me a [mid-range](pricing) restaurant
-    - Something [not too cheap, not too expensive](pricing)
     - I want a [reasonably priced](pricing) place
-    - Somewhere [moderately priced](pricing)
     - A restaurant with [fair prices](pricing)
     - I want a [high-end](pricing) restaurant
     - Find me a [fancy](pricing) restaurant
-    - It should be an [upscale](pricing) place
     - Looking for a [fine dining](pricing) experience
-    - Something [premium](pricing)
     - I want a [luxury](pricing) dining place
-    - The restaurant should have an average rating of [4.5+](rating)
-    - Find me a place with [good reviews](rating)
-    - It should be [top-rated](rating)
-    - I prefer a place with a rating above [4.2](rating)
+    - Yes, I need some [vege]{"entity": "vegetarian", "value": "True"} options and the place should be [highly-rated](rating) but [budget](pricing) friendly
+    - Yes, I need some [vegetarian]{"entity": "vegetarian", "value": "True"} options in menu. Also, I would like to go someplace [popular](popularity), but I'm on a [budget](pricing)
+    - Yes I want a [well-rated](rating), [fancy](pricing) place. It's diner with fiance
+- intent: nlu_fallback
+  examples: |
+    - I really want a pizza
+    - [great](rating), thanks
+- synonym: Mexican
+  examples: |
+    - mexican
+- synonym: 'True'
+  examples: |
+    - vegetarian
+    - vege
+    - vegan
+    - beer
+    - wine
+    - alcohol

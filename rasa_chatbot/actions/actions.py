@@ -10,7 +10,6 @@ from .database.db_queries import get_closest_reservation_for_user, make_reservat
 from .database.db_recommendations import get_combined_recommendations
 import difflib
 
-DB_PATH = '/rasa_chatbot/actions/database/restaurants.db' ##TODO: verify with dockerfile
 CITY_VALIDATION =  ['Gdańsk', 'Gdynia', "Sopot", "Tricity"]
 CUISINE_VALIDATION = ["Italian", "Turkish", "Indian", "Chinese", "sushi", "pizza", "Mexican", "Japanese", "French"]
 
@@ -24,10 +23,10 @@ class ActionFetchReservations(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
         full_name = tracker.get_slot("PERSON")
-        closest_reservation, text = get_closest_reservation_for_user(full_name, db_path=DB_PATH)
+        closest_reservation, text = get_closest_reservation_for_user(full_name)
         if closest_reservation:
             restaurant_id = closest_reservation[0]
-            restaurant_name = get_restaurant_name(restaurant_id, db_path = DB_PATH)
+            restaurant_name = get_restaurant_name(restaurant_id)
             current_reservations_message = f"Your closest reservation {text} on {closest_reservation[1]} at {closest_reservation[2]} for {closest_reservation[3]} people, in the {restaurant_name}." 
         else:
             current_reservations_message = f'Sorry currently there are no reservations for {full_name}'
@@ -37,7 +36,7 @@ class ActionFetchReservations(Action):
 
         return []
 
-class ActionFetchReservations(Action):
+class ActionMakeReservations(Action):
 
     def name(self) -> Text:
         return "action_make_reservation"
@@ -52,7 +51,7 @@ class ActionFetchReservations(Action):
         place = tracker.get_slot("place_id")
         date = time.split("T")[0]
         hour = time.split("T")[1][:5]
-        make_reservation(place, full_name, num_people, date, time=hour, db_path=DB_PATH)
+        make_reservation(place, full_name, num_people, date, time=hour)
         dispatcher.utter_message(text=f"I have made a reservation for you, on {date}, {hour}, for {num_people} people")
 
         return []
@@ -76,43 +75,82 @@ class ActionFindRestaurant(Action):
             dispatcher.utter_message("I'm sorry, I don't have any restaurant with such a cuisine. Please try something else")
             # return empty cuisine slot
         else:
-            first, second, third = get_combined_recommendations(city, cuisine, db_path=DB_PATH)
+            first, second, third = get_combined_recommendations(city, cuisine)
             restaurant_id, restaurant_name, _ = first 
             dispatcher.utter_message(text=f"I have found a {restaurant_name} restaurant in {city}")
             
         return [SlotSet("place_id", restaurant_id),SlotSet("place_name", restaurant_name) ]
-    
-class ActionMapPricing(Action):
+
+class ActionMapFiltersToScale(Action):
     def name(self):
-        return "action_map_pricing"
+        return "action_map_filters"
 
     def run(self, dispatcher, tracker, domain):
+        # Get user-provided slots
         pricing_text = tracker.get_slot("pricing")
+        rating_text = tracker.get_slot("rating")
+        popularity_text = tracker.get_slot("popularity")
+        vege = tracker.get_slot("vegetarian") # bool
+        alcohol = tracker.get_slot("alcohol") # bool
 
-        # Define pricing categories and common phrases
+        # Pricing Mapping (1 = Cheap, 2 = Moderate, 3 = Expensive)
         pricing_mapping = {
-            "cheap": 1, "budget-friendly": 1, "not too pricey": 1, "affordable": 1, "low-cost": 1, "not expensive": 1, "budget": 1,
+            "cheap": 1, "budget-friendly": 1, "budget": 1, "not too pricey": 1, "affordable": 1, "low-cost": 1, "not expensive": 1,
             "mid-range": 2, "moderately priced": 2, "fair prices": 2, "reasonably priced": 2, "not too cheap, not too expensive": 2,
             "expensive": 3, "high-end": 3, "luxury": 3, "fine dining": 3, "fancy": 3, "premium": 3, "upscale": 3
         }
 
-        if not pricing_text:
-            dispatcher.utter_message(text="I couldn't understand your price range. Can you specify if you want something cheap, moderate, or expensive?")
-            return []
+        # Rating Mapping (>4.0 = Good, >3.0 = Decent)
+        rating_mapping = {
+            "highly-rated": 4.0, "good rating": 4.0, "best-rated": 4.5, "top-rated": 4.5, "solid reputation": 4.0,
+            "great reviews": 4.0, "well-rated": 4.0, "decent rating": 3.0
+        }
 
-        # Try direct match first
-        pricing_text = pricing_text.lower()
-        if pricing_text in pricing_mapping:
-            pricing_level = pricing_mapping[pricing_text]
+        # Popularity Mapping (>500 reviews = Popular)
+        popularity_mapping = {
+            "popular": 1000, "recommended": 500, "proven place": 500, "often visited": 1000, "frequented by many people": 500,
+            "customer traffic": 500
+        }
+
+        # Function to perform fuzzy matching
+        def fuzzy_match(input_text, mapping):
+            if not input_text:
+                return None
+            input_text = input_text.lower()
+            if input_text in mapping:
+                return mapping[input_text]
+            closest_match = difflib.get_close_matches(input_text, mapping.keys(), n=1, cutoff=0.6)
+            return mapping[closest_match[0]] if closest_match else None
+
+        # Process Pricing
+        pricing_level = fuzzy_match(pricing_text, pricing_mapping)
+
+        # Process Rating
+        rating_threshold = fuzzy_match(rating_text, rating_mapping)
+
+        # Process Popularity
+        review_count = fuzzy_match(popularity_text, popularity_mapping)
+
+        # Generate Response
+        response_parts = []
+        if pricing_level:
+            response_parts.append(f"price level {pricing_level}")
+        if rating_threshold:
+            response_parts.append(f"rating above {rating_threshold}")
+        if review_count:
+            response_parts.append(f"more than {review_count} reviews")
+        if vege:
+            response_parts.append(f"vegetarian options")
+        if alcohol:
+            response_parts.append(f"alcohol available")
+
+        if response_parts:
+            dispatcher.utter_message(text=f"Got it! I'll look for restaurants with {', '.join(response_parts)}.")
         else:
-            # Use fuzzy matching to find the closest known category
-            closest_match = difflib.get_close_matches(pricing_text, pricing_mapping.keys(), n=1, cutoff=0.6)
-            if closest_match:
-                pricing_level = pricing_mapping[closest_match[0]]
-            else:
-                # Default fallback if no match is found
-                dispatcher.utter_message(text="I couldn't classify that price range. Do you mean cheap, moderate, or expensive?")
-                return []
+            dispatcher.utter_message(text="I couldn't understand your preferences. Could you clarify?")
 
-        dispatcher.utter_message(text=f"Got it! I'll look for restaurants in price level {pricing_level}.")
-        return [SlotSet("pricing_level", pricing_level)]
+        return [
+            SlotSet("pricing_level", pricing_level),
+            SlotSet("rating_level", rating_threshold),
+            SlotSet("popularity_level", review_count)
+        ]

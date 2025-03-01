@@ -100,7 +100,7 @@ stories:
     - intent: record_filters  
     - slot_was_set:
         - pricing: "cheap"
-    - action: action_map_pricing  
+    - action: action_map_filters  
     - action: action_find_restaurant
 
 - story: User doesn't want additional filters 
@@ -125,7 +125,7 @@ stories:
     - intent: record_filters
     - slot_was_set:
         - pricing: "cheap"
-    - action: action_map_pricing  
+    - action: action_map_filters  
     - action: action_find_restaurant
 
 - story: User says "yes" to additional filters and provides pricing
@@ -140,5 +140,133 @@ stories:
     - intent: record_filters
     - slot_was_set:
         - pricing: "moderately priced"
-    - action: action_map_pricing 
+    - action: action_map_filters 
     - action: action_find_restaurant
+
+- story: User provides rating and popularity filters
+  steps:
+    - intent: find_restaurant
+    - action: find_restaurant_form
+    - active_loop: find_restaurant_form
+    - active_loop: null 
+    - action: utter_ask_if_additional_filters
+    - intent: record_filters
+    - slot_was_set:
+        - rating: "highly-rated"
+        - popularity: "recommended"
+    - action: action_map_filters  # Converts values into DB format
+    - action: action_find_restaurant
+
+- story: User says "yes" to additional filters and provides rating
+  steps:
+    - intent: find_restaurant
+    - action: find_restaurant_form
+    - active_loop: find_restaurant_form
+    - active_loop: null 
+    - action: utter_ask_if_additional_filters
+    - intent: confirm
+    - action: utter_ask_for_optional_filters
+    - intent: record_filters
+    - slot_was_set:
+        - rating: "best-rated"
+    - action: action_map_filters
+    - action: action_find_restaurant
+
+- story: interactive_story_1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: find_restaurant
+    entities:
+    - GPE: Gdańsk
+  - slot_was_set:
+    - GPE: Gdańsk
+  - action: find_restaurant_form
+  - active_loop: find_restaurant_form
+  - slot_was_set:
+    - GPE: Gdańsk
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: record_cuisine
+    entities:
+    - cuisine: Mexican
+  - slot_was_set:
+    - cuisine: Mexican
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_ask_if_additional_filters
+  - intent: record_filters
+    entities:
+    - vegetarian: 'True'
+    - rating: highly-rated
+    - pricing: budget
+  - slot_was_set:
+    - vegetarian: 'True'
+  - slot_was_set:
+    - pricing: budget
+  - slot_was_set:
+    - rating: highly-rated
+  - action: action_map_filters
+  - slot_was_set:
+    - pricing_level: 1.0
+  - slot_was_set:
+    - rating_level: 4.0
+  - slot_was_set:
+    - popularity_level: null
+  - action: action_find_restaurant
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: interactive_story_2
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: find_restaurant
+  - action: find_restaurant_form
+  - active_loop: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: GPE
+  - intent: record_GPE
+    entities:
+    - GPE: Sopot
+  - slot_was_set:
+    - GPE: Sopot
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: nlu_fallback
+  - action: utter_please_rephrase
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: record_cuisine
+    entities:
+    - cuisine: Italian
+  - slot_was_set:
+    - cuisine: Italian
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_ask_if_additional_filters
+  - intent: record_filters
+    entities:
+    - vegetarian: 'True'
+    - popularity: popular
+    - pricing: budget
+  - slot_was_set:
+    - vegetarian: 'True'
+  - slot_was_set:
+    - pricing: budget
+  - slot_was_set:
+    - popularity: popular
+  - action: action_map_filters
+  - slot_was_set:
+    - pricing_level: 1
+  - slot_was_set:
+    - rating_level: null
+  - slot_was_set:
+    - popularity_level: 500
+  - action: action_find_restaurant

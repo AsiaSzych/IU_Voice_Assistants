@@ -14,3 +14,4 @@ pyaudio
 webrtcvad
 webrtc-audio-processing
 numpy==1.24
+psycopg2

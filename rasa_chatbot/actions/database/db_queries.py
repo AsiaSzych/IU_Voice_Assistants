@@ -1,17 +1,28 @@
-import sqlite3
+import psycopg2
 import logging
+from .db_config import DB_CONFIG 
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("db_queries")
 
+def connect_to_db():
+    """Create a connection to the PostgreSQL database."""
+    return psycopg2.connect(
+    host=DB_CONFIG['host'],
+    database=DB_CONFIG['database'],
+    user=DB_CONFIG['user'],
+    password=DB_CONFIG['password']
+)
 
-def get_restaurants(city, db_path="restaurants.db"):
-    conn = sqlite3.connect(db_path)
+
+def get_restaurants(city):
+    logger.debug(f"get_restaurants query for city {city}")
+    conn = connect_to_db()
     query = """
     SELECT place_id, name, cuisine, avg_rating, price_level, vegetarian, beer, wine 
     FROM restaurants 
-    WHERE city = ?;
+    WHERE city = %s;
     """
     cursor = conn.cursor()
     cursor.execute(query, (city,))
@@ -19,13 +30,14 @@ def get_restaurants(city, db_path="restaurants.db"):
     conn.close()
     return data
 
-def get_reservations(city, db_path="restaurants.db"):
-    conn = sqlite3.connect(db_path)
+def get_reservations(city):
+    logger.debug(f"get_reservations query for city {city}")
+    conn = connect_to_db()
     query = """
     SELECT place.place_id, place.name, res.name AS user_name
     FROM restaurants place
     JOIN reservations res ON place.place_id = res.restaurant_id
-    WHERE place.city = ?;
+    WHERE place.city = %s;
     """
     cursor = conn.cursor()
     cursor.execute(query, (city,))
@@ -33,14 +45,14 @@ def get_reservations(city, db_path="restaurants.db"):
     conn.close()
     return data
 
-
-def get_distinct_users_in_city(city, db_path="restaurants.db"):
-    conn = sqlite3.connect(db_path)
+def get_distinct_users_in_city(city):
+    logger.debug(f"get_distinct_users_in_city query for city {city}")
+    conn = connect_to_db()
     query = """
     SELECT DISTINCT res.name 
     FROM restaurants place
     JOIN reservations res ON place.place_id = res.restaurant_id
-    WHERE place.city = ?;
+    WHERE place.city = %s;
     """
     cursor = conn.cursor()
     cursor.execute(query, (city,))
@@ -48,15 +60,14 @@ def get_distinct_users_in_city(city, db_path="restaurants.db"):
     conn.close()
     return data
 
-#TODO: change this - add logic to check if there is a possibility to make reservation
-def make_reservation(restaurant_id, name, num_people, date, time, db_path="restaurants.db", *kwargs):
-
-    conn = sqlite3.connect(db_path)
+def make_reservation(restaurant_id, name, num_people, date, time):
+    logger.debug(f"make_reservation query for restaurant_id {restaurant_id}")
+    conn = connect_to_db()
     cursor = conn.cursor()
 
     query = '''
     INSERT INTO reservations (restaurant_id, name, num_people, date, time)
-    VALUES (?, ?, ?, ?, ?);
+    VALUES (%s, %s, %s, %s, %s);
     '''
     cursor.execute(query, (restaurant_id, name, num_people, date, time))
     
@@ -64,33 +75,35 @@ def make_reservation(restaurant_id, name, num_people, date, time, db_path="resta
     conn.close()
     logger.debug(f"New reservation inserted")
 
-def get_closest_reservation_for_user(name, db_path="restaurants.db", *kwargs):
+def get_closest_reservation_for_user(name):
+    logger.debug(f"get_closest_reservation_for_user query for user {name}")
 
     query_closest_future = '''
-    SELECT restaurant_id, date, time, num_people,  julianday(date) - julianday('now') AS date_diff
+    SELECT restaurant_id, date, time, num_people, 
+           EXTRACT(EPOCH FROM (date::timestamp - CURRENT_TIMESTAMP)) as date_diff
     FROM reservations
-    WHERE name = ? and date_diff >- 0 
+    WHERE name = %s AND date >= CURRENT_DATE
     ORDER BY date_diff 
     '''
     query_closest_past = '''
-    SELECT restaurant_id, date, time, num_people,  julianday(date) - julianday('now') AS date_diff
+    SELECT restaurant_id, date, time, num_people, 
+            EXTRACT(EPOCH FROM (date::timestamp - CURRENT_TIMESTAMP))as date_diff
     FROM reservations
-    WHERE name = ? and date_diff < 0 
-    ORDER BY date_diff desc
+    WHERE name = %s AND date < CURRENT_DATE
+    ORDER BY date_diff 
     '''
 
-    conn = sqlite3.connect(db_path)
+    conn = connect_to_db()
     cursor = conn.cursor()
     cursor.execute(query_closest_future, (name,))
     results = cursor.fetchall()
-    if len(results)>0:
+    if len(results) > 0:
         closest_resevation = results[0]
         text = "is"
     else:
-        cursor = conn.cursor()
         cursor.execute(query_closest_past, (name,))
         results = cursor.fetchall()
-        if len(results)>0:
+        if len(results) > 0:
             closest_resevation = results[0]
             text = "was"
         else:
@@ -98,32 +111,31 @@ def get_closest_reservation_for_user(name, db_path="restaurants.db", *kwargs):
             text = "no"
 
     conn.close()
-
     logger.debug(f"Found {results} reservations for {name}")
-
     return closest_resevation, text
 
-def get_restaurant_name(restaurant_id, db_path="restaurants.db"):
-
+def get_restaurant_name(restaurant_id):
+    logger.debug(f"get_restaurant_name query for restaurant_id {restaurant_id}")
     query = '''
     SELECT name
     FROM restaurants
-    WHERE place_id = ?
+    WHERE place_id = %s
     '''
 
-    conn = sqlite3.connect(db_path)
+    conn = connect_to_db()
     cursor = conn.cursor()
     cursor.execute(query, (restaurant_id,))
     results = cursor.fetchall()
+    conn.close()
     return results[0][0]
 
-def get_restaurant_details(restaurant_id, db_path="restaurants.db"):
-
-    conn = sqlite3.connect(db_path)
+def get_restaurant_details(restaurant_id):
+    logger.debug(f"get_restaurant_details query for restaurant_id {restaurant_id}")
+    conn = connect_to_db()
     query = """
     SELECT place_id, name, cuisine, avg_rating, price_level, vegetarian, beer, wine 
     FROM restaurants 
-    WHERE place_id = ?
+    WHERE place_id = %s
     """
     cursor = conn.cursor()
     cursor.execute(query, (restaurant_id,))
@@ -134,6 +146,10 @@ def get_restaurant_details(restaurant_id, db_path="restaurants.db"):
 
 if __name__ == "__main__":
     # Test queries
-    make_reservation("ChIJ90grTyOn_UYRYV0USPJmPq4", "John Doe", 4, "2025-02-10", "15:00")
-    get_reservations("Joanna Szych")
+    get_reservations("Sopot")
+    get_restaurants("Sopot")
+    get_distinct_users_in_city("Gdynia")
     get_restaurant_name("ChIJK4PtjPun_UYRRYuECz2jxWk")
+    get_restaurant_details("ChIJK4PtjPun_UYRRYuECz2jxWk")
+    get_closest_reservation_for_user("Joanna Szych")
+    make_reservation("ChIJ90grTyOn_UYRYV0USPJmPq4", "John Doe", 4, "2025-02-10", "15:00")

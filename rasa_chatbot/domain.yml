@@ -6,30 +6,34 @@ intents:
 - goodbye
 - greet
 - make_reservation
+- nlu_fallback
+- out_of_scope
 - record_GPE
 - record_LOC
 - record_PERSON
 - record_cuisine
 - record_date_time
+- record_filters
 - record_num_people
 - session_start
 - show_reservations
-- out_of_scope
 - what_can_do
-- record_filters
 entities:
+- rating
 - cuisine
+- pricing
+- popularity
 - GPE
+- vegetarian
 - PERSON
 - time
 - number
 - place_id
 - place_name
-- vegan
 - alcohol
-- pricing
-- popularity
-- rating
+- pricing_level
+- rating_level
+- popularity_level
 slots:
   PERSON:
     type: text
@@ -77,47 +81,57 @@ slots:
     type: bool
     influence_conversation: false
     mappings:
-      - type: from_intent
-        intent: confirm
-        value: true
-      - type: from_intent
-        intent: deny
-        value: false
-  vegan:
+    - type: from_intent
+      intent: confirm
+      value: true
+    - type: from_intent
+      intent: deny
+      value: false
+  vegetarian:
     type: bool
     influence_conversation: false
     mappings:
-      - type: from_entity
-        entity: vegan
+    - type: from_entity
+      entity: vegetarian
   alcohol:
     type: bool
     influence_conversation: false
     mappings:
-      - type: from_entity
-        entity: alcohol
+    - type: from_entity
+      entity: alcohol
   pricing:
     type: text
     influence_conversation: false
     mappings:
-      - type: from_entity
-        entity: pricing
+    - type: from_entity
+      entity: pricing
   pricing_level:
     type: float
     influence_conversation: false
     mappings:
-      - type: custom
+    - type: custom
   popularity:
     type: text
     influence_conversation: false
     mappings:
-      - type: from_entity
-        entity: popularity
+    - type: from_entity
+      entity: popularity
+  popularity_level:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: custom
   rating:
     type: text
     influence_conversation: false
     mappings:
-      - type: from_entity
-        entity: rating
+    - type: from_entity
+      entity: rating
+  rating_level:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: custom
 forms:
   show_reservations_form:
     required_slots:
@@ -146,7 +160,7 @@ responses:
   utter_ask_PERSON:
   - text: What is your full name?
   utter_ask_GPE:
-  - text: What city are you in?
+  - text: In what city you want to find a place?
   utter_ask_cuisine:
   - text: What type of cuisine would you like?
   utter_ask_time:
@@ -162,28 +176,31 @@ responses:
   utter_submit_make_reservation:
   - text: Wait a minute, I will make a reservation
   utter_out_of_scope:
-  - text: Sorry, I can't handle that request. 
+  - text: Sorry, I can't handle that request.
   utter_please_rephrase:
   - text: I'm sorry, I didn't quite understand that. Could you rephrase?
   utter_default:
   - text: Sorry I didn't get that. Can you rephrase?
   utter_ask_if_additional_filters:
-  - text: "Would you like to specify additional preferences like vegan, alcohol availability, rating, or price level?"
+  - text: Would you like to specify additional preferences like vegetarian, alcohol availability, rating, or price level?
   utter_ask_for_optional_filters:
-    - text: "What additional preferences do you have?"
+  - text: What additional preferences do you have?
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: false
 actions:
-- utter_submit_find_restaurant
-- action_find_restaurant
-- utter_goodbye
-- utter_submit_show_reservations
-- action_make_reservation
 - action_fetch_reservations
+- utter_submit_show_reservations
+- utter_goodbye
+- utter_please_rephrase
+- action_find_restaurant
+- utter_ask_if_additional_filters
+- action_make_reservation
+- action_map_filters
 - utter_submit_make_reservation
-- utter_welcome
 - utter_greet
+- utter_submit_find_restaurant
+- utter_welcome
 - utter_confirm
 - utter_ask_PERSON
 - utter_ask_GPE
@@ -191,4 +208,3 @@ actions:
 - utter_ask_time
 - utter_ask_number
 - utter_ask_place_id
-- action_map_pricing
