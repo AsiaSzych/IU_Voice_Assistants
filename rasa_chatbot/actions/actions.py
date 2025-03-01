@@ -5,13 +5,12 @@ from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet
+from rasa_sdk.forms import ValidationAction
+from typing import Any, Dict, Text
 
 from .database.db_queries import get_closest_reservation_for_user, make_reservation, get_restaurant_name
 from .database.db_recommendations import get_combined_recommendations
 import difflib
-
-CITY_VALIDATION =  ['Gdańsk', 'Gdynia', "Sopot", "Tricity"]
-CUISINE_VALIDATION = ["Italian", "Turkish", "Indian", "Chinese", "sushi", "pizza", "Mexican", "Japanese", "French"]
 
 class ActionFetchReservations(Action):
 
@@ -83,17 +82,15 @@ class ActionFindRestaurant(Action):
         if alcohol:
             addiitonal_options.update({"beer": 1})
             addiitonal_options.update({"wine": 1})
-
-        if city not in CITY_VALIDATION:
-            dispatcher.utter_message("I'm sorry. It is only possible to find restaurant in the Tricity area of Poland")
-            # return empty city slot
-        elif cuisine not in CUISINE_VALIDATION:
-            dispatcher.utter_message("I'm sorry, I don't have any restaurant with such a cuisine. Please try something else")
-            # return empty cuisine slot
-        else:
-            first, second, third = get_combined_recommendations(city, cuisine, optional_filters=addiitonal_options)
-            restaurant_id, restaurant_name, _ = first 
-            dispatcher.utter_message(text=f"I have found a {restaurant_name} restaurant in {city}")
+        if not full_name:
+            full_name = ""
+        print(f'In find restauration, addtional options {addiitonal_options}')
+        first, second, third = get_combined_recommendations(city=city, 
+                                                            cuisine_preferences=cuisine,
+                                                            user_name=full_name,
+                                                            optional_filters=addiitonal_options)
+        restaurant_id, restaurant_name, _ = first 
+        dispatcher.utter_message(text=f"I have found a {restaurant_name} restaurant in {city}")
             
         return [SlotSet("place_id", restaurant_id),SlotSet("place_name", restaurant_name) ]
 
@@ -157,3 +154,48 @@ class ActionMapFiltersToScale(Action):
             SlotSet("pricing_level", pricing_level),
             SlotSet("rating_level", rating_threshold)
         ]
+    
+class ValidateFindRestaurantForm(ValidationAction):
+    def name(self) -> Text:
+        return "validate_find_restaurant_form"
+
+    def validate_GPE(
+        self, 
+        slot_value: Any, 
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker, 
+        domain: Dict[Text, Any]) -> Dict[Text, Any]:
+        """Validate that the provided city is within the supported locations."""
+
+        valid_cities = ["Gdańsk", "Gdynia", "Sopot", "Tricity"]
+
+        # If city is valid, accept it
+        if slot_value in valid_cities:
+            dispatcher.utter_message(text=f"Got it! I'll find restaurants in {slot_value}.")
+            return {"GPE": slot_value}
+
+        # If city is invalid, reset the slot and ask again
+        dispatcher.utter_message(
+            text="Sorry, I currently support restaurants only in Gdańsk, Gdynia, Sopot, and Tricity. "
+                 "Please enter one of these cities."
+        )
+        return {"GPE": None}  # Reset the slot, so the form asks again
+    
+    def validate_cuisine(
+        self, 
+        slot_value: Any,
+        dispatcher: CollectingDispatcher, 
+        tracker: Tracker, 
+        domain: Dict[Text, Any]) -> Dict[Text, Any]:
+        """Validate that the provided cuisine is in the allowed list."""
+        valid_cuisines = ["Italian", "Turkish", "Indian", "Chinese", "sushi", "pizza", "Mexican", "Japanese", "French"]
+
+        if slot_value in valid_cuisines:
+            dispatcher.utter_message(text=f"Got it! You're looking for {slot_value} cuisine.")
+            return {"cuisine": slot_value}
+
+        dispatcher.utter_message(
+            text="Sorry, I can only recommend restaurants with the following cuisines: Italian, Turkish, Indian, "
+                 "Chinese, sushi, pizza, Mexican, Japanese, or French. Please enter a valid cuisine."
+        )
+        return {"cuisine": None}  # Reset the slot, so the form asks again

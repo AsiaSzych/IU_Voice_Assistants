@@ -54,6 +54,14 @@ rules:
   - action: find_restaurant_form
   - active_loop: find_restaurant_form
 
+- rule: Handle invalid city input
+  condition:
+    - active_loop: find_restaurant_form
+  steps:
+    - slot_was_set:
+        - GPE: null  # If the validation fails, we retry
+    - action: find_restaurant_form  # Bot asks for city again
+
 - rule: Submit form find restaurant
   condition:
     - active_loop: find_restaurant_form
@@ -62,7 +70,7 @@ rules:
     - active_loop: null
     - slot_was_set:
         - requested_slot: null
-    - action: utter_ask_if_additional_filters  
+    - action: utter_ask_if_additional_filters  # Proceed only if GPE was valid
 
 - rule: User provides additional filters immediately
   steps:

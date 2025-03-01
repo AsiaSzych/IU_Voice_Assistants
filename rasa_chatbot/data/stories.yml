@@ -362,7 +362,7 @@ stories:
   - intent: goodbye
   - action: utter_goodbye
 
-- story: interactive_story_1
+- story: find_place_and_make_reservation_with_filters_2
   steps:
   - intent: greet
   - action: utter_greet
@@ -443,7 +443,7 @@ stories:
     - rating: great
   - action: utter_goodbye
 
-- story: interactive_story_1
+- story: find_place_and_make_reservation_with_filters_3
   steps:
   - intent: find_restaurant
   - action: find_restaurant_form
@@ -491,4 +491,134 @@ stories:
     - rating: great
   - slot_was_set:
     - rating: great
+  - action: utter_goodbye
+
+- story: find_place_and_make_reservation_with_filters_4
+  steps:
+  - intent: find_restaurant
+  - action: find_restaurant_form
+  - active_loop: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: GPE
+  - intent: nlu_fallback
+    entities:
+    - GPE: New York
+  - slot_was_set:
+    - GPE: New York
+  - action: find_restaurant_form
+  - slot_was_set:
+    - GPE: null
+  - slot_was_set:
+    - requested_slot: GPE
+  - intent: record_GPE
+    entities:
+    - GPE: Gdanks
+    - GPE: Gdanks
+  - slot_was_set:
+    - GPE: Gdanks
+  - action: find_restaurant_form
+  - slot_was_set:
+    - GPE: null
+  - slot_was_set:
+    - requested_slot: GPE
+  - intent: record_GPE
+    entities:
+    - GPE: Gdańsk
+    - GPE: Gdańsk
+  - slot_was_set:
+    - GPE: Gdańsk
+  - action: find_restaurant_form
+  - slot_was_set:
+    - GPE: Gdańsk
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: record_cuisine
+    entities:
+    - cuisine: Chinese
+  - slot_was_set:
+    - cuisine: Chinese
+  - action: find_restaurant_form
+  - slot_was_set:
+    - cuisine: Chinese
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_ask_if_additional_filters
+  - intent: record_filters
+    entities:
+    - rating: well-rated place
+  - slot_was_set:
+    - rating: well-rated place
+  - action: action_map_filters
+  - slot_was_set:
+    - pricing_level: null
+  - slot_was_set:
+    - rating_level: 4.0
+  - action: action_find_restaurant
+  - slot_was_set:
+    - place_id: ChIJv9pvBKFz_UYRO0SUVcKggbc
+  - slot_was_set:
+    - place_name: Restauracja Chińska Yang Guang
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: find_place_and_make_reservation_no_filters_1
+  steps:
+  - intent: find_restaurant
+  - action: find_restaurant_form
+  - active_loop: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: GPE
+  - intent: record_GPE
+    entities:
+    - GPE: Gdańsk
+    - GPE: Gdańsk
+  - slot_was_set:
+    - GPE: Gdańsk
+  - action: find_restaurant_form
+  - slot_was_set:
+    - GPE: Gdańsk
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: record_cuisine
+    entities:
+    - cuisine: italiano
+  - slot_was_set:
+    - cuisine: italiano
+  - action: find_restaurant_form
+  - slot_was_set:
+    - cuisine: null
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: record_cuisine
+    entities:
+    - cuisine: intalian
+  - slot_was_set:
+    - cuisine: intalian
+  - action: find_restaurant_form
+  - slot_was_set:
+    - cuisine: null
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: record_cuisine
+    entities:
+    - cuisine: Italian
+  - slot_was_set:
+    - cuisine: Italian
+  - action: find_restaurant_form
+  - slot_was_set:
+    - cuisine: Italian
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_ask_if_additional_filters
+  - intent: deny
+  - slot_was_set:
+    - additional_filters: false
+  - action: action_find_restaurant
+  - slot_was_set:
+    - place_id: ChIJf3VHdkhz_UYRb85uLPt9Avg
+  - slot_was_set:
+    - place_name: Casa del Gusto
+  - intent: goodbye
   - action: utter_goodbye
