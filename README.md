@@ -20,7 +20,7 @@ Assistant is intented to use as localy deployed voicebot. The setup scripts are 
 1. Create a python3.10 environment 
 2. Run a setup.sh script
 3. Install requirements from requirements.txt
-4. Run docker compose up in the main folder ??
+4. Run docker compose up in the main folder
 5. Run the va_main.py python script
 
 ### Docker compose 
@@ -30,7 +30,7 @@ Docker componse creates the environment for rasa chatbot. It consists of 3 servi
 * **rasa** server that hosts rasa chatbot model - build by dockerfile in */rasa_chatbot*, stored on [aszych/iu_rasa_chatbot](https://hub.docker.com/repository/docker/aszych/iu_rasa_actions/general)
 * **postgres** server that host PostgreSQL database with restaurant and reservatios - - build by dockerfile in */rasa_chatbot/actions/database*, stored on [aszych/iu_rasa_database](https://hub.docker.com/repository/docker/aszych/iu_rasa_database/general)
 
-Those services allow main assistant loop to use chatbot model developed in Rasa software via API. ??
+Those services allow main assistant loop to use chatbot model developed in Rasa software via API.
 
 ### Chatbot instead of Voicebot 
 
