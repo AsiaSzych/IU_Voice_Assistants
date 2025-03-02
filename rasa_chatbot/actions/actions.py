@@ -4,7 +4,7 @@ from typing import Any, Text, Dict, List
 
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
-from rasa_sdk.events import SlotSet
+from rasa_sdk.events import SlotSet, ActiveLoop
 from rasa_sdk.forms import ValidationAction
 from typing import Any, Dict, Text
 
@@ -23,18 +23,20 @@ class ActionFetchReservations(Action):
         
         full_name = tracker.get_slot("PERSON")
         closest_reservation, text = get_closest_reservation_for_user(full_name)
+
         if closest_reservation:
             restaurant_id = closest_reservation[0]
             restaurant_name = get_restaurant_name(restaurant_id)
-            current_reservations_message = f"Your closest reservation {text} on {closest_reservation[1]} at {closest_reservation[2]} for {closest_reservation[3]} people, in the {restaurant_name}." 
+            current_reservations_message = f"Your closest reservation {text} on {closest_reservation[1]} at {closest_reservation[2]} for {closest_reservation[3]} people, in {restaurant_name}." 
         else:
-            current_reservations_message = f'Sorry currently there are no reservations for {full_name}'
+            current_reservations_message = f'Sorry, currently there are no reservations for {full_name}.'
+
         if text == 'was':
-            current_reservations_message = current_reservations_message + "There are no reservations in the future."
+            current_reservations_message += " There are no reservations in the future."
+
         dispatcher.utter_message(text=current_reservations_message)
-
         return []
-
+    
 class ActionMakeReservations(Action):
 
     def name(self) -> Text:
@@ -65,11 +67,11 @@ class ActionMakeReservations(Action):
 
         elif reservation_status == "user_exists":
             dispatcher.utter_message(text=f"You already have a reservation at this restaurant on {date}. Please choose a different date.")
-            return [SlotSet("time", None), SlotSet("date", None)]  # Reset date & time slots
+            return [SlotSet("time", None)]  # Reset time slot
 
         elif reservation_status == "time_full":
             dispatcher.utter_message(text=f"Unfortunately, this restaurant is fully booked at {hour} on {date}. Please choose a different date or time.")
-            return [SlotSet("time", None), SlotSet("date", None)]  # Reset date & time slots
+            return [SlotSet("time", None)]  # Reset time slot
 
         return []
     
@@ -82,7 +84,7 @@ class ActionFindRestaurant(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
-        full_name = tracker.get_slot("PERSON")
+        full_name = tracker.get_slot("PERSON") or ""
         city = tracker.get_slot("GPE")
         cuisine = tracker.get_slot("cuisine")
         pricing_level = tracker.get_slot("pricing_level")
@@ -90,30 +92,38 @@ class ActionFindRestaurant(Action):
         vege = tracker.get_slot("vegetarian") # bool
         alcohol = tracker.get_slot("alcohol") # bool
 
-        addiitonal_options = {}
+        additional_options = {}
         if pricing_level:
-            addiitonal_options.update({"price_level": pricing_level})
+            additional_options["price_level"] = pricing_level
         if rating_level:
-            addiitonal_options.update({"avg_rating": rating_level})
+            additional_options["avg_rating"] = rating_level
         if vege:
-            addiitonal_options.update({"vegetarian": 1})
+            additional_options["vegetarian"] = 1
         if alcohol:
-            addiitonal_options.update({"beer": 1})
-            addiitonal_options.update({"wine": 1})
-        if not full_name:
-            full_name = ""
+            additional_options["beer"] = 1
+            additional_options["wine"] = 1
         try:
-            first, _, _ = get_combined_recommendations(city=city, 
-                                                                cuisine_preferences=cuisine,
-                                                                user_name=full_name,
-                                                                optional_filters=addiitonal_options)
-            restaurant_id, restaurant_name, _ = first 
-            dispatcher.utter_message(text=f"I have found a {restaurant_name} restaurant in {city}")
-            return [SlotSet("place_id", restaurant_id),SlotSet("place_name", restaurant_name) ]
+            first, _, _ = get_combined_recommendations(
+                city=city, 
+                cuisine_preferences=cuisine,
+                user_name=full_name,
+                optional_filters=additional_options
+            )
 
-        except Exception as e:
-            dispatcher.utter_message(text=f"I'm so sorry, there seems to be some issue finding a restaurant for you. Let's try again! ")
-            return [SlotSet("full_name", None),SlotSet("city", None), SlotSet("cuisine", None), SlotSet("pricing_level", None), SlotSet("rating_level", None), SlotSet("vege", None), SlotSet("alcohol", None) ]
+            restaurant_id, restaurant_name, _ = first 
+            dispatcher.utter_message(text=f"I have found {restaurant_name} restaurant in {city}.")
+            return [SlotSet("place_id", restaurant_id), SlotSet("place_name", restaurant_name)]
+
+        except Exception:
+            dispatcher.utter_message(text="I'm so sorry, there seems to be some issue finding a restaurant for you. Let's try again!")
+            return [
+                SlotSet("GPE", None), 
+                SlotSet("cuisine", None), 
+                SlotSet("pricing_level", None), 
+                SlotSet("rating_level", None), 
+                SlotSet("vegetarian", None), 
+                SlotSet("alcohol", None)
+            ]
 
 class ActionMapFiltersToScale(Action):
     def name(self):
@@ -175,6 +185,42 @@ class ActionMapFiltersToScale(Action):
             SlotSet("pricing_level", pricing_level),
             SlotSet("rating_level", rating_threshold)
         ]
+
+class ActionUpdateReservation(Action):
+    def name(self) -> Text:
+        return "action_update_reservation"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        intent = tracker.latest_message["intent"].get("name")
+        entities = tracker.latest_message.get("entities", [])
+        slots_to_update = []
+
+        if intent == "record_date_time":
+            time_entity = next((e["value"] for e in entities if e["entity"] == "time"), None)
+            if time_entity:
+                slots_to_update.append(SlotSet("time", time_entity))
+                dispatcher.utter_message(text=f"Got it! Changing the reservation time to {time_entity}.")
+
+        elif intent == "record_num_people":
+            number_entity = next((e["value"] for e in entities if e["entity"] == "number"), None)
+            if number_entity:
+                slots_to_update.append(SlotSet("number", number_entity))
+                dispatcher.utter_message(text=f"Got it! Updating the number of people to {number_entity}.")
+
+        elif intent == "record_PERSON":
+            person_entity = next((e["value"] for e in entities if e["entity"] == "PERSON"), None)
+            if person_entity:
+                slots_to_update.append(SlotSet("PERSON", person_entity))
+                dispatcher.utter_message(text=f"Got it! The reservation will now be under {person_entity}.")
+
+        if not slots_to_update:
+            dispatcher.utter_message(text="I didn't quite understand. What would you like to change?")
+            return []
+
+        return slots_to_update
     
 class ValidateFindRestaurantForm(ValidationAction):
     def name(self) -> Text:
@@ -249,3 +295,20 @@ class ValidateFindRestaurantForm(ValidationAction):
                  "Mexican, Japanese, or French. Could you specify one of these?"
         )
         return {"cuisine": None}  
+
+class ActionCheckActiveLoop(Action):
+    def name(self) -> str:
+        return "action_check_active_loop"
+
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: dict):
+        """Immediately redirect users to recommendation if no place is chosen. Otherwise, continue with reservation."""
+
+        place_id = tracker.get_slot("place_id")
+
+        if not place_id:
+            dispatcher.utter_message(text="It looks like you don't have a place chosen. Let's go over recommendations now.")
+            return [ActiveLoop("find_restaurant_form")]  # Redirect to recommendation
+
+        # If a place is already set, proceed with the reservation flow
+        return [ActiveLoop("make_reservation_form")]  
+

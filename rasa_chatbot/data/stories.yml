@@ -95,7 +95,7 @@ stories:
     - action: utter_ask_if_additional_filters
     - slot_was_set:
         - requested_slot: null
-    - intent: confirm 
+    - intent: confirm_filters  
     - action: utter_ask_for_optional_filters  
     - intent: record_filters  
     - slot_was_set:
@@ -112,7 +112,7 @@ stories:
     - action: utter_ask_if_additional_filters
     - slot_was_set:
         - requested_slot: null
-    - intent: deny  
+    - intent: deny_filters  
     - action: action_find_restaurant
 
 - story: User provides pricing filter in the first response
@@ -135,8 +135,8 @@ stories:
     - active_loop: find_restaurant_form
     - active_loop: null 
     - action: utter_ask_if_additional_filters
-    - intent: confirm
-    - action: utter_ask_for_optional_filters  # Bot asks for details
+    - intent: confirm_filters  
+    - action: utter_ask_for_optional_filters 
     - intent: record_filters
     - slot_was_set:
         - pricing: "moderately priced"
@@ -153,7 +153,7 @@ stories:
     - intent: record_filters
     - slot_was_set:
         - rating: "highly-rated"
-    - action: action_map_filters  # Converts values into DB format
+    - action: action_map_filters  
     - action: action_find_restaurant
 
 - story: User says "yes" to additional filters and provides rating
@@ -163,7 +163,7 @@ stories:
     - active_loop: find_restaurant_form
     - active_loop: null 
     - action: utter_ask_if_additional_filters
-    - intent: confirm
+    - intent: confirm_filters
     - action: utter_ask_for_optional_filters
     - intent: record_filters
     - slot_was_set:
@@ -171,7 +171,7 @@ stories:
     - action: action_map_filters
     - action: action_find_restaurant
 
-- story: interactive_story_1
+- story: find_place_with_filters_1
   steps:
   - intent: greet
   - action: utter_greet
@@ -216,7 +216,7 @@ stories:
   - intent: goodbye
   - action: utter_goodbye
 
-- story: interactive_story_2
+- story: find_place_with_filters_2
   steps:
   - intent: greet
   - action: utter_greet
@@ -263,83 +263,6 @@ stories:
     - rating_level: null
   - action: action_find_restaurant
 
-- story: find_place_and_make_reservation_1
-  steps:
-  - intent: find_restaurant
-  - action: find_restaurant_form
-  - active_loop: find_restaurant_form
-  - slot_was_set:
-    - requested_slot: GPE
-  - intent: record_GPE
-    entities:
-    - GPE: Gdynia
-  - slot_was_set:
-    - GPE: Gdynia
-  - action: find_restaurant_form
-  - slot_was_set:
-    - requested_slot: cuisine
-  - intent: record_cuisine
-    entities:
-    - cuisine: Italian
-  - slot_was_set:
-    - cuisine: Italian
-  - action: find_restaurant_form
-  - slot_was_set:
-    - requested_slot: null
-  - active_loop: null
-  - action: utter_ask_if_additional_filters
-  - intent: record_filters
-    entities:
-    - vegetarian: 'True'
-    - pricing: budget
-  - slot_was_set:
-    - vegetarian: 'True'
-  - slot_was_set:
-    - pricing: budget
-  - action: action_map_filters
-  - slot_was_set:
-    - pricing_level: 1
-  - slot_was_set:
-    - rating_level: null
-  - action: action_find_restaurant
-  - slot_was_set:
-    - place_id: ChIJsc4Fu2Wn_UYR3TgoG1K1Da0
-  - slot_was_set:
-    - place_name: Bergamo - kuchnia pizza prosecco
-  - intent: make_reservation
-  - action: make_reservation_form
-  - active_loop: make_reservation_form
-  - slot_was_set:
-    - requested_slot: PERSON
-  - intent: record_PERSON
-    entities:
-    - PERSON: Emily Brown
-  - slot_was_set:
-    - PERSON: Emily Brown
-  - action: make_reservation_form
-  - slot_was_set:
-    - requested_slot: time
-  - intent: record_date_time
-    entities:
-    - time: '2025-03-03T17:00:00.000+01:00'
-  - slot_was_set:
-    - time: '2025-03-03T17:00:00.000+01:00'
-  - action: make_reservation_form
-  - slot_was_set:
-    - requested_slot: number
-  - intent: record_num_people
-    entities:
-    - number: 4
-  - slot_was_set:
-    - number: 4
-  - action: make_reservation_form
-  - slot_was_set:
-    - requested_slot: null
-  - active_loop: null
-  - action: utter_submit_make_reservation
-  - action: action_make_reservation
-  - intent: goodbye
-  - action: utter_goodbye
 
 - story: show_reservations_story_5
   steps:
@@ -362,88 +285,7 @@ stories:
   - intent: goodbye
   - action: utter_goodbye
 
-- story: find_place_and_make_reservation_with_filters_2
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: find_restaurant
-  - action: find_restaurant_form
-  - active_loop: find_restaurant_form
-  - slot_was_set:
-    - requested_slot: GPE
-  - intent: record_GPE
-    entities:
-    - GPE: Sopot
-  - slot_was_set:
-    - GPE: Sopot
-  - action: find_restaurant_form
-  - slot_was_set:
-    - requested_slot: cuisine
-  - intent: record_cuisine
-    entities:
-    - cuisine: Chinese
-  - slot_was_set:
-    - cuisine: Chinese
-  - action: find_restaurant_form
-  - slot_was_set:
-    - requested_slot: null
-  - active_loop: null
-  - action: utter_ask_if_additional_filters
-  - intent: record_filters
-    entities:
-    - pricing: high ratings
-  - slot_was_set:
-    - pricing: high ratings
-  - action: action_map_filters
-  - slot_was_set:
-    - pricing_level: null
-  - slot_was_set:
-    - rating_level: null
-  - action: action_find_restaurant
-  - slot_was_set:
-    - place_id: ChIJI4fVJ9cK_UYRFFPbdBi5YMQ
-  - slot_was_set:
-    - place_name: Asia Hoanmy
-  - intent: make_reservation
-  - action: make_reservation_form
-  - active_loop: make_reservation_form
-  - slot_was_set:
-    - requested_slot: PERSON
-  - intent: nlu_fallback
-    entities:
-    - PERSON: Mike Curry
-  - slot_was_set:
-    - PERSON: Mike Curry
-  - action: make_reservation_form
-  - slot_was_set:
-    - requested_slot: time
-  - intent: record_date_time
-    entities:
-    - time: '2025-03-02T12:00:00.000+01:00'
-  - slot_was_set:
-    - time: '2025-03-02T12:00:00.000+01:00'
-  - action: make_reservation_form
-  - slot_was_set:
-    - requested_slot: number
-  - intent: record_num_people
-    entities:
-    - number: 6
-  - slot_was_set:
-    - number: 6
-  - action: make_reservation_form
-  - slot_was_set:
-    - requested_slot: null
-  - active_loop: null
-  - action: utter_submit_make_reservation
-  - action: action_make_reservation
-  - intent: goodbye
-    entities:
-    - rating: great
-  - slot_was_set:
-    - rating: great
-  - action: utter_goodbye
-
-- story: find_place_and_make_reservation_with_filters_3
+- story: find_place_with_filters_3
   steps:
   - intent: find_restaurant
   - action: find_restaurant_form
@@ -493,7 +335,7 @@ stories:
     - rating: great
   - action: utter_goodbye
 
-- story: find_place_and_make_reservation_with_filters_4
+- story: find_place_with_filters_4
   steps:
   - intent: find_restaurant
   - action: find_restaurant_form
@@ -523,7 +365,6 @@ stories:
     - requested_slot: GPE
   - intent: record_GPE
     entities:
-    - GPE: Gdańsk
     - GPE: Gdańsk
   - slot_was_set:
     - GPE: Gdańsk
@@ -562,72 +403,12 @@ stories:
   - intent: goodbye
   - action: utter_goodbye
 
-- story: find_place_and_make_reservation_no_filters_1
+- story: make_reservation_but_first_recommend_1
   steps:
-  - intent: find_restaurant
-  - action: find_restaurant_form
+  - intent: make_reservation
+  - action: action_check_active_loop
   - active_loop: find_restaurant_form
-  - slot_was_set:
-    - requested_slot: GPE
-  - intent: record_GPE
-    entities:
-    - GPE: Gdańsk
-    - GPE: Gdańsk
-  - slot_was_set:
-    - GPE: Gdańsk
   - action: find_restaurant_form
-  - slot_was_set:
-    - GPE: Gdańsk
-  - slot_was_set:
-    - requested_slot: cuisine
-  - intent: record_cuisine
-    entities:
-    - cuisine: italiano
-  - slot_was_set:
-    - cuisine: italiano
-  - action: find_restaurant_form
-  - slot_was_set:
-    - cuisine: null
-  - slot_was_set:
-    - requested_slot: cuisine
-  - intent: record_cuisine
-    entities:
-    - cuisine: intalian
-  - slot_was_set:
-    - cuisine: intalian
-  - action: find_restaurant_form
-  - slot_was_set:
-    - cuisine: null
-  - slot_was_set:
-    - requested_slot: cuisine
-  - intent: record_cuisine
-    entities:
-    - cuisine: Italian
-  - slot_was_set:
-    - cuisine: Italian
-  - action: find_restaurant_form
-  - slot_was_set:
-    - cuisine: Italian
-  - slot_was_set:
-    - requested_slot: null
-  - active_loop: null
-  - action: utter_ask_if_additional_filters
-  - intent: deny
-  - slot_was_set:
-    - additional_filters: false
-  - action: action_find_restaurant
-  - slot_was_set:
-    - place_id: ChIJf3VHdkhz_UYRb85uLPt9Avg
-  - slot_was_set:
-    - place_name: Casa del Gusto
-  - intent: goodbye
-  - action: utter_goodbye
-
-- story: interactive_story_1
-  steps:
-  - intent: find_restaurant
-  - action: find_restaurant_form
-  - active_loop: find_restaurant_form
   - slot_was_set:
     - requested_slot: GPE
   - intent: record_GPE
@@ -643,12 +424,12 @@ stories:
     - requested_slot: cuisine
   - intent: record_cuisine
     entities:
-    - cuisine: Italian
+    - cuisine: Mexican
   - slot_was_set:
-    - cuisine: Italian
+    - cuisine: Mexican
   - action: find_restaurant_form
   - slot_was_set:
-    - cuisine: Italian
+    - cuisine: Mexican
   - slot_was_set:
     - requested_slot: null
   - active_loop: null
@@ -656,48 +437,37 @@ stories:
   - intent: record_filters
     entities:
     - vegetarian: 'True'
-    - rating: reviews
-    - pricing: affordable
   - slot_was_set:
     - vegetarian: 'True'
-  - slot_was_set:
-    - pricing: affordable
-  - slot_was_set:
-    - rating: reviews
   - action: action_map_filters
   - slot_was_set:
-    - pricing_level: 1
+    - pricing_level: null
   - slot_was_set:
-    - rating_level: 4.0
+    - rating_level: null
   - action: action_find_restaurant
   - slot_was_set:
-    - place_id: ChIJsc4Fu2Wn_UYR3TgoG1K1Da0
+    - place_id: ChIJ0QpfI7Cn_UYRMuXzCkZk9hA
   - slot_was_set:
-    - place_name: Bergamo - kuchnia pizza prosecco
+    - place_name: Mexeat Taco & Burrito
   - intent: make_reservation
-    entities:
-    - rating: great
-  - slot_was_set:
-    - rating: great
-  - action: make_reservation_form
+  - action: action_check_active_loop
   - active_loop: make_reservation_form
-  - slot_was_set:
-    - rating: great
+  - action: make_reservation_form
   - slot_was_set:
     - requested_slot: PERSON
   - intent: record_PERSON
     entities:
-    - PERSON: Mark Trump
+    - PERSON: John Doe
   - slot_was_set:
-    - PERSON: Mark Trump
+    - PERSON: John Doe
   - action: make_reservation_form
   - slot_was_set:
     - requested_slot: time
   - intent: record_date_time
     entities:
-    - time: '2025-03-03T13:00:00.000+01:00'
+    - time: '2025-03-07T20:00:00.000+01:00'
   - slot_was_set:
-    - time: '2025-03-03T13:00:00.000+01:00'
+    - time: '2025-03-07T20:00:00.000+01:00'
   - action: make_reservation_form
   - slot_was_set:
     - requested_slot: number
@@ -710,5 +480,183 @@ stories:
   - slot_was_set:
     - requested_slot: null
   - active_loop: null
-  - action: utter_submit_make_reservation
+  - action: utter_confirm_reservation
+  - intent: confirm_reservation
   - action: action_make_reservation
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: recommend_and_make_reservation_with_corrections_2
+  steps:
+  - intent: find_restaurant
+  - action: find_restaurant_form
+  - active_loop: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: GPE
+  - intent: record_GPE
+    entities:
+    - GPE: Sopot
+    - GPE: Sopot
+  - slot_was_set:
+    - GPE: Sopot
+  - action: find_restaurant_form
+  - slot_was_set:
+    - GPE: Sopot
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: record_cuisine
+    entities:
+    - cuisine: sushi
+  - slot_was_set:
+    - cuisine: sushi
+  - action: find_restaurant_form
+  - slot_was_set:
+    - cuisine: sushi
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_ask_if_additional_filters
+  - intent: record_filters
+    entities:
+    - alcohol: 'True'
+  - slot_was_set:
+    - alcohol: 'True'
+  - action: action_map_filters
+  - slot_was_set:
+    - pricing_level: null
+  - slot_was_set:
+    - rating_level: null
+  - action: action_find_restaurant
+  - slot_was_set:
+    - place_id: ChIJIZ__940K_UYR989YLuqB6SU
+  - slot_was_set:
+    - place_name: Phuket - Thai Food & Bar
+  - intent: make_reservation
+  - action: action_check_active_loop
+  - active_loop: make_reservation_form
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: PERSON
+  - intent: record_PERSON
+    entities:
+    - PERSON: Emily Smith
+  - slot_was_set:
+    - PERSON: Emily Smith
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: time
+  - intent: record_date_time
+    entities:
+    - time: '2025-03-04T18:00:00.000+01:00'
+  - slot_was_set:
+    - time: '2025-03-04T18:00:00.000+01:00'
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: number
+  - intent: record_num_people
+    entities:
+    - number: 2
+  - slot_was_set:
+    - number: 2
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_confirm_reservation
+  - intent: record_num_people
+    entities:
+    - number: 8
+  - slot_was_set:
+    - number: 8
+  - action: action_update_reservation
+  - slot_was_set:
+    - number: 8
+  - action: utter_confirm_reservation
+  - intent: confirm_reservation
+  - action: action_make_reservation
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: interactive_story_1
+  steps:
+  - intent: make_reservation
+  - action: action_check_active_loop
+  - active_loop: find_restaurant_form
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: GPE
+  - intent: record_GPE
+    entities:
+    - GPE: Gdynia
+    - GPE: Gdynia
+  - slot_was_set:
+    - GPE: Gdynia
+  - action: find_restaurant_form
+  - slot_was_set:
+    - GPE: Gdynia
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: record_cuisine
+    entities:
+    - cuisine: pizza
+  - slot_was_set:
+    - cuisine: pizza
+  - action: find_restaurant_form
+  - slot_was_set:
+    - cuisine: pizza
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_ask_if_additional_filters
+  - intent: record_filters
+    entities:
+    - rating: good reviews
+  - slot_was_set:
+    - rating: good reviews
+  - action: action_map_filters
+  - slot_was_set:
+    - pricing_level: null
+  - slot_was_set:
+    - rating_level: 4.0
+  - action: action_find_restaurant
+  - slot_was_set:
+    - place_id: ChIJnTFAEzCn_UYR_jjxray_vmQ
+  - slot_was_set:
+    - place_name: Viva La Pizza
+  - intent: make_reservation
+  - action: action_check_active_loop
+  - active_loop: make_reservation_form
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: PERSON
+  - intent: record_PERSON
+    entities:
+    - PERSON: Christine Bing
+  - slot_was_set:
+    - PERSON: Christine Bing
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: time
+  - intent: record_date_time
+    entities:
+    - time: '2025-03-09T12:00:00.000+01:00'
+  - slot_was_set:
+    - time: '2025-03-09T12:00:00.000+01:00'
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: number
+  - intent: record_num_people
+    entities:
+    - number: 4
+  - slot_was_set:
+    - number: 4
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_confirm_reservation
+  - intent: confirm
+  - intent: confirm_reservation
+  - action: action_make_reservation
+  - intent: goodbye
+  - action: utter_goodbye

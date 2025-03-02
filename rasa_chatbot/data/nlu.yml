@@ -40,6 +40,11 @@ nlu:
     - That's all, bye bye
     - [great](rating), bye
     - [Great]{"entity": "rating", "value": "great"}, thanks
+    - thank you, bye!
+    - thanks, bye!
+    - Thanks, bye!
+    - awesome, bye!
+    - Bye!
 - intent: confirm
   examples: |
     - yes
@@ -65,6 +70,58 @@ nlu:
     - No, thanks
     - nope, this is it
     - no, that fine
+    - No,
+- intent: confirm_filters
+  examples: |
+    - Yes, I'd like to specify more filters
+    - Sure, I want to add some preferences
+    - Yeah, I want to include more details
+    - Absolutely, I'd like to refine my search
+    - Yes, please let me add more filters
+    - Ok, I want to add additional criteria
+    - Yes, I want to specify a price range
+    - Yes, I want to set a rating limit
+    - Sure, let's add some filters
+- intent: deny_filters
+  examples: |
+    - No, just find a restaurant
+    - No, I don't need any filters
+    - Skip the filters, just give me recommendations
+    - No, I'm fine with anything
+    - Nope, just show me a place
+    - I don't need extra filters
+    - No additional criteria, thanks
+    - No, I don't need any additional options
+- intent: confirm_reservation
+  examples: |
+    - Yes, book it
+    - Yes, confirm my reservation
+    - Yes, that's correct
+    - Yes, that time works for me
+    - Yes, make the reservation
+    - Yeah, book it for me
+    - Sure, go ahead with the reservation
+    - Yes, everything looks good
+    - Confirm my booking
+    - That's perfect, go ahead
+    - Yes, I confirm the reservation
+    - Yes, I confirm
+    - Yes, please make that reservation
+    - Yes, This is correct reservation
+    - Yes, I confirm now
+    - Yes
+- intent: deny_reservation
+  examples: |
+    - No, I need to change something
+    - No, I want a different time
+    - No, I need to update my booking
+    - No, actually I want it at 5PM
+    - Wait, I need to modify the reservation
+    - No, let me change the number of people
+    - No, I need to update the restaurant name
+    - No, I want a different restaurant
+    - No, I need a different date
+    - No, I want to change something
 - intent: find_restaurant
   examples: |
     - I want to find a restaurant
@@ -99,6 +156,8 @@ nlu:
     - Hi I want to find a place for dinner with family
     - Hi, I need help finding a place to eat
     - Hi, I need help finding a place for dinner
+    - Hi i want to find a restaurant in Gdynia
+    - Hi I need help finding a restaurant
 - intent: make_reservation
   examples: |
     - I want to book a table here
@@ -138,7 +197,14 @@ nlu:
     - Hi I want to check my reservations
     - Hi, can you show me old reservations?
     - Can you book a table for me there?
-    - [Great]{"entity": "rating", "value": "great"}! Can you book a table for me there?
+    - Great! Can you book a table for me there?
+    - Thanks, now let's book a table here
+    - Can you book a table there for me?
+    - Hi i want to make a reservation
+    - Thanks, let's make a reservation there
+    - Let's book a table there
+    - Hi I want to make a reservation
+    - Awesome! Can I book a table there?
 - intent: record_PERSON
   examples: |
     - Anna Green
@@ -157,6 +223,12 @@ nlu:
     - My name is Julie Brown
     - Emily Brown
     - My name is Mark Trump
+    - Mike Smith is my name
+    - Pete Trump
+    - My name is Susan Geller
+    - My name is John Doe
+    - My name is Emily Smith
+    - Christine Bing
 - intent: record_GPE
   examples: |
     - Gdynia
@@ -171,10 +243,10 @@ nlu:
     - In [Sopot](GPE)
     - In Gdynia
     - In Gdańsk
-    - I'm in [Gdanks](GPE) city
-    - I'm in [Gdańsk](GPE)
-    - In [Gdanks][{"entity": "GPE", "value": "Gda\u0144sk"}, {"entity": "GPE", "value": "Gda\u0144sk"}]
+    - I'm in Gdanks city
+    - In [Gdanks]{"entity": "GPE", "value": "Gda\u0144sk"}
     - I'm in [Gdinia]{"entity": "GPE", "value": "Gdynia"}
+    - In [Gdynia](GPE)
 - intent: record_cuisine
   examples: |
     - I would like something [Italian](cuisine)
@@ -225,6 +297,12 @@ nlu:
     - I want [intalian](cuisine) dish
     - I want [Italien]{"entity": "cuisine", "value": "Italian"} dish
     - Maybe, something [Intalian]{"entity": "cuisine", "value": "Italian"}
+    - [Mexican](cuisine) cuisine
+    - Something [Chinese](cuisine) sound good
+    - I need a place that serves [pizza](cuisine)
+    - I want a place that serves [sushi](cuisine)
+    - I need a place that serves [sushi](cuisine)
+    - I need a place that serves [pizza](cuisine)!
 - intent: record_date_time
   examples: |
     - today at 5PM
@@ -239,6 +317,12 @@ nlu:
     - Next Monday at 5PM
     - Tomorrow at noon
     - Tommorow at 1PM
+    - Tomorrow at 2PM
+    - Next wednesday at 5PM
+    - Today at 6PM, please
+    - Next Friday at 8PM
+    - Next Tuesday at 18:00
+    - Next sunday at noon
 - intent: record_num_people
   examples: |
     - it will be for 5 people
@@ -257,6 +341,14 @@ nlu:
     - There will be four of us
     - For 6 people
     - it's for five people
+    - it is for four people
+    - It's for 2 people
+    - It it for 4 people
+    - It should be for 5 people
+    - For 5 people
+    - it's for 2 people
+    - No, it should be for 8 people instead
+    - It's a table for 4
 - intent: out_of_scope
   examples: |
     - What is 2 + 2?
@@ -323,6 +415,12 @@ nlu:
     - Yes, I want this place to have [vegetarian]{"entity": "vegetarian", "value": "True"} food and I want it to be moderately [expensive](pricing)
     - YEs, it should be a [well-rated place](rating)
     - Yes, this place should offer [vegetarian]{"entity": "vegetarian", "value": "True"} food. I also want it to have [good reviews](rating), but be [affordable](pricing)
+    - Yes, [vegetarian]{"entity": "vegetarian", "value": "True"} options
+    - Yes, it should be a [budget-friendly place](pricing)
+    - Yes, I need a [vege]{"entity": "vegetarian", "value": "True"} options
+    - Yes, I need a place that has a [bar]{"entity": "alcohol", "value": "True"}
+    - Yes, I need a place with [wine]{"entity": "alcohol", "value": "True"}
+    - Yes it should be a place with [good reviews](rating)
 - synonym: great
   examples: |
     - Great
@@ -333,6 +431,14 @@ nlu:
     - Gdańsk city
     - Danzig
     - Gdánsk
+- synonym: Gdynia
+  examples: |
+    - Gdinia
+    - Gdinya
+    - Gdynska
+    - Gdynia city
+    - Gdyna
+    - Gdynya
 - synonym: Mexican
   examples: |
     - mexican
@@ -353,6 +459,7 @@ nlu:
 - synonym: Italian
   examples: |
     - Italien
+    - Intalian
     - italian
     - ITALIAN
     - Itallian
@@ -361,7 +468,6 @@ nlu:
     - Itallan
     - Italain
     - Italiano
-    - Intalian
 - synonym: 'True'
   examples: |
     - vegetarian
@@ -370,6 +476,7 @@ nlu:
     - beer
     - wine
     - alcohol
+    - bar
 - synonym: Turkish
   examples: |
     - turkish
@@ -422,14 +529,6 @@ nlu:
     - Frech
     - Frensh
     - Frenche
-- synonym: Gdynia
-  examples: |
-    - Gdinia
-    - Gdinya
-    - Gdynska
-    - Gdynia city
-    - Gdyna
-    - Gdynya
 - synonym: Sopot
   examples: |
     - Sopott

@@ -1,7 +1,11 @@
 version: '3.1'
 intents:
 - confirm
+- confirm_filters
+- confirm_reservation
 - deny
+- deny_filters
+- deny_reservation
 - find_restaurant
 - goodbye
 - greet
@@ -19,17 +23,17 @@ intents:
 - show_reservations
 - what_can_do
 entities:
-- rating
+- cuisine
 - GPE
+- rating
+- alcohol
 - vegetarian
 - pricing
-- cuisine
 - PERSON
 - time
 - number
 - place_id
 - place_name
-- alcohol
 - pricing_level
 - rating_level
 slots:
@@ -80,10 +84,10 @@ slots:
     influence_conversation: false
     mappings:
     - type: from_intent
-      intent: confirm
+      intent: confirm_filters
       value: true
     - type: from_intent
-      intent: deny
+      intent: deny_filters
       value: false
   vegetarian:
     type: bool
@@ -129,29 +133,29 @@ forms:
     - cuisine
   make_reservation_form:
     required_slots:
+    - place_id
     - PERSON
     - time
     - number
-    - place_id
 responses:
   utter_greet:
   - text: Hey! What can I help you with?
   utter_whoami:
-  - text: I'm a restaurnat-helper bot, I can help you find a restaurnat, reserve a seat there and check previous reservations! What would you like to do today?
+  - text: I'm a restaurant-helper bot, I can help you find a restaurant, reserve a seat there, and check previous reservations! What would you like to do today?
   utter_goodbye:
   - text: Bye
   utter_welcome:
-  - text: You're welcome! Can I help you with somethig else?
+  - text: You're welcome! Can I help you with something else?
   utter_confirm:
   - text: Great, I've got that
   utter_ask_PERSON:
   - text: What is your full name?
   utter_ask_GPE:
-  - text: In what city you want to find a place?
+  - text: In what city do you want to find a place?
   utter_ask_cuisine:
   - text: What type of cuisine would you like?
   utter_ask_time:
-  - text: What date and time should I put on reservation?
+  - text: What date and time should I put on the reservation?
   utter_ask_number:
   - text: For how many people is this reservation?
   utter_ask_place_id:
@@ -168,31 +172,27 @@ responses:
   - text: I'm sorry, I didn't quite understand that. Could you rephrase?
   utter_default:
   - text: Sorry I didn't get that. Can you rephrase?
-  utter_ask_if_additional_filters:
-  - text: Would you like to specify additional preferences like vegetarian, alcohol availability, rating, or price level?
   utter_ask_for_optional_filters:
   - text: What additional preferences do you have?
+  utter_ask_what_to_change:
+  - text: What would you like to change? You can modify the time, number of people, or the reservation name.
+  utter_ask_if_additional_filters:
+  - text: Would you like to specify additional preferences like vegetarian, alcohol availability, rating, or price level?
+  utter_confirm_reservation:
+  - text: 'Please confirm your reservation: {number} people at {place_name} on {time}. Do you confirm?'
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: false
 actions:
-- utter_submit_make_reservation
-- action_find_restaurant
-- action_map_filters
 - utter_ask_if_additional_filters
+- action_map_filters
 - action_make_reservation
+- action_find_restaurant
+- action_check_active_loop
 - utter_goodbye
-- utter_greet
+- utter_confirm_reservation
+- action_update_reservation
+- utter_ask_for_optional_filters
+- utter_ask_what_to_change
 - action_fetch_reservations
-- utter_submit_show_reservations
-- utter_please_rephrase
-- utter_submit_find_restaurant
-- utter_welcome
-- utter_confirm
-- utter_ask_PERSON
-- utter_ask_GPE
-- utter_ask_cuisine
-- utter_ask_time
-- utter_ask_number
-- utter_ask_place_id
 - validate_find_restaurant_form
