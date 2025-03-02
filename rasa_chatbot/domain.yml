@@ -23,11 +23,11 @@ intents:
 - show_reservations
 - what_can_do
 entities:
-- cuisine
-- GPE
-- rating
 - alcohol
+- GPE
+- cuisine
 - vegetarian
+- rating
 - pricing
 - PERSON
 - time
@@ -184,15 +184,16 @@ session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: false
 actions:
-- utter_ask_if_additional_filters
-- action_map_filters
-- action_make_reservation
-- action_find_restaurant
-- action_check_active_loop
 - utter_goodbye
+- utter_ask_if_additional_filters
+- action_find_restaurant
+- action_map_filters
+- action_fetch_reservations
+- utter_submit_show_reservations
+- action_check_active_loop
 - utter_confirm_reservation
 - action_update_reservation
+- action_make_reservation
 - utter_ask_for_optional_filters
 - utter_ask_what_to_change
-- action_fetch_reservations
 - validate_find_restaurant_form

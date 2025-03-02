@@ -660,3 +660,173 @@ stories:
   - action: action_make_reservation
   - intent: goodbye
   - action: utter_goodbye
+
+- story: show_reservations_7
+  steps:
+  - intent: show_reservations
+  - action: show_reservations_form
+  - active_loop: show_reservations_form
+  - slot_was_set:
+    - requested_slot: PERSON
+  - intent: record_PERSON
+    entities:
+    - PERSON: Christine Bing
+  - slot_was_set:
+    - PERSON: Christine Bing
+  - action: show_reservations_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_show_reservations
+  - action: action_fetch_reservations
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: make_reservation_but_firstly_recommend
+  steps:
+  - intent: make_reservation
+  - action: action_check_active_loop
+  - active_loop: find_restaurant_form
+  - action: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: GPE
+  - intent: record_GPE
+    entities:
+    - GPE: Gdańsk
+    - GPE: Gdańsk
+  - slot_was_set:
+    - GPE: Gdańsk
+  - action: find_restaurant_form
+  - slot_was_set:
+    - GPE: Gdańsk
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: record_cuisine
+    entities:
+    - cuisine: Japanese
+  - slot_was_set:
+    - cuisine: Japanese
+  - action: find_restaurant_form
+  - slot_was_set:
+    - cuisine: Japanese
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_ask_if_additional_filters
+  - intent: deny_filters
+  - slot_was_set:
+    - additional_filters: false
+  - action: action_find_restaurant
+  - slot_was_set:
+    - place_id: ChIJk6rtQKR1_UYRRDZJz_pc7iY
+  - slot_was_set:
+    - place_name: Akita Ramen
+  - intent: make_reservation
+    entities:
+    - rating: great
+  - slot_was_set:
+    - rating: great
+  - action: action_check_active_loop
+  - active_loop: make_reservation_form
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: PERSON
+  - intent: record_PERSON
+    entities:
+    - PERSON: Chandler Bing
+  - slot_was_set:
+    - PERSON: Chandler Bing
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: time
+  - intent: record_date_time
+    entities:
+    - time: '2025-03-03T16:00:00.000+01:00'
+  - slot_was_set:
+    - time: '2025-03-03T16:00:00.000+01:00'
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: number
+  - intent: record_num_people
+    entities:
+    - number: 2
+  - slot_was_set:
+    - number: 2
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_confirm_reservation
+  - intent: confirm_reservation
+  - action: action_make_reservation
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: check_reservations
+  steps:
+  - intent: show_reservations
+  - action: show_reservations_form
+  - active_loop: show_reservations_form
+  - slot_was_set:
+    - requested_slot: PERSON
+  - intent: record_PERSON
+    entities:
+    - PERSON: Chandler Bing
+  - slot_was_set:
+    - PERSON: Chandler Bing
+  - action: show_reservations_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_show_reservations
+  - action: action_fetch_reservations
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: only_find_restaurant_1
+  steps:
+  - intent: find_restaurant
+  - action: find_restaurant_form
+  - active_loop: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: GPE
+  - intent: record_GPE
+    entities:
+    - GPE: Sopot
+    - GPE: Sopot
+  - slot_was_set:
+    - GPE: Sopot
+  - action: find_restaurant_form
+  - slot_was_set:
+    - GPE: Sopot
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: record_cuisine
+    entities:
+    - cuisine: sushi
+  - slot_was_set:
+    - cuisine: sushi
+  - action: find_restaurant_form
+  - slot_was_set:
+    - cuisine: sushi
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_ask_if_additional_filters
+  - intent: record_filters
+    entities:
+    - alcohol: 'True'
+  - slot_was_set:
+    - alcohol: 'True'
+  - action: action_map_filters
+  - slot_was_set:
+    - pricing_level: null
+  - slot_was_set:
+    - rating_level: null
+  - action: action_find_restaurant
+  - slot_was_set:
+    - place_id: ChIJIZ__940K_UYR989YLuqB6SU
+  - slot_was_set:
+    - place_name: Phuket - Thai Food & Bar
+  - intent: goodbye
+  - action: utter_goodbye

@@ -45,6 +45,7 @@ nlu:
     - Thanks, bye!
     - awesome, bye!
     - Bye!
+    - great, bye!
 - intent: confirm
   examples: |
     - yes
@@ -92,6 +93,7 @@ nlu:
     - I don't need extra filters
     - No additional criteria, thanks
     - No, I don't need any additional options
+    - Nope, no additional options for me
 - intent: confirm_reservation
   examples: |
     - Yes, book it
@@ -110,6 +112,7 @@ nlu:
     - Yes, This is correct reservation
     - Yes, I confirm now
     - Yes
+    - Yes, it look good
 - intent: deny_reservation
   examples: |
     - No, I need to change something
@@ -158,6 +161,32 @@ nlu:
     - Hi, I need help finding a place for dinner
     - Hi i want to find a restaurant in Gdynia
     - Hi I need help finding a restaurant
+    - I want to find a place for dinner
+- intent: show_reservations
+  examples: |
+    - show me my previous reservation
+    - show me previous reservations for Anna Green
+    - what are my old reservations
+    - what are my previous reservations
+    - what are previous reservations for Brad Pit
+    - show me my reservations
+    - show me the list of reservations for Angelina Jolie
+    - I wanna check the reservations I made
+    - I want to see reservations made
+    - I want to check my reservations
+    - What are the previous reservations for Joanna Szych
+    - I want to know the list of reservations for Mark Twain
+    - I want to see reservatrions for Joanna Szych
+    - Show me my reservations
+    - Show me old reservations
+    - I want to check old reservatinos
+    - Show me reservations for Mark Twain
+    - Show me reservations for Monica Geller
+    - I want to check reservations
+    - I want to check reservatons for michal Blajetow
+    - Can you show me my reservation now?
+    - Hi I want to check my reservations
+    - Hi, can you show me old reservations?
 - intent: make_reservation
   examples: |
     - I want to book a table here
@@ -175,27 +204,6 @@ nlu:
     - I want to book a table in this restaurant
     - That's awesome. Can we book a table there?
     - Can you book a table there?
-    - show me my reservations
-    - show me the list of reservations for Angelina Jolie
-    - I wanna check the reservations I made
-    - I want to see my previous reservations
-    - I want to see what are my reservations
-    - What are the previous reservations for Joanna Szych
-    - I want to know the list of reservations for Mark Twain
-    - I want to see reservatrions for Joanna Szych
-    - show me my prevous reservations
-    - Show me my reservations
-    - Show me old reservations
-    - I want to check old reservatinos
-    - Show me reservations for Mark Twain
-    - Show me reservations for Monica Geller
-    - I want to check reservations
-    - I want to see reservations made
-    - I want to check my reservations
-    - I want to check reservatons for michal Blajetow
-    - Can you show me my reservation now?
-    - Hi I want to check my reservations
-    - Hi, can you show me old reservations?
     - Can you book a table for me there?
     - Great! Can you book a table for me there?
     - Thanks, now let's book a table here
@@ -205,6 +213,7 @@ nlu:
     - Let's book a table there
     - Hi I want to make a reservation
     - Awesome! Can I book a table there?
+    - [Great]{"entity": "rating", "value": "great"}, let's make a reservation
 - intent: record_PERSON
   examples: |
     - Anna Green
@@ -247,6 +256,8 @@ nlu:
     - In [Gdanks]{"entity": "GPE", "value": "Gda\u0144sk"}
     - I'm in [Gdinia]{"entity": "GPE", "value": "Gdynia"}
     - In [Gdynia](GPE)
+    - IN [Gdańsk](GPE)
+    - In [Sopot][{"entity": "GPE"}, {"entity": "GPE"}]
 - intent: record_cuisine
   examples: |
     - I would like something [Italian](cuisine)
@@ -303,6 +314,8 @@ nlu:
     - I want a place that serves [sushi](cuisine)
     - I need a place that serves [sushi](cuisine)
     - I need a place that serves [pizza](cuisine)!
+    - [Japanese](cuisine) cuisine, please
+    - I need a place with [sushi](cuisine)
 - intent: record_date_time
   examples: |
     - today at 5PM
@@ -349,6 +362,7 @@ nlu:
     - it's for 2 people
     - No, it should be for 8 people instead
     - It's a table for 4
+    - it's a table for two
 - intent: out_of_scope
   examples: |
     - What is 2 + 2?
@@ -421,6 +435,7 @@ nlu:
     - Yes, I need a place that has a [bar]{"entity": "alcohol", "value": "True"}
     - Yes, I need a place with [wine]{"entity": "alcohol", "value": "True"}
     - Yes it should be a place with [good reviews](rating)
+    - Yes, the place should have a [bar]{"entity": "alcohol", "value": "True"}
 - synonym: great
   examples: |
     - Great
