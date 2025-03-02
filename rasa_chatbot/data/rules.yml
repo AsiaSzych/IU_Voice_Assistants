@@ -2,6 +2,7 @@ version: "3.1"
 
 rules:
 
+# General Rules
 - rule: Introduce anytime the user says hello
   steps:
   - intent: greet
@@ -12,64 +13,136 @@ rules:
   - intent: goodbye
   - action: utter_goodbye
 
-- rule: Activate form show reservations
+- rule: Handle what the bot can do
+  steps:
+  - intent: what_can_do
+  - action: utter_whoami
+
+- rule: Handle out-of-scope requests
+  steps:
+  - intent: out_of_scope
+  - action: utter_out_of_scope
+  - action: utter_whoami
+
+- rule: Ask the user to rephrase whenever they send a message with low NLU confidence
+  steps:
+  - intent: nlu_fallback
+  - action: utter_please_rephrase
+
+# Show Reservations Flow
+- rule: Activate form to show reservations
   steps:
   - intent: show_reservations
   - action: show_reservations_form
   - active_loop: show_reservations_form
 
-- rule: Submit form show reservations
+- rule: Submit form to show reservations
   condition:
-  # Condition that form is active.
-  - active_loop: show_reservations_form
+    - active_loop: show_reservations_form
   steps:
-  # Form is deactivated
-  - action: show_reservations_form
-  - active_loop: null
-  - slot_was_set:
-    - requested_slot: null
-  # The actions we want to run when the form is submitted.
-  - action: utter_submit_show_reservations
-  - action: action_fetch_reservations
+    - action: show_reservations_form
+    - active_loop: null
+    - slot_was_set:
+        - requested_slot: null
+    - action: utter_submit_show_reservations
+    - action: action_fetch_reservations
 
-- rule: Activate form find restaurant
+# Restaurant Recommendation Flow
+- rule: Activate form to find a restaurant
   steps:
   - intent: find_restaurant
   - action: find_restaurant_form
   - active_loop: find_restaurant_form
 
-
-- rule: Submit form find restaurant
+- rule: Handle invalid city input
   condition:
-  # Condition that form is active.
-  - active_loop: find_restaurant_form
+    - active_loop: find_restaurant_form
   steps:
-  # Form is deactivated
-  - action: find_restaurant_form
-  - active_loop: null
-  - slot_was_set:
-    - requested_slot: null
-  # The actions we want to run when the form is submitted.
-  - action: utter_submit_find_restaurant
-  - action: action_find_restaurant
+    - slot_was_set:
+        - GPE: null  
+    - action: find_restaurant_form  
 
-- rule: Activate form make reservation
-  steps:
-  - intent: make_reservation
-  - action: make_reservation_form
-  - active_loop: make_reservation_form
-
-
-- rule: Submit form make reservation
+- rule: Submit form to find a restaurant
   condition:
-  # Condition that form is active.
-  - active_loop: make_reservation_form
+    - active_loop: find_restaurant_form
   steps:
-  # Form is deactivated
-  - action: make_reservation_form
-  - active_loop: null
-  - slot_was_set:
-    - requested_slot: null
-  # The actions we want to run when the form is submitted.
-  - action: utter_submit_make_reservation
-  - action: action_make_reservation
+    - action: find_restaurant_form
+    - active_loop: null
+    - slot_was_set:
+        - requested_slot: null
+    - action: utter_ask_if_additional_filters 
+
+- rule: User provides additional filters immediately
+  steps:
+    - intent: record_filters
+    - action: action_map_filters  
+    - action: action_find_restaurant
+
+- rule: User confirms filtering options
+  steps:
+    - intent: confirm_filters
+    - action: utter_ask_for_optional_filters
+
+- rule: User denies filtering options
+  steps:
+    - intent: deny_filters
+    - action: action_find_restaurant
+
+# Reservation Flow
+
+- rule: User starts a reservation
+  steps:
+    - intent: make_reservation
+    - action: action_check_active_loop  # Check if a place is chosen\
+    - active_loop: null 
+
+- rule: Redirect user to recommendation if no place is chosen
+  steps:
+    - action: action_check_active_loop
+    - active_loop: find_restaurant_form  # Start restaurant search flow
+
+- rule: Proceed with reservation if place is chosen
+  steps:
+    - slot_was_set:
+        - place_id
+    - active_loop: make_reservation_form  #Start reservation flow
+
+- rule: Ask for confirmation after filling reservation form
+  condition:
+    - active_loop: make_reservation_form
+  steps:
+    - action: make_reservation_form
+    - active_loop: null
+    - slot_was_set:
+        - requested_slot: null
+    - slot_was_set:
+        - place_id  # Ensures place_id exists before confirmation
+    - action: utter_confirm_reservation  
+
+- rule: User confirms the reservation
+  steps:
+    - intent: confirm_reservation
+    - action: action_make_reservation
+
+- rule: User denies the reservation and wants changes
+  steps:
+    - intent: deny_reservation
+    - action: utter_ask_what_to_change
+
+- rule: User provides a new date/time for reservation
+  steps:
+    - intent: record_date_time
+    - action: action_update_reservation
+    - action: utter_confirm_reservation  
+
+- rule: User provides a new number of people for reservation
+  steps:
+    - intent: record_num_people
+    - action: action_update_reservation
+    - action: utter_confirm_reservation  
+
+- rule: User provides a new name for reservation
+  steps:
+    - intent: record_PERSON
+    - action: action_update_reservation
+    - action: utter_confirm_reservation  

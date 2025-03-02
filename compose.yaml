@@ -4,7 +4,7 @@ services:
     ports:
       - 8000:8000
   rasa:
-    image: aszych/iu_rasa_chatbot:0.0.3
+    image: aszych/iu_rasa_chatbot:0.0.5
     user: root
     build: 
       context: rasa_chatbot
@@ -13,11 +13,31 @@ services:
     ports: 
       - 5005:5005
   actions:
-    image: aszych/iu_rasa_actions:0.0.5
+    image: aszych/iu_rasa_actions:0.0.7
     build: 
-      context: rasa_chatbot/actions
+      context: rasa_chatbot/actionsdocke
     volumes:
         - ./rasa_chatbot/actions:/app/actions
         - ./rasa_chatbot/data:/app/data
     ports:
       - 5055:5055
+  postgres:
+    image: aszych/iu_rasa_database:0.0.3
+    environment:
+      POSTGRES_USER: rasa_user
+      POSTGRES_PASSWORD: rasa_password
+      POSTGRES_DB: rasa_db
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data 
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "rasa_db", "-U", "rasa_user"]
+      interval: 30s
+      retries: 5
+      start_period: 10s
+      timeout: 10s
+
+volumes:
+  postgres_data:
+    external: true

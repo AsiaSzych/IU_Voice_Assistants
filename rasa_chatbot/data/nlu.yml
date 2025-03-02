@@ -15,6 +15,9 @@ nlu:
     - goodmorning
     - goodevening
     - good afternoon
+    - what's up
+    - Hello
+    - Hi
 - intent: goodbye
   examples: |
     - cu
@@ -33,7 +36,16 @@ nlu:
     - Thanks, bye
     - thanks, bye
     - thank, bye
-    - thanks
+    - ciao
+    - That's all, bye bye
+    - [great](rating), bye
+    - [Great]{"entity": "rating", "value": "great"}, thanks
+    - thank you, bye!
+    - thanks, bye!
+    - Thanks, bye!
+    - awesome, bye!
+    - Bye!
+    - great, bye!
 - intent: confirm
   examples: |
     - yes
@@ -56,6 +68,63 @@ nlu:
     - never
     - it's a no
     - no, it's not
+    - No, thanks
+    - nope, this is it
+    - no, that fine
+    - No,
+- intent: confirm_filters
+  examples: |
+    - Yes, I'd like to specify more filters
+    - Sure, I want to add some preferences
+    - Yeah, I want to include more details
+    - Absolutely, I'd like to refine my search
+    - Yes, please let me add more filters
+    - Ok, I want to add additional criteria
+    - Yes, I want to specify a price range
+    - Yes, I want to set a rating limit
+    - Sure, let's add some filters
+- intent: deny_filters
+  examples: |
+    - No, just find a restaurant
+    - No, I don't need any filters
+    - Skip the filters, just give me recommendations
+    - No, I'm fine with anything
+    - Nope, just show me a place
+    - I don't need extra filters
+    - No additional criteria, thanks
+    - No, I don't need any additional options
+    - Nope, no additional options for me
+- intent: confirm_reservation
+  examples: |
+    - Yes, book it
+    - Yes, confirm my reservation
+    - Yes, that's correct
+    - Yes, that time works for me
+    - Yes, make the reservation
+    - Yeah, book it for me
+    - Sure, go ahead with the reservation
+    - Yes, everything looks good
+    - Confirm my booking
+    - That's perfect, go ahead
+    - Yes, I confirm the reservation
+    - Yes, I confirm
+    - Yes, please make that reservation
+    - Yes, This is correct reservation
+    - Yes, I confirm now
+    - Yes
+    - Yes, it look good
+- intent: deny_reservation
+  examples: |
+    - No, I need to change something
+    - No, I want a different time
+    - No, I need to update my booking
+    - No, actually I want it at 5PM
+    - Wait, I need to modify the reservation
+    - No, let me change the number of people
+    - No, I need to update the restaurant name
+    - No, I want a different restaurant
+    - No, I need a different date
+    - No, I want to change something
 - intent: find_restaurant
   examples: |
     - I want to find a restaurant
@@ -83,6 +152,41 @@ nlu:
     - Hi I want to find a restaurant
     - Hi I want to find a restaurant in Gdańsk
     - I want to find a place to eat dinner
+    - I want to find a place for dinner in Gdańsk
+    - I need a place to eat
+    - Hello, I need help finding a place for dinner
+    - Hi, I want to find a restaurant
+    - Hi I want to find a place for dinner with family
+    - Hi, I need help finding a place to eat
+    - Hi, I need help finding a place for dinner
+    - Hi i want to find a restaurant in Gdynia
+    - Hi I need help finding a restaurant
+    - I want to find a place for dinner
+- intent: show_reservations
+  examples: |
+    - show me my previous reservation
+    - show me previous reservations for Anna Green
+    - what are my old reservations
+    - what are my previous reservations
+    - what are previous reservations for Brad Pit
+    - show me my reservations
+    - show me the list of reservations for Angelina Jolie
+    - I wanna check the reservations I made
+    - I want to see reservations made
+    - I want to check my reservations
+    - What are the previous reservations for Joanna Szych
+    - I want to know the list of reservations for Mark Twain
+    - I want to see reservatrions for Joanna Szych
+    - Show me my reservations
+    - Show me old reservations
+    - I want to check old reservatinos
+    - Show me reservations for Mark Twain
+    - Show me reservations for Monica Geller
+    - I want to check reservations
+    - I want to check reservatons for michal Blajetow
+    - Can you show me my reservation now?
+    - Hi I want to check my reservations
+    - Hi, can you show me old reservations?
 - intent: make_reservation
   examples: |
     - I want to book a table here
@@ -98,31 +202,18 @@ nlu:
     - I want to book that place
     - Thanks, I want to make reservation here
     - I want to book a table in this restaurant
-- intent: show_reservations
-  examples: |
-    - show me my previous reservation
-    - show me previous reservations for Anna Green
-    - what are my old reservations
-    - what are my previous reservations
-    - what are previous reservations for Brad Pit
-    - show me my reservations
-    - show me the list of reservations for Angelina Jolie
-    - I wanna check the reservations I made
-    - I want to see my previous reservations
-    - I want to see what are my reservations
-    - What are the previous reservations for Joanna Szych
-    - I want to know the list of reservations for Mark Twain
-    - I want to see reservatrions for Joanna Szych
-    - show me my prevous reservations
-    - Show me my reservations
-    - Show me old reservations
-    - I want to check old reservatinos
-    - Show me reservations for Mark Twain
-    - Show me reservations for Monica Geller
-    - I want to check reservations
-    - I want to see reservations made
-    - I want to check my reservations
-    - I want to check reservatons for michal Blajetow
+    - That's awesome. Can we book a table there?
+    - Can you book a table there?
+    - Can you book a table for me there?
+    - Great! Can you book a table for me there?
+    - Thanks, now let's book a table here
+    - Can you book a table there for me?
+    - Hi i want to make a reservation
+    - Thanks, let's make a reservation there
+    - Let's book a table there
+    - Hi I want to make a reservation
+    - Awesome! Can I book a table there?
+    - [Great]{"entity": "rating", "value": "great"}, let's make a reservation
 - intent: record_PERSON
   examples: |
     - Anna Green
@@ -138,6 +229,15 @@ nlu:
     - It's Joanna Szych
     - My name is Joanna Szych
     - My name is Kate Ming
+    - My name is Julie Brown
+    - Emily Brown
+    - My name is Mark Trump
+    - Mike Smith is my name
+    - Pete Trump
+    - My name is Susan Geller
+    - My name is John Doe
+    - My name is Emily Smith
+    - Christine Bing
 - intent: record_GPE
   examples: |
     - Gdynia
@@ -149,6 +249,15 @@ nlu:
     - I need a place in Gdańsk
     - I'm in Gdynia
     - I'm in Gdańsk
+    - In [Sopot](GPE)
+    - In Gdynia
+    - In Gdańsk
+    - I'm in Gdanks city
+    - In [Gdanks]{"entity": "GPE", "value": "Gda\u0144sk"}
+    - I'm in [Gdinia]{"entity": "GPE", "value": "Gdynia"}
+    - In [Gdynia](GPE)
+    - IN [Gdańsk](GPE)
+    - In [Sopot][{"entity": "GPE"}, {"entity": "GPE"}]
 - intent: record_cuisine
   examples: |
     - I would like something [Italian](cuisine)
@@ -172,6 +281,41 @@ nlu:
     - I want something [Italian](cuisine)
     - something [Mexican](cuisine)
     - Something [mexican]{"entity": "cuisine", "value": "Mexican"}
+    - [Mexican](cuisine) dishes is what I like
+    - I really want something [Italian](cuisine)
+    - I want something [Chinese](cuisine)
+    - I want something [Italian](cuisine) to eat
+    - I want [Chinese](cuisine) food
+    - Something [Italian](cuisine)
+    - I want to eat [sushi](cuisine)
+    - I'm in the mood for some [pizza](cuisine)
+    - Can you find me a place that serves [sushi](cuisine)?
+    - I'd like to have [pizza](cuisine) today
+    - Show me a restaurant with good [sushi](cuisine)
+    - Find me a [pizza](cuisine) place in the city
+    - Where can I get some great [sushi](cuisine)?
+    - I prefer [pizza](cuisine) over anything else
+    - Looking for a [sushi](cuisine) restaurant nearby
+    - I want a [pizza](cuisine) restaurant
+    - Do you know a nice [sushi](cuisine) spot?
+    - Give me a good [pizza](cuisine) place in town
+    - I love [sushi](cuisine), show me the best options
+    - A place that specializes in [pizza](cuisine), please
+    - Can you recommend a place with delicious [sushi](cuisine)?
+    - Find me a restaurant that serves authentic [pizza](cuisine)
+    - Something [Chinesse]{"entity": "cuisine", "value": "Chinese"}
+    - I want an [italiano](cuisine) dish
+    - I want [intalian](cuisine) dish
+    - I want [Italien]{"entity": "cuisine", "value": "Italian"} dish
+    - Maybe, something [Intalian]{"entity": "cuisine", "value": "Italian"}
+    - [Mexican](cuisine) cuisine
+    - Something [Chinese](cuisine) sound good
+    - I need a place that serves [pizza](cuisine)
+    - I want a place that serves [sushi](cuisine)
+    - I need a place that serves [sushi](cuisine)
+    - I need a place that serves [pizza](cuisine)!
+    - [Japanese](cuisine) cuisine, please
+    - I need a place with [sushi](cuisine)
 - intent: record_date_time
   examples: |
     - today at 5PM
@@ -182,6 +326,16 @@ nlu:
     - Tomorrow at noon, please
     - Tomorrow at 3PM
     - Tomorrow at 4PM
+    - Today, for 6PM
+    - Next Monday at 5PM
+    - Tomorrow at noon
+    - Tommorow at 1PM
+    - Tomorrow at 2PM
+    - Next wednesday at 5PM
+    - Today at 6PM, please
+    - Next Friday at 8PM
+    - Next Tuesday at 18:00
+    - Next sunday at noon
 - intent: record_num_people
   examples: |
     - it will be for 5 people
@@ -196,3 +350,233 @@ nlu:
     - It will be a table for two
     - for nine people
     - It's for four people
+    - It's a table for 2
+    - There will be four of us
+    - For 6 people
+    - it's for five people
+    - it is for four people
+    - It's for 2 people
+    - It it for 4 people
+    - It should be for 5 people
+    - For 5 people
+    - it's for 2 people
+    - No, it should be for 8 people instead
+    - It's a table for 4
+    - it's a table for two
+- intent: out_of_scope
+  examples: |
+    - What is 2 + 2?
+    - Who's the US President?
+    - How's the weather
+    - What day it is?
+    - How to play golf?
+    - I want to buy new shoes
+    - I want to check the weather
+    - I want to order food to my house
+    - I want to check my bank account
+    - How much money do I have?
+    - Can I order a taxi?
+    - I want an uber
+- intent: what_can_do
+  examples: |
+    - What do you do?
+    - What can I do?
+    - How can you help me?
+    - What's your purpose?
+    - What skills do you have?
+    - What can you help me with?
+    - I don't know what I can ask
+- intent: record_filters
+  examples: |
+    - I want a [vegetarian]{"entity": "vegetarian", "value": "True"} option
+    - The restaurant should be [vegetarian]{"entity": "vegetarian", "value": "True"}-friendly
+    - It must have [vegetarian]{"entity": "vegetarian", "value": "True"} options
+    - I need [vege]{"entity": "vegetarian", "value": "True"} options available
+    - It must have [vegan]{"entity": "vegetarian", "value": "True"} options
+    - It must have [vege]{"entity": "vegetarian", "value": "True"} dishes
+    - It need [vegetarian]{"entity": "vegetarian", "value": "True"} dish
+    - I want a place that serves [beer]{"entity": "alcohol", "value": "True"} and [wine]{"entity": "alcohol", "value": "True"}
+    - The restaurant should have [alcohol]{"entity": "alcohol", "value": "True"} available
+    - Does it serve [beer]{"entity": "alcohol", "value": "True"}?
+    - It should have [wine]{"entity": "alcohol", "value": "True"} options
+    - It should be a [proven place](rating)
+    - Find me a [highly-rated](rating) restaurant
+    - The restaurant should have a [good rating](rating)
+    - Can you find one of the [best-rated](rating) places?
+    - Show me a place with [great reviews](rating)
+    - I want a restaurant with a rating of [4.5+](rating)
+    - It should be [top-rated](rating)
+    - A place with a [solid reputation](rating)
+    - I want something [cheap](pricing)
+    - [Not too pricey](pricing)
+    - [Nothing expensive](pricing)
+    - I don't want to spend too much, find something [cheap](pricing)
+    - Find a [budget-friendly](pricing) place
+    - It should be [affordable](pricing)
+    - Looking for a [low-cost](pricing) restaurant
+    - Find me a [mid-range](pricing) restaurant
+    - I want a [reasonably priced](pricing) place
+    - A restaurant with [fair prices](pricing)
+    - I want a [high-end](pricing) restaurant
+    - Find me a [fancy](pricing) restaurant
+    - Looking for a [fine dining](pricing) experience
+    - I want a [luxury](pricing) dining place
+    - Yes, I need some [vege]{"entity": "vegetarian", "value": "True"} options and the place should be [highly-rated](rating) but [budget](pricing) friendly
+    - Yes, I need some [vegetarian]{"entity": "vegetarian", "value": "True"} options in menu. Also, I'm on a [budget](pricing)
+    - Yes I want a [well-rated](rating), [fancy](pricing) place. It's diner with fiance
+    - Yes, I want [vegetarian]{"entity": "vegetarian", "value": "True"} option and the place should be [budget](pricing)-friendly
+    - Yes, this place should have [high ratings](pricing)
+    - Yes, I want this place to have [vegetarian]{"entity": "vegetarian", "value": "True"} food and I want it to be moderately [expensive](pricing)
+    - YEs, it should be a [well-rated place](rating)
+    - Yes, this place should offer [vegetarian]{"entity": "vegetarian", "value": "True"} food. I also want it to have [good reviews](rating), but be [affordable](pricing)
+    - Yes, [vegetarian]{"entity": "vegetarian", "value": "True"} options
+    - Yes, it should be a [budget-friendly place](pricing)
+    - Yes, I need a [vege]{"entity": "vegetarian", "value": "True"} options
+    - Yes, I need a place that has a [bar]{"entity": "alcohol", "value": "True"}
+    - Yes, I need a place with [wine]{"entity": "alcohol", "value": "True"}
+    - Yes it should be a place with [good reviews](rating)
+    - Yes, the place should have a [bar]{"entity": "alcohol", "value": "True"}
+- synonym: great
+  examples: |
+    - Great
+- synonym: Gdańsk
+  examples: |
+    - Gdanks
+    - Gdansk
+    - Gdańsk city
+    - Danzig
+    - Gdánsk
+- synonym: Gdynia
+  examples: |
+    - Gdinia
+    - Gdinya
+    - Gdynska
+    - Gdynia city
+    - Gdyna
+    - Gdynya
+- synonym: Mexican
+  examples: |
+    - mexican
+    - MEXICAN
+    - Mexian
+    - Mexiacan
+    - Mexcan
+    - Mexicann
+    - Meixcan
+- synonym: Chinese
+  examples: |
+    - Chinesse
+    - chinese
+    - CHINESE
+    - Chnese
+    - Chinee
+    - Chines
+- synonym: Italian
+  examples: |
+    - Italien
+    - Intalian
+    - italian
+    - ITALIAN
+    - Itallian
+    - Itailan
+    - Itlian
+    - Itallan
+    - Italain
+    - Italiano
+- synonym: 'True'
+  examples: |
+    - vegetarian
+    - vege
+    - vegan
+    - beer
+    - wine
+    - alcohol
+    - bar
+- synonym: Turkish
+  examples: |
+    - turkish
+    - TURKISH
+    - Turksh
+    - Tirkish
+    - Trukish
+    - Turckish
+    - Turkysh
+- synonym: Indian
+  examples: |
+    - indian
+    - INDIAN
+    - Indan
+    - Indain
+    - Indiann
+    - Indyan
+    - Indiian
+- synonym: sushi
+  examples: |
+    - Sushi
+    - SUSHI
+    - Suschi
+    - Sushee
+    - Sushy
+    - Suhsi
+    - Sushie
+- synonym: pizza
+  examples: |
+    - Pizza
+    - PIZZA
+    - Piza
+    - Pizaa
+    - Pitsa
+    - Pizzza
+- synonym: Japanese
+  examples: |
+    - japanese
+    - JAPANESE
+    - Japaneese
+    - Japenese
+    - Japnese
+    - Japanees
+    - Jappanese
+- synonym: French
+  examples: |
+    - french
+    - FRENCH
+    - Franch
+    - Frech
+    - Frensh
+    - Frenche
+- synonym: Sopot
+  examples: |
+    - Sopott
+    - Sopod
+    - Sopot city
+    - Sopot Poland
+    - Sopotka
+- synonym: Tricity
+  examples: |
+    - Tri-City
+    - Tri City
+    - Trójmiasto
+    - 3City
+    - Three Cities
+    - 3-city
+    - Trici
+    - Triciti
+- lookup: GPE
+  examples: |
+    - Gdańsk
+    - Gdansk
+    - Gdánsk
+    - Gdanks
+    - Danzig
+    - Gdynia
+    - Gdinia
+    - Gdinya
+    - Gdynska
+    - Sopot
+    - Sopott
+    - Sopod
+    - Tricity
+    - Tri-City
+    - Tri City
+    - Trójmiasto
+    - 3City
