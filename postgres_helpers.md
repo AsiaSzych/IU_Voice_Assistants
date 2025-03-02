@@ -12,7 +12,7 @@
     1.  docker stop rasa_postgres_container
     2. docker rm rasa_postgres_container  
 6. Build image 
-    1. docker build . -t aszych/iu_rasa_database:0.0.2 
+    1. docker build . -t aszych/iu_rasa_database:0.0.x
 7. Run image to check 
     1. docker run -d 
         --name shared_postgres_container 
@@ -21,8 +21,8 @@
         -e POSTGRES_DB=rasa_db 
         -p 5432:5432 
         -v rasa_postgres_data:/var/lib/postgresql/data 
-        aszych/iu_rasa_database:0.0.2
+        aszych/iu_rasa_database:0.0.x
     2. Run scripts to check if all data are in the database and if conneciton works
 8. Push image to repo
-    1. docker push aszych/iu_rasa_database:0.0.2
+    1. docker push aszych/iu_rasa_database:0.0.x
 9. Run docker compose and use app! 
