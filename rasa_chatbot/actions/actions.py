@@ -48,13 +48,31 @@ class ActionMakeReservations(Action):
         num_people = tracker.get_slot("number")
         time = tracker.get_slot("time")
         place = tracker.get_slot("place_id")
+
+        if not (full_name and num_people and time and place):
+            dispatcher.utter_message(text="I'm missing some details for your reservation. Could you please provide all necessary information?")
+            return []
+
         date = time.split("T")[0]
         hour = time.split("T")[1][:5]
-        make_reservation(place, full_name, num_people, date, time=hour)
-        dispatcher.utter_message(text=f"I have made a reservation for you, on {date}, {hour}, for {num_people} people")
+
+        # Attempt to make a reservation
+        reservation_status = make_reservation(place, full_name, num_people, date, hour)
+
+        if reservation_status == "success":
+            dispatcher.utter_message(text=f"I have made a reservation for you on {date} at {hour} for {num_people} people.")
+            return []
+
+        elif reservation_status == "user_exists":
+            dispatcher.utter_message(text=f"You already have a reservation at this restaurant on {date}. Please choose a different date.")
+            return [SlotSet("time", None), SlotSet("date", None)]  # Reset date & time slots
+
+        elif reservation_status == "time_full":
+            dispatcher.utter_message(text=f"Unfortunately, this restaurant is fully booked at {hour} on {date}. Please choose a different date or time.")
+            return [SlotSet("time", None), SlotSet("date", None)]  # Reset date & time slots
 
         return []
-
+    
 class ActionFindRestaurant(Action):
 
     def name(self) -> Text:
@@ -84,15 +102,18 @@ class ActionFindRestaurant(Action):
             addiitonal_options.update({"wine": 1})
         if not full_name:
             full_name = ""
-        print(f'In find restauration, addtional options {addiitonal_options}')
-        first, second, third = get_combined_recommendations(city=city, 
-                                                            cuisine_preferences=cuisine,
-                                                            user_name=full_name,
-                                                            optional_filters=addiitonal_options)
-        restaurant_id, restaurant_name, _ = first 
-        dispatcher.utter_message(text=f"I have found a {restaurant_name} restaurant in {city}")
-            
-        return [SlotSet("place_id", restaurant_id),SlotSet("place_name", restaurant_name) ]
+        try:
+            first, _, _ = get_combined_recommendations(city=city, 
+                                                                cuisine_preferences=cuisine,
+                                                                user_name=full_name,
+                                                                optional_filters=addiitonal_options)
+            restaurant_id, restaurant_name, _ = first 
+            dispatcher.utter_message(text=f"I have found a {restaurant_name} restaurant in {city}")
+            return [SlotSet("place_id", restaurant_id),SlotSet("place_name", restaurant_name) ]
+
+        except Exception as e:
+            dispatcher.utter_message(text=f"I'm so sorry, there seems to be some issue finding a restaurant for you. Let's try again! ")
+            return [SlotSet("full_name", None),SlotSet("city", None), SlotSet("cuisine", None), SlotSet("pricing_level", None), SlotSet("rating_level", None), SlotSet("vege", None), SlotSet("alcohol", None) ]
 
 class ActionMapFiltersToScale(Action):
     def name(self):
@@ -160,42 +181,71 @@ class ValidateFindRestaurantForm(ValidationAction):
         return "validate_find_restaurant_form"
 
     def validate_GPE(
-        self, 
-        slot_value: Any, 
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker, 
-        domain: Dict[Text, Any]) -> Dict[Text, Any]:
+        self, slot_value: Any, dispatcher: "CollectingDispatcher", tracker: Tracker, domain: Dict[Text, Any]
+    ) -> Dict[Text, Any]:
         """Validate that the provided city is within the supported locations."""
 
         valid_cities = ["Gdańsk", "Gdynia", "Sopot", "Tricity"]
+        city_mapping = {
+            "Gdańsk": ["Gdansk", "Gdańsk city", "Danzig", "Gdánsk", "Gdanks"],
+            "Gdynia": ["Gdinia", "Gdinya", "Gdynska", "Gdynia city", "Gdyna", "Gdynya"],
+            "Sopot": ["Sopott", "Sopod", "Sopot city", "Sopotka"],
+            "Tricity": ["Tri-City", "Tri City", "Trójmiasto", "3City", "Three Cities", "3-city", "Trici", "Triciti"]
+        }
 
-        # If city is valid, accept it
-        if slot_value in valid_cities:
-            dispatcher.utter_message(text=f"Got it! I'll find restaurants in {slot_value}.")
-            return {"GPE": slot_value}
+        # Flatten mapping for easy lookup
+        all_variants = {variant.lower(): city for city, variants in city_mapping.items() for variant in variants}
 
-        # If city is invalid, reset the slot and ask again
-        dispatcher.utter_message(
-            text="Sorry, I currently support restaurants only in Gdańsk, Gdynia, Sopot, and Tricity. "
-                 "Please enter one of these cities."
-        )
-        return {"GPE": None}  # Reset the slot, so the form asks again
+        # Normalize the input
+        city_text = slot_value.lower() if slot_value else ""
+
+        # Check for direct match or mapped synonym
+        matched_city = all_variants.get(city_text, None)
+        if matched_city:
+            dispatcher.utter_message(text=f"Got it! I'll find restaurants in {matched_city}.")
+            return {"GPE": matched_city}
+
+        # If no match, check if it's a completely unsupported city
+        if slot_value not in valid_cities:
+            dispatcher.utter_message(text=f"Sorry, I currently support restaurants only in Gdańsk, Gdynia, Sopot, and Tricity. Could you specify one of these?")
+            return {"GPE": None}  # Reset the slot and ask again
+
+        return {"GPE": slot_value}
+
     
     def validate_cuisine(
-        self, 
-        slot_value: Any,
-        dispatcher: CollectingDispatcher, 
-        tracker: Tracker, 
-        domain: Dict[Text, Any]) -> Dict[Text, Any]:
-        """Validate that the provided cuisine is in the allowed list."""
-        valid_cuisines = ["Italian", "Turkish", "Indian", "Chinese", "sushi", "pizza", "Mexican", "Japanese", "French"]
+        self, slot_value: Any, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]
+    ) -> Dict[Text, Any]:
+        """Validate that the provided cuisine is in the allowed list and map common variations."""
 
-        if slot_value in valid_cuisines:
-            dispatcher.utter_message(text=f"Got it! You're looking for {slot_value} cuisine.")
-            return {"cuisine": slot_value}
+        # valid_cuisines: "Italian", "Turkish", "Indian", "Chinese", "sushi", "pizza", "Mexican", "Japanese", "French"
+        cuisine_mapping = {
+            "Italian": ["italian", "Itallian", "Itailan", "Itlian", "Itallan", "Italain", "Italien", "Italiano", "Italiani"],
+            "Turkish": ["turkish", "Turksh", "Tirkish", "Trukish", "Turckish", "Turkysh"],
+            "Indian": ["indian", "Indan", "Indain", "Indiann", "Indyan", "Indiian"],
+            "Chinese": ["chinese", "Chnese", "Chinesse", "Chinee", "Chines", "Chinease"],
+            "sushi": ["Sushi", "Suschi", "Sushee", "Sushy", "Suhsi", "Sushie"],
+            "pizza": ["Pizza", "Piza", "Pizaa", "Pitsa", "Pizaa", "Pizzza"],
+            "Mexican": ["mexican", "Mexian", "Mexiacan", "Mexcan", "Mexicann", "Meixcan"],
+            "Japanese": ["japanese", "Japaneese", "Japenese", "Japnese", "Japanees", "Jappanese"],
+            "French": ["french", "Franch", "Frech", "Frensh", "Frenche"]
+        }
 
+        # Flatten mapping for easy lookup
+        all_variants = {variant.lower(): cuisine for cuisine, variants in cuisine_mapping.items() for variant in variants}
+
+        # Normalize the input
+        cuisine_text = slot_value.lower() if slot_value else ""
+
+        # Check for direct match or mapped synonym
+        matched_cuisine = all_variants.get(cuisine_text, None)
+        if matched_cuisine:
+            dispatcher.utter_message(text=f"Got it! You're looking for {matched_cuisine} cuisine.")
+            return {"cuisine": matched_cuisine}
+
+        # If no match, reject and ask again
         dispatcher.utter_message(
-            text="Sorry, I can only recommend restaurants with the following cuisines: Italian, Turkish, Indian, "
-                 "Chinese, sushi, pizza, Mexican, Japanese, or French. Please enter a valid cuisine."
+            text="Sorry, I only support the following cuisines: Italian, Turkish, Indian, Chinese, sushi, pizza, "
+                 "Mexican, Japanese, or French. Could you specify one of these?"
         )
-        return {"cuisine": None}  # Reset the slot, so the form asks again
+        return {"cuisine": None}  

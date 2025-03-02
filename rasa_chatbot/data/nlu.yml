@@ -98,6 +98,7 @@ nlu:
     - Hi, I want to find a restaurant
     - Hi I want to find a place for dinner with family
     - Hi, I need help finding a place to eat
+    - Hi, I need help finding a place for dinner
 - intent: make_reservation
   examples: |
     - I want to book a table here
@@ -137,6 +138,7 @@ nlu:
     - Hi I want to check my reservations
     - Hi, can you show me old reservations?
     - Can you book a table for me there?
+    - [Great]{"entity": "rating", "value": "great"}! Can you book a table for me there?
 - intent: record_PERSON
   examples: |
     - Anna Green
@@ -154,6 +156,7 @@ nlu:
     - My name is Kate Ming
     - My name is Julie Brown
     - Emily Brown
+    - My name is Mark Trump
 - intent: record_GPE
   examples: |
     - Gdynia
@@ -171,6 +174,7 @@ nlu:
     - I'm in [Gdanks](GPE) city
     - I'm in [Gdańsk](GPE)
     - In [Gdanks][{"entity": "GPE", "value": "Gda\u0144sk"}, {"entity": "GPE", "value": "Gda\u0144sk"}]
+    - I'm in [Gdinia]{"entity": "GPE", "value": "Gdynia"}
 - intent: record_cuisine
   examples: |
     - I would like something [Italian](cuisine)
@@ -220,6 +224,7 @@ nlu:
     - I want an [italiano](cuisine) dish
     - I want [intalian](cuisine) dish
     - I want [Italien]{"entity": "cuisine", "value": "Italian"} dish
+    - Maybe, something [Intalian]{"entity": "cuisine", "value": "Italian"}
 - intent: record_date_time
   examples: |
     - today at 5PM
@@ -233,6 +238,7 @@ nlu:
     - Today, for 6PM
     - Next Monday at 5PM
     - Tomorrow at noon
+    - Tommorow at 1PM
 - intent: record_num_people
   examples: |
     - it will be for 5 people
@@ -250,6 +256,7 @@ nlu:
     - It's a table for 2
     - There will be four of us
     - For 6 people
+    - it's for five people
 - intent: out_of_scope
   examples: |
     - What is 2 + 2?
@@ -315,9 +322,17 @@ nlu:
     - Yes, this place should have [high ratings](pricing)
     - Yes, I want this place to have [vegetarian]{"entity": "vegetarian", "value": "True"} food and I want it to be moderately [expensive](pricing)
     - YEs, it should be a [well-rated place](rating)
+    - Yes, this place should offer [vegetarian]{"entity": "vegetarian", "value": "True"} food. I also want it to have [good reviews](rating), but be [affordable](pricing)
 - synonym: great
   examples: |
     - Great
+- synonym: Gdańsk
+  examples: |
+    - Gdanks
+    - Gdansk
+    - Gdańsk city
+    - Danzig
+    - Gdánsk
 - synonym: Mexican
   examples: |
     - mexican
@@ -335,6 +350,18 @@ nlu:
     - Chnese
     - Chinee
     - Chines
+- synonym: Italian
+  examples: |
+    - Italien
+    - italian
+    - ITALIAN
+    - Itallian
+    - Itailan
+    - Itlian
+    - Itallan
+    - Italain
+    - Italiano
+    - Intalian
 - synonym: 'True'
   examples: |
     - vegetarian
@@ -343,18 +370,6 @@ nlu:
     - beer
     - wine
     - alcohol
-- synonym: Italian
-  examples: |
-    - italian
-    - ITALIAN
-    - Itallian
-    - Itailan
-    - Itlian
-    - Itallan
-    - Italain
-    - Italien
-    - Italiano
-    - Intalian
 - synonym: Turkish
   examples: |
     - turkish
@@ -407,13 +422,6 @@ nlu:
     - Frech
     - Frensh
     - Frenche
-- synonym: Gdańsk
-  examples: |
-    - Gdansk
-    - Gdańsk city
-    - Danzig
-    - Gdánsk
-    - Gdanks
 - synonym: Gdynia
   examples: |
     - Gdinia

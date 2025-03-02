@@ -19,11 +19,11 @@ intents:
 - show_reservations
 - what_can_do
 entities:
-- cuisine
-- GPE
 - rating
+- GPE
 - vegetarian
 - pricing
+- cuisine
 - PERSON
 - time
 - number
@@ -176,13 +176,13 @@ session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: false
 actions:
-- action_find_restaurant
-- utter_ask_if_additional_filters
-- utter_goodbye
-- action_map_filters
 - utter_submit_make_reservation
-- utter_greet
+- action_find_restaurant
+- action_map_filters
+- utter_ask_if_additional_filters
 - action_make_reservation
+- utter_goodbye
+- utter_greet
 - action_fetch_reservations
 - utter_submit_show_reservations
 - utter_please_rephrase

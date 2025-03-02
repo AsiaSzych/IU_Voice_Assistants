@@ -622,3 +622,93 @@ stories:
     - place_name: Casa del Gusto
   - intent: goodbye
   - action: utter_goodbye
+
+- story: interactive_story_1
+  steps:
+  - intent: find_restaurant
+  - action: find_restaurant_form
+  - active_loop: find_restaurant_form
+  - slot_was_set:
+    - requested_slot: GPE
+  - intent: record_GPE
+    entities:
+    - GPE: Gdynia
+    - GPE: Gdynia
+  - slot_was_set:
+    - GPE: Gdynia
+  - action: find_restaurant_form
+  - slot_was_set:
+    - GPE: Gdynia
+  - slot_was_set:
+    - requested_slot: cuisine
+  - intent: record_cuisine
+    entities:
+    - cuisine: Italian
+  - slot_was_set:
+    - cuisine: Italian
+  - action: find_restaurant_form
+  - slot_was_set:
+    - cuisine: Italian
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_ask_if_additional_filters
+  - intent: record_filters
+    entities:
+    - vegetarian: 'True'
+    - rating: reviews
+    - pricing: affordable
+  - slot_was_set:
+    - vegetarian: 'True'
+  - slot_was_set:
+    - pricing: affordable
+  - slot_was_set:
+    - rating: reviews
+  - action: action_map_filters
+  - slot_was_set:
+    - pricing_level: 1
+  - slot_was_set:
+    - rating_level: 4.0
+  - action: action_find_restaurant
+  - slot_was_set:
+    - place_id: ChIJsc4Fu2Wn_UYR3TgoG1K1Da0
+  - slot_was_set:
+    - place_name: Bergamo - kuchnia pizza prosecco
+  - intent: make_reservation
+    entities:
+    - rating: great
+  - slot_was_set:
+    - rating: great
+  - action: make_reservation_form
+  - active_loop: make_reservation_form
+  - slot_was_set:
+    - rating: great
+  - slot_was_set:
+    - requested_slot: PERSON
+  - intent: record_PERSON
+    entities:
+    - PERSON: Mark Trump
+  - slot_was_set:
+    - PERSON: Mark Trump
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: time
+  - intent: record_date_time
+    entities:
+    - time: '2025-03-03T13:00:00.000+01:00'
+  - slot_was_set:
+    - time: '2025-03-03T13:00:00.000+01:00'
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: number
+  - intent: record_num_people
+    entities:
+    - number: 5
+  - slot_was_set:
+    - number: 5
+  - action: make_reservation_form
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit_make_reservation
+  - action: action_make_reservation

@@ -15,7 +15,6 @@ def connect_to_db():
     password=DB_CONFIG['password']
 )
 
-
 def get_restaurants(city):
     logger.debug(f"get_restaurants query for city {city}")
     conn = connect_to_db()
@@ -65,15 +64,42 @@ def make_reservation(restaurant_id, name, num_people, date, time):
     conn = connect_to_db()
     cursor = conn.cursor()
 
-    query = '''
+    # Check if the user already has a reservation on the same date
+    user_check_query = '''
+    SELECT COUNT(*) FROM reservations
+    WHERE restaurant_id = %s AND name = %s AND date = %s;
+    '''
+    cursor.execute(user_check_query, (restaurant_id, name, date))
+    user_reservations = cursor.fetchone()[0]
+
+    if user_reservations > 0:
+        cursor.close()
+        conn.close()
+        return "user_exists"  # Indicate user already has a reservation
+
+    # Check if the restaurant already has 3 reservations at the same date and time
+    time_check_query = '''
+    SELECT COUNT(*) FROM reservations
+    WHERE restaurant_id = %s AND date = %s AND time = %s;
+    '''
+    cursor.execute(time_check_query, (restaurant_id, date, time))
+    existing_reservations = cursor.fetchone()[0]
+
+    if existing_reservations >= 3:
+        cursor.close()
+        conn.close()
+        return "time_full"  # Indicate restaurant is fully booked at that time
+
+    # Insert new reservation if all checks pass
+    insert_query = '''
     INSERT INTO reservations (restaurant_id, name, num_people, date, time)
     VALUES (%s, %s, %s, %s, %s);
     '''
-    cursor.execute(query, (restaurant_id, name, num_people, date, time))
-    
+    cursor.execute(insert_query, (restaurant_id, name, num_people, date, time))
     conn.commit()
+    cursor.close()
     conn.close()
-    logger.debug(f"New reservation inserted")
+    return "success"
 
 def get_closest_reservation_for_user(name):
     logger.debug(f"get_closest_reservation_for_user query for user {name}")
@@ -146,10 +172,13 @@ def get_restaurant_details(restaurant_id):
 
 if __name__ == "__main__":
     # Test queries
-    get_reservations("Sopot")
-    get_restaurants("Sopot")
-    get_distinct_users_in_city("Gdynia")
-    get_restaurant_name("ChIJK4PtjPun_UYRRYuECz2jxWk")
-    get_restaurant_details("ChIJK4PtjPun_UYRRYuECz2jxWk")
-    get_closest_reservation_for_user("Joanna Szych")
-    make_reservation("ChIJ90grTyOn_UYRYV0USPJmPq4", "John Doe", 4, "2025-02-10", "15:00")
+    print(get_reservations("Sopot"))
+    print(get_restaurants("Sopot"))
+    print(get_distinct_users_in_city("Gdynia"))
+    print(get_restaurant_name("ChIJK4PtjPun_UYRRYuECz2jxWk"))
+    print(get_restaurant_details("ChIJK4PtjPun_UYRRYuECz2jxWk"))
+    print(get_closest_reservation_for_user("Joanna Szych"))
+    print(make_reservation("ChIJ90grTyOn_UYRYV0USPJmPq4", "John Doe", 4, "2025-02-10", "15:00"))
+    print(make_reservation("ChIJ90grTyOn_UYRYV0USPJmPq4", "Mike Brown", 4, "2025-02-10", "15:00"))
+    print(make_reservation("ChIJ90grTyOn_UYRYV0USPJmPq4", "Susan Geller", 4, "2025-02-10", "15:00"))
+    print(make_reservation("ChIJ90grTyOn_UYRYV0USPJmPq4", "Ross Geller", 4, "2025-02-10", "15:00"))
