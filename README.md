@@ -14,7 +14,7 @@ The bot should allow for 3 main actions:
 
 ## Usage
 
-Assistant is intented to use as localy deployed voicebot. The setup scripts are prepared for a UNIX based systems. To run the assistant having a working **speakers** and **microphone** is necessary! 
+Assistant is intented to use as localy deployed voicebot. The setup scripts are prepared for a **UNIX** based systems. To run the assistant having a working **speakers** and **microphone** is necessary! 
 Also, the assistant is using Google Text-To-Speech API. In order to use there there is a need to:
 * Have an account on [Google Could Platform](https://console.cloud.google.com/)
 * Have Cloud Text To Speech API enabled - you can check it [here](https://console.cloud.google.com/apis/api/texttospeech.googleapis.com/)
@@ -31,6 +31,9 @@ Also, the assistant is using Google Text-To-Speech API. In order to use there th
 4. Run `python -m spacy download en_core_web_md` in order to download entity recognition model required for the chatbot.
 5. Run `docker compose up` in the main project directory
 6. Run `python va_main.py` in the main project directory in separate terminal window.
+
+### Windows usage 
+Currently the project was not testes on the Windows environment, due to not having access to such operating system at the moment. However, from my research it seems that the steps should be similar. The only change is in steop **2** - there is no need for running *setup.sh* file. Insted interested user should make sure to have [ffmpeg library installed](https://ffmpeg.org/download.html#build-windows)
 
 ### Docker compose 
 Docker componse creates the environment for rasa chatbot. It consists of 4 services:
