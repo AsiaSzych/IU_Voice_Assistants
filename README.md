@@ -33,7 +33,7 @@ Also, the assistant is using Google Text-To-Speech API. In order to use there th
 6. Run `python va_main.py` in the main project directory in separate terminal window.
 
 ### Windows usage 
-Currently the project was not testes on the Windows environment, due to not having access to such operating system at the moment. However, from my research it seems that the steps should be similar. The only change is in steop **2** - there is no need for running *setup.sh* file. Insted interested user should make sure to have [ffmpeg library installed](https://ffmpeg.org/download.html#build-windows)
+Currently the project was not testes on the Windows environment, due to not having access to such operating system at the moment. However, from my research it seems that the steps should be similar. The only change is in step **2** - there is no need for running *setup.sh* file. Insted interested user should make sure to have [ffmpeg library installed](https://ffmpeg.org/download.html#build-windows)
 
 ### Docker compose 
 Docker componse creates the environment for rasa chatbot. It consists of 4 services:
