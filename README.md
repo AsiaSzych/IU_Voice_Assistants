@@ -8,27 +8,41 @@ Handles chosen restaurants in the area of Tricity, Poland. List od restaurants a
 
 The bot should allow for 3 main actions:
 * Recommending the best suited restaurant based on at least city and cuisine
+  * Cities available to choose from: "Gdańsk", "Gdynia", "Sopot",
+  * Cuisines available to choose from: "Italian", "Turkish", "Indian", "Chinese", "sushi", "pizza", "Mexican", "Japanese", "French"
 * Reserving a table in the restaurant (fictional reservation in a project database)
 * Informing about already made reservations 
 
 
 ## Usage
 
-Assistant is intented to use as localy deployed voicebot. The setup scripts are prepared for a UNIX based systems. To run the assistant having a working **speakers** and **microphone** is necessary! 
+Assistant is intented to use as localy deployed voicebot. The setup scripts are prepared for a **UNIX** based systems. To run the assistant having a working **speakers** and **microphone** is necessary! 
+Also, the assistant is using Google Text-To-Speech API. In order to use there there is a need to:
+* Have an account on [Google Could Platform](https://console.cloud.google.com/)
+* Have Cloud Text To Speech API enabled - you can check it [here](https://console.cloud.google.com/apis/api/texttospeech.googleapis.com/)
+* Create a Service Account - the instruction can be found [here](https://cloud.google.com/iam/docs/service-accounts-create#creating)
+* Generate Service Account API key in JSON format - the instruction to do this can be found [here](https://cloud.google.com/iam/docs/keys-create-delete#creating)
+* Save generated json file in the main application folder with the name *tts_sa.json*
+
 
 ### Steps to run:
-1. Create a python3.10 environment 
-2. Run a setup.sh script
-3. Install requirements from requirements.txt
-4. Run docker compose up in the main folder
-5. Run the va_main.py python script
+1. Create a python3.10 environment
+2. Run a `setup.sh` script to install system dependencies
+3. Install requirements from `requirements.txt` file 
+`pip install -r requirements.txt`
+4. Run `python -m spacy download en_core_web_md` in order to download entity recognition model required for the chatbot.
+5. Run `docker compose up` in the main project directory
+6. Run `python va_main.py` in the main project directory in separate terminal window.
+
+### Windows usage 
+Currently the project was not testes on the Windows environment, due to not having access to such operating system at the moment. However, from my research it seems that the steps should be similar. The only change is in step **2** - there is no need for running *setup.sh* file. Insted interested user should make sure to have [ffmpeg library installed](https://ffmpeg.org/download.html#build-windows)
 
 ### Docker compose 
-Docker componse creates the environment for rasa chatbot. It consists of 3 services:
+Docker componse creates the environment for rasa chatbot. It consists of 4 services:
 * **duckling** server for entity extraction - from [rasa/duckling](https://hub.docker.com/r/rasa/duckling) 
 * **actions** server that hosts rasa actions - build by dockerfile in */rasa_chatbot/actions*, stored on [aszych/iu_rasa_actions](https://hub.docker.com/repository/docker/aszych/iu_rasa_chatbot/general)
 * **rasa** server that hosts rasa chatbot model - build by dockerfile in */rasa_chatbot*, stored on [aszych/iu_rasa_chatbot](https://hub.docker.com/repository/docker/aszych/iu_rasa_actions/general)
-* **postgres** server that host PostgreSQL database with restaurant and reservatios - - build by dockerfile in */rasa_chatbot/actions/database*, stored on [aszych/iu_rasa_database](https://hub.docker.com/repository/docker/aszych/iu_rasa_database/general)
+* **postgres** server that host PostgreSQL database with restaurant and reservatios - build by dockerfile in */rasa_chatbot/actions/database*, stored on [aszych/iu_rasa_database](https://hub.docker.com/repository/docker/aszych/iu_rasa_database/general)
 
 Those services allow main assistant loop to use chatbot model developed in Rasa software via API.
 
