@@ -8,6 +8,8 @@ Handles chosen restaurants in the area of Tricity, Poland. List od restaurants a
 
 The bot should allow for 3 main actions:
 * Recommending the best suited restaurant based on at least city and cuisine
+  * Cities available to choose from: "Gdańsk", "Gdynia", "Sopot",
+  * Cuisines available to choose from: "Italian", "Turkish", "Indian", "Chinese", "sushi", "pizza", "Mexican", "Japanese", "French"
 * Reserving a table in the restaurant (fictional reservation in a project database)
 * Informing about already made reservations 
 
