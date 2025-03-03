@@ -5,4 +5,3 @@ sudo apt-get install -y libasound-dev portaudio19-dev libportaudio2 libportaudio
 sudo apt-get install -y ffmpeg libav-tools
 sudo apt install -y python3-pyaudio
 sudo apt install -y libsqlite3-dev
-python -m spacy download en_core_web_md

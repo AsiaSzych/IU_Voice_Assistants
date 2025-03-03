@@ -33,11 +33,28 @@ audio_config = texttospeech.AudioConfig(
 
 vad = webrtcvad.Vad(VAD_MODE)
 audio = pyaudio.PyAudio()
-stream = audio.open(format=FORMAT,
-                    channels=CHANNELS,
-                    rate=SAMPLE_RATE,
-                    input=True,
-                    frames_per_buffer=FRAME_SIZE)
+stream = None
+for i in range(audio.get_device_count()):
+    audio_info = audio.get_device_info_by_index(i)
+    try:
+        logger.debug(f"Checking the '{audio_info['name']}' device.")
+        stream = audio.open(format=FORMAT,
+                        channels=CHANNELS,
+                        rate=SAMPLE_RATE,
+                        input=True,
+                        input_device_index=i,
+                        frames_per_buffer=FRAME_SIZE)
+        if stream != None:
+            logger.info(f"Device '{audio_info['name']}' will be used as an input device.")
+            break
+        else:
+            logger.debug(f"'{audio_info['name']}' cannot be used an input device.")
+
+    except: 
+        pass
+if stream == None:
+    logger.error("Cannot open the input device. Please make sure you system has available microphone configured.")
+    exit(-1)
 
 
 def create_session(sessions:dict):
@@ -110,7 +127,7 @@ def save_audio_to_file(audio_data:bytes, sample_rate:int, filename:str):
 def transcribe_audio(stt_model: any, 
                     file_path: str):
 
-    result = stt_model.transcribe(file_path)
+    result = stt_model.transcribe(file_path, language='en')
     return result['text']
 
 
